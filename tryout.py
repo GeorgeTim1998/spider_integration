@@ -14,9 +14,9 @@ import numpy
 tdim = domain.topology.dim # mesh dimensions. For 2d problem equals 2
 fdim = tdim - 1 # facets dimensions. for 2d problem equals 2
 domain.topology.create_connectivity(fdim, tdim)
-boundary_facets = mesh.exterior_facet_indices(domain.topology)
+boundary_facets = mesh.exterior_facet_indices(domain.topology) # find line segments of the boundary of the domain
 
-boundary_dofs = fem.locate_dofs_topological(V, fdim, boundary_facets)
+boundary_dofs = fem.locate_dofs_topological(V, fdim, boundary_facets) # indexes of line segments
 bc = fem.dirichletbc(uD, boundary_dofs)
 
 import ufl
@@ -34,10 +34,15 @@ uh = problem.solve()
 
 from dolfinx import plot
 import pyvista
-topology, cell_types, geometry = plot.create_vtk_mesh(domain, tdim)
-grid = pyvista.UnstructuredGrid(topology, cell_types, geometry)
+# topology, cell_types, geometry = plot.create_vtk_mesh(domain, tdim)
+# grid = pyvista.UnstructuredGrid(topology, cell_types, geometry)
 
-plotter = pyvista.Plotter()
-plotter.add_mesh(grid, show_edges=True)
-plotter.view_xy() # view curtain surface
-plotter.show()
+u_topology, u_cell_types, u_geometry = plot.create_vtk_mesh(V)
+u_grid = pyvista.UnstructuredGrid(u_topology, u_cell_types, u_geometry)
+u_grid.point_data["u"] = uh.x.array.real
+u_grid.set_active_scalars("u")
+u_plotter = pyvista.Plotter()
+u_plotter.add_mesh(u_grid, show_edges=True)
+
+u_plotter.view_xy() # view curtain surface
+u_plotter.show()
