@@ -1,6 +1,6 @@
 from fenics import *
 
-def operator_weights(self, V):
+def operator_weights(V):
   r_2 = interpolate(Expression('x[0]*x[0]', degree = 2), V) # interpolation is needed so that 'a' could evaluate deriviations and such
   r = Expression('x[0]', degree = 1) # interpolation is needed so that 'a' could evaluate deriviations and such
   
