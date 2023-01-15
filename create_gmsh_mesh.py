@@ -1,8 +1,6 @@
 from fenics import *
 import gmsh
 
-Mesh()
-
 gmsh.initialize()
 
 model = gmsh.model()
@@ -19,3 +17,5 @@ model.addPhysicalGroup(dim-1, [sphere]) # add physical group to curve (physical 
 
 model.mesh.generate(dim)
 gmsh.fltk.run()
+gmsh.finalize()
+
