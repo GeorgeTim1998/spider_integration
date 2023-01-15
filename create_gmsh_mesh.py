@@ -2,7 +2,7 @@ import gmsh
 
 folder = 'Mesh/msh'
 
-dim=2
+dim = 2
 mesh_size = 0.01
 ellipse_center = [0, 0, 0]
 ellipse_ratio = 3
