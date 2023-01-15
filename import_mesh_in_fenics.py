@@ -34,5 +34,4 @@ L = f*v*dx
 u = Function(V)
 solve(a == L, u, bc)
 
-plot(u)
-pyplot.show()
+fsup.countour_plot_via_mesh(gmsh, u, levels = 10, colorbar=True, grid=True)
