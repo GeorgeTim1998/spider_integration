@@ -5,9 +5,10 @@ import fenics_support as fsup
 from math import pi
 
 folder = sup.xml_files_folder()
-xml_file = folder + '/' + 't1.xml'
-xml_file_facet = folder + '/' + 't1_facet_region.xml'
-xml_file_physical_region = folder + '/' + 't1_physical_region.xml'
+filename = 'a_37.000_ratio_1.600_msh_1.0e+00'
+xml_file = "%s/%s.xml" % (folder, filename)
+xml_file_facet = "%s/%s_facet_region.xml" % (folder, filename)
+xml_file_physical_region = "%s/%s_physical_region.xml" % (folder, filename)
 
 gmsh = Mesh(xml_file)
 
@@ -35,13 +36,3 @@ solve(a == L, u, bc)
 
 plot(u)
 pyplot.show()
-
-error_L2 = errornorm(u_D, u, 'L2')
-
-# Compute maximum error at vertices
-vertex_values_u_D = u_D.compute_vertex_values(gmsh)
-vertex_values_u = u.compute_vertex_values(gmsh)
-import numpy as np
-error_max = np.max(np.abs(vertex_values_u_D - vertex_values_u))
-
-print(error_max)
