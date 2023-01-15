@@ -39,14 +39,15 @@ def countour_plot_via_mesh(gmsh, u, levels,
   if u_min == u_max:
     print("Trivial solution. u = %s" % u_max)
   else:
-    triang = tri.Triangulation(*gmsh.coordinates().reshape((-1, 2)).T, triangles=gmsh.cells())
+    gmsh_coordinates = gmsh.coordinates().reshape((-1, 2)).T
+    triang = tri.Triangulation(*gmsh_coordinates, triangles=gmsh.cells())
     u_array = u.compute_vertex_values(gmsh)
 
     fig = matplt.tricontour(triang, u_array, levels, zorder=2)
     matplt.gca().set_aspect("equal")
     
-    # matplt.xlim(gmsh.plot_domain[0], gmsh.plot_domain[1])
-    # matplt.ylim(gmsh.plot_domain[2], gmsh.plot_domain[3])
+    matplt.xlim(gmsh_coordinates[0].min(), gmsh_coordinates[0].max())
+    matplt.ylim(gmsh_coordinates[1].min(), gmsh_coordinates[1].max())
     matplt.xlabel("r, см")
     matplt.ylabel("z, см")
     
