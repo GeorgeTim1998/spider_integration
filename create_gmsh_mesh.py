@@ -1,5 +1,4 @@
 import gmsh
-import math
 
 folder = 'Mesh/msh'
 
