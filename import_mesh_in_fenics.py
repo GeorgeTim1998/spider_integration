@@ -2,9 +2,9 @@ from fenics import *
 import matplotlib.pyplot as pyplot
 
 folder = 'Mesh/xml'
-xml_file = folder + "/" + 't1.xml'
-xml_file_facet = folder + "/" + 't1_facet_region.xml'
-xml_file_physical_region = folder + "/" + 't1_physical_region.xml'
+xml_file = folder + '/' + 't1.xml'
+xml_file_facet = folder + '/' + 't1_facet_region.xml'
+xml_file_physical_region = folder + '/' + 't1_physical_region.xml'
 
 gmsh = Mesh(xml_file)
 
