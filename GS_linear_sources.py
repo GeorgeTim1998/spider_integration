@@ -44,6 +44,10 @@ S_plasma = fsup.calculate_plasma_cross_surface(gmsh)
 
 boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
 ds = Measure('ds', domain=gmsh, subdomain_data=boundaries)
-L = fsup.circulation(ds)
+L = fsup.boundary_length(ds)
+
+n = FacetNormal(gmsh) # normal to plasma boundary
+tangent = as_vector([n[1], -n[0]])
+circ = fsup.circulation(n, ds)
 
 print(1)

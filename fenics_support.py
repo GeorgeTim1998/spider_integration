@@ -94,5 +94,9 @@ def calculate_omega(r, gmsh):
 def calculate_plasma_cross_surface(gmsh):
   return assemble(Constant(1) * dx(gmsh))
 
-def circulation(ds):
+def boundary_length(ds):
   return assemble(Constant(1) * ds)
+
+def circulation(n, ds):
+  scalar_product = dot(n, n)
+  return assemble(scalar_product * ds)
