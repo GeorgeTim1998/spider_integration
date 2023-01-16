@@ -12,8 +12,6 @@ xml_file_facet = "%s/%s_facet_region.xml" % (folder, filename) # triangle surfac
 xml_file_physical_region = "%s/%s_physical_region.xml" % (folder, filename) # domains
 
 gmsh = Mesh(xml_file)
-boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
-ds = Measure('ds', domain=gmsh, subdomain_data=boundaries)
 
 V = FunctionSpace(gmsh, 'P', 1)
 #%% Define boundary condition
@@ -43,6 +41,9 @@ solve(a == L, u, bc)
 Bp = fsup.calculate_Bp(u, r)
 omega = fsup.calculate_omega(r, gmsh)
 S_plasma = fsup.calculate_plasma_cross_surface(gmsh)
-L = fsup.circulation(ds, gmsh)
+
+boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
+ds = Measure('ds', domain=gmsh, subdomain_data=boundaries)
+L = fsup.circulation(ds)
 
 print(1)
