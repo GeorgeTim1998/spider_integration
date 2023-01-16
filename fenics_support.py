@@ -90,3 +90,6 @@ def calculate_Bp(u, r):
 
 def calculate_omega(r, gmsh):
   return assemble(2 * numpy.pi * r * dx(gmsh))
+
+def calculate_plasma_cross_surface(gmsh):
+  return assemble(Constant(1) * dx(gmsh))

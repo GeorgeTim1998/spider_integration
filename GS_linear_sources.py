@@ -39,7 +39,8 @@ solve(a == L, u, bc)
 #%% Post solve calculus
 Bp = fsup.calculate_Bp(u, r)
 omega = fsup.calculate_omega(r, gmsh)
-
+S_plasma = fsup.calculate_plasma_cross_surface(gmsh
+                                               )
 plot(Bp)
-plot.show()
+pyplot.show()
 # flux_u = project(-k*grad(u), W)
