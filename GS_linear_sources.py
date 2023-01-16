@@ -34,4 +34,12 @@ L = f*v*dx
 u = Function(V)
 solve(a == L, u, bc)
 
-fsup.countour_plot_via_mesh(gmsh, u, levels = 10, colorbar=True, grid=True)
+# fsup.countour_plot_via_mesh(gmsh, u, levels = 30, colorbar=True, grid=True)
+
+#%% Post solve calculus
+Bp = fsup.calculate_Bp(u, r)
+omega = fsup.calculate_omega(r, gmsh)
+
+plot(Bp)
+plot.show()
+# flux_u = project(-k*grad(u), W)

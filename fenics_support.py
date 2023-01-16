@@ -10,7 +10,7 @@ PICS_FOLDER = 'Pics'
 
 def operator_weights(V):
   r_2 = interpolate(Expression('x[0]*x[0]', degree = 2), V) # interpolation is needed so that 'a' could evaluate deriviations and such
-  r = Expression('x[0]', degree = 1) # interpolation is needed so that 'a' could evaluate deriviations and such
+  r = interpolate(Expression('x[0]', degree = 1), V) # interpolation is needed so that 'a' could evaluate deriviations and such
   
   return r_2, r
 
@@ -79,3 +79,14 @@ def save_contour_plot(plot_title):
   print("3D countour plot saved to PATH: %s" % file_path)
   time.sleep(1)
   
+def calculate_Bp(u, r):
+  V = u.function_space()
+  gmsh = V.mesh()
+  degree = V.ufl_element().degree()
+  W = VectorFunctionSpace(gmsh, 'P', degree)
+  grad_u = project(grad(u), W)
+
+  return as_vector( (-1/r * grad_u[1], 1/r * grad_u[0]) )
+
+def calculate_omega(r, gmsh):
+  return assemble(2 * numpy.pi * r * dx(gmsh))
