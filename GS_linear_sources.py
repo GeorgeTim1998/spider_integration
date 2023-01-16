@@ -6,11 +6,14 @@ from math import pi
 
 folder = sup.xml_files_folder()
 filename = 'a_37.000_ratio_1.600_msh_1.0e+00'
+
 xml_file = "%s/%s.xml" % (folder, filename)
-xml_file_facet = "%s/%s_facet_region.xml" % (folder, filename)
-xml_file_physical_region = "%s/%s_physical_region.xml" % (folder, filename)
+xml_file_facet = "%s/%s_facet_region.xml" % (folder, filename) # triangle surfaces
+xml_file_physical_region = "%s/%s_physical_region.xml" % (folder, filename) # domains
 
 gmsh = Mesh(xml_file)
+boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
+ds = Measure('ds', domain=gmsh, subdomain_data=boundaries)
 
 V = FunctionSpace(gmsh, 'P', 1)
 #%% Define boundary condition
@@ -39,8 +42,7 @@ solve(a == L, u, bc)
 #%% Post solve calculus
 Bp = fsup.calculate_Bp(u, r)
 omega = fsup.calculate_omega(r, gmsh)
-S_plasma = fsup.calculate_plasma_cross_surface(gmsh
-                                               )
-plot(Bp)
-pyplot.show()
-# flux_u = project(-k*grad(u), W)
+S_plasma = fsup.calculate_plasma_cross_surface(gmsh)
+L = fsup.circulation(ds, gmsh)
+
+print(1)
