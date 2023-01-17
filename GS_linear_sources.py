@@ -48,9 +48,6 @@ Bpa = 1/L * fsup.circulation(Bp, n, ds)
 
 [er, ez] = fsup.calculate_orts(W)
 
-plot(ez)
-pyplot.show()
-
 omega = fsup.calculate_omega(r, gmsh)
 S_plasma = fsup.calculate_plasma_cross_surface(gmsh)
 Rt = 1/(2*pi) * omega / S_plasma
