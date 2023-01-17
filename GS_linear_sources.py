@@ -38,16 +38,21 @@ solve(a == L, u, bc)
 # fsup.countour_plot_via_mesh(gmsh, u, levels = 30, colorbar=True, grid=True)
 
 #%% Post solve calculus
-Bp = fsup.calculate_Bp(u, r)
-omega = fsup.calculate_omega(r, gmsh)
-S_plasma = fsup.calculate_plasma_cross_surface(gmsh)
-
 boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
 ds = Measure('ds', domain=gmsh, subdomain_data=boundaries)
-L = fsup.boundary_length(ds)
-
 n = FacetNormal(gmsh) # normal to plasma boundary
-tangent = as_vector([n[1], -n[0]])
-circ = fsup.circulation(n, ds)
+
+L = fsup.boundary_length(ds)
+[Bp, W] = fsup.calculate_Bp(u, r)
+Bpa = 1/L * fsup.circulation(Bp, n, ds)
+
+[er, ez] = fsup.calculate_orts(W)
+
+plot(ez)
+pyplot.show()
+
+omega = fsup.calculate_omega(r, gmsh)
+S_plasma = fsup.calculate_plasma_cross_surface(gmsh)
+Rt = 1/(2*pi) * omega / S_plasma
 
 print(1)

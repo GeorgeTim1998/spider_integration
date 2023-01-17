@@ -86,7 +86,13 @@ def calculate_Bp(u, r):
   W = VectorFunctionSpace(gmsh, 'P', degree)
   grad_u = project(grad(u), W)
 
-  return as_vector( (-1/r * grad_u[1], 1/r * grad_u[0]) )
+  return as_vector( (-1/r * grad_u[1], 1/r * grad_u[0]) ), W
+
+def calculate_orts(W):
+  er = Expression(("1", "0"), degree = 1)
+  ez = Expression(("0", "1"), degree = 1)
+  
+  return interpolate(er, W), interpolate(ez, W)
 
 def calculate_omega(r, gmsh):
   return assemble(2 * numpy.pi * r * dx(gmsh))
@@ -97,6 +103,8 @@ def calculate_plasma_cross_surface(gmsh):
 def boundary_length(ds):
   return assemble(Constant(1) * ds)
 
-def circulation(n, ds):
-  scalar_product = dot(n, n)
+def circulation(vector, n, ds):
+  tangent = as_vector([n[1], -n[0]])
+  scalar_product = dot(vector, tangent)
+  
   return assemble(scalar_product * ds)
