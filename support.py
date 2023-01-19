@@ -1,4 +1,6 @@
 import os
+import regex
+
 def msh_files_folder():
   return 'Mesh/msh'
 
@@ -37,3 +39,9 @@ def drop_physical_n_dacet_files(xml_files):
     xml_files.remove(xml_files[i])
     
   return xml_files
+
+def mesh_size(filename):
+  e_number_pattern = r"\d+\.\d+e\+\d+"
+  numbers = regex.findall(e_number_pattern, filename)
+  
+  return numbers[-1]
