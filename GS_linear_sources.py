@@ -6,6 +6,7 @@ from math import pi
 
 folder = sup.xml_files_folder()
 filename = 'a_37.000_ratio_1.600_msh_1.0e+00'
+mesh_size = sup.mesh_size(filename)
 
 xml_file = "%s/%s.xml" % (folder, filename)
 xml_file_facet = "%s/%s_facet_region.xml" % (folder, filename) # triangle surfaces
@@ -63,4 +64,4 @@ q.append( as_vector((r - interpolate(Constant(lao_hash['Rt'][0]), V), z)))
 
 S1 = 1 / Bpa**2 / omega * assemble( dot(Bp, Bp) * dot(q[0], n) * 2*pi*r*ds )
 
-print(S1)
+print(mesh_size, S1)
