@@ -52,4 +52,15 @@ omega = fsup.calculate_omega(r, gmsh)
 S_plasma = fsup.calculate_plasma_cross_surface(gmsh)
 Rt = 1/(2*pi) * omega / S_plasma
 
-print(1)
+lao_hash = sup.lao_hash()
+z = interpolate(Expression('x[1]', degree = 1), V) # interpolation is needed so that 'a' could evaluate deriviations and such
+q = []
+er = as_vector((interpolate(Constant(1), V), interpolate(Constant(0), V)))
+# pick one
+# q.append( (r - interpolate(Constant(lao_hash['Rt'][0]), V))*er + z*ez )
+q.append( as_vector((r - interpolate(Constant(lao_hash['Rt'][0]), V), z))) 
+# q.append( as_vector((r - interpolate(Constant(lao_hash['Rt'][0]), V), 0))) 
+
+S1 = 1 / Bpa**2 / omega * assemble( dot(Bp, Bp) * dot(q[0], n) * 2*pi*r*ds )
+
+print(S1)
