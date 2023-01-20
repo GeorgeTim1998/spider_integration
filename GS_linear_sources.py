@@ -61,6 +61,8 @@ Rt = 1/(2*pi) * omega / S_plasma
 R0 = fsup.return_R0(u, V)
 
 q = fsup.return_q(r, z, R0, V)
-S1 = 1 / Bpa**2 / omega * assemble( dot(Bp, Bp) * dot(q[0], n) * 2*pi*r*ds )
+S = fsup.calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds)
 
-print(mesh_size, S1)
+print(mesh_size, S['S1'])
+print(mesh_size, S['S2'])
+print(mesh_size, S['S3'])

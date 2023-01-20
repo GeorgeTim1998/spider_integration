@@ -127,3 +127,10 @@ def return_q(r, z, R0, V):
   
   return q
   
+def calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds):
+  S = {'S1': 0, 'S2': 0, 'S3': 0}
+  for i, qi in enumerate(q):
+    Si = "S%d" % (i + 1)
+    S[Si] = 1 / Bpa**2 / omega * assemble( dot(Bp, Bp) * dot(qi, n) * 2*pi*r*ds )
+    
+  return S
