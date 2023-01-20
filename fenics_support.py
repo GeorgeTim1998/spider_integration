@@ -114,6 +114,9 @@ def calculate_omega(r, gmsh):
 def calculate_plasma_cross_surface(gmsh):
   return assemble(Constant(1) * dx(gmsh))
 
+def calculate_plasma_surface(r, ds):
+  return assemble(2*pi * r*ds)
+
 def return_R0(u, V): # multiply by 1.1 and S1 = 2
   max_index = numpy.argmax(u.vector()[:])
   max_point = V.tabulate_dof_coordinates() # can be used for assigning?? from known data
