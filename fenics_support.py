@@ -115,3 +115,15 @@ def return_R0(u, V): # multiply by 1.1 and S1 = 2
   max_point = V.tabulate_dof_coordinates() # can be used for assigning?? from known data
   
   return max_point[max_index][0]
+
+def return_q(r, z, R0, V):
+  q = []
+  R0 = interpolate(Constant(R0), V)
+  zero = interpolate(Constant(0), V)
+  
+  q.append( as_vector( (r - R0, z) ) )
+  q.append( as_vector( (R0, zero) ) )
+  q.append( as_vector( (zero, z) ) )
+  
+  return q
+  

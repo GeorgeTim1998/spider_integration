@@ -58,13 +58,9 @@ omega = fsup.calculate_omega(r, gmsh)
 S_plasma = fsup.calculate_plasma_cross_surface(gmsh)
 Rt = 1/(2*pi) * omega / S_plasma
 
-lao_hash = sup.lao_hash()
-q = []
-
 R0 = fsup.return_R0(u, V)
 
-q.append( as_vector((r - interpolate(Constant(R0), V), z))) 
-
+q = fsup.return_q(r, z, R0, V)
 S1 = 1 / Bpa**2 / omega * assemble( dot(Bp, Bp) * dot(q[0], n) * 2*pi*r*ds )
 
 print(mesh_size, S1)
