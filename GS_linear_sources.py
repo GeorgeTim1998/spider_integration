@@ -3,9 +3,14 @@ import matplotlib.pyplot as pyplot
 import support as sup
 import fenics_support as fsup
 from math import pi
+import numpy as np
 
 folder = sup.xml_files_folder()
-filename = 'a_37.000_ratio_1.600_msh_1.0e+00'
+
+# filenames = ['a_37.000_ratio_1.600_msh_1.0e-01', 'a_37.000_ratio_1.600_msh_2.5e-01', 'a_37.000_ratio_1.600_msh_5.0e-01', 'a_37.000_ratio_1.600_msh_1.0e+00']
+filenames = ['a_37.000_ratio_1.600_msh_2.5e-01', 'a_37.000_ratio_1.600_msh_5.0e-01', 'a_37.000_ratio_1.600_msh_1.0e+00']
+# for filename in filenames:
+filename = filenames[-1]
 mesh_size = sup.mesh_size(filename)
 
 xml_file = "%s/%s.xml" % (folder, filename)
@@ -26,7 +31,7 @@ bc = DirichletBC(V, u_D, boundary)
 u = TrialFunction(V)
 v = TestFunction(V)
 
-[r_2, r] = fsup.operator_weights(V)
+[r_2, r, z] = fsup.operator_weights(V)
 [p0, f0_2, psi0] = fsup.linear_profiles()
 
 a = dot(grad(u)/r, grad(r_2*v))*dx
@@ -54,13 +59,11 @@ S_plasma = fsup.calculate_plasma_cross_surface(gmsh)
 Rt = 1/(2*pi) * omega / S_plasma
 
 lao_hash = sup.lao_hash()
-z = interpolate(Expression('x[1]', degree = 1), V) # interpolation is needed so that 'a' could evaluate deriviations and such
 q = []
-er = as_vector((interpolate(Constant(1), V), interpolate(Constant(0), V)))
-# pick one
-# q.append( (r - interpolate(Constant(lao_hash['Rt'][0]), V))*er + z*ez )
-q.append( as_vector((r - interpolate(Constant(lao_hash['Rt'][0]), V), z))) 
-# q.append( as_vector((r - interpolate(Constant(lao_hash['Rt'][0]), V), 0))) 
+
+R0 = fsup.return_R0(u, V)
+
+q.append( as_vector((r - interpolate(Constant(R0), V), z))) 
 
 S1 = 1 / Bpa**2 / omega * assemble( dot(Bp, Bp) * dot(q[0], n) * 2*pi*r*ds )
 

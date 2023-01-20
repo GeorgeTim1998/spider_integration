@@ -41,7 +41,7 @@ def drop_physical_n_dacet_files(xml_files):
   return xml_files
 
 def mesh_size(filename):
-  e_number_pattern = r"\d+\.\d+e\+\d+"
+  e_number_pattern = r"\d+\.\d+e\+\d+|\d+\.\d+e\-\d+"
   numbers = regex.findall(e_number_pattern, filename)
   
   return numbers[-1]
