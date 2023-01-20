@@ -80,7 +80,7 @@ def save_contour_plot(plot_title):
   print("3D countour plot saved to PATH: %s" % file_path)
   time.sleep(1)
 
-def boundary_length(ds):
+def boundary_length(ds): # checked against circle tor
   return assemble(Constant(1) * ds)
 
 def form_vector_space(u):
@@ -108,13 +108,13 @@ def calculate_orts(W):
   
   return interpolate(er, W), interpolate(ez, W)
 
-def calculate_omega(r, gmsh):
+def calculate_omega(r, gmsh): # checked against circle tor
   return assemble(2 * numpy.pi * r * dx(gmsh))
 
-def calculate_plasma_cross_surface(gmsh):
+def calculate_plasma_cross_surface(gmsh): # checked against circle tor
   return assemble(Constant(1) * dx(gmsh))
 
-def calculate_plasma_surface(r, ds):
+def calculate_plasma_surface(r, ds): # checked against circle tor
   return assemble(2*pi * r*ds)
 
 def return_R0(u, V): # multiply by 1.1 and S1 = 2
