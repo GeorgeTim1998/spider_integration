@@ -11,8 +11,9 @@ PICS_FOLDER = 'Pics'
 def operator_weights(V):
   r_2 = interpolate(Expression('x[0]*x[0]', degree = 2), V) # interpolation is needed so that 'a' could evaluate deriviations and such
   r = interpolate(Expression('x[0]', degree = 1), V) # interpolation is needed so that 'a' could evaluate deriviations and such
+  z = interpolate(Expression('x[1]', degree = 1), V) # interpolation is needed so that 'a' could evaluate deriviations and such
   
-  return r_2, r
+  return r_2, r, z
 
 def linear_profiles():
   p0 = 1
@@ -108,3 +109,9 @@ def circulation(vector, n, ds):
   scalar_product = dot(vector, tangent)
   
   return assemble(scalar_product * ds)
+
+def return_R0(u, V): # multiply by 1.1 and S1 = 2
+  max_index = numpy.argmax(u.vector()[:])
+  max_point = V.tabulate_dof_coordinates() # can be used for assigning?? from known data
+  
+  return max_point[max_index][0]
