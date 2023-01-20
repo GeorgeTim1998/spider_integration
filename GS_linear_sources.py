@@ -49,7 +49,8 @@ ds = Measure('ds', domain=gmsh, subdomain_data=boundaries)
 n = FacetNormal(gmsh) # normal to plasma boundary
 
 L = fsup.boundary_length(ds)
-[Bp, W] = fsup.calculate_Bp(u, r)
+W = fsup.form_vector_space(u)
+Bp = fsup.calculate_Bp(u, r, W)
 Bpa = 1/L * fsup.circulation(Bp, n, ds)
 
 [er, ez] = fsup.calculate_orts(W)

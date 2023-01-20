@@ -79,15 +79,22 @@ def save_contour_plot(plot_title):
 
   print("3D countour plot saved to PATH: %s" % file_path)
   time.sleep(1)
-  
-def calculate_Bp(u, r):
+
+def boundary_length(ds):
+  return assemble(Constant(1) * ds)
+
+def form_vector_space(u):
   V = u.function_space()
   gmsh = V.mesh()
   degree = V.ufl_element().degree()
   W = VectorFunctionSpace(gmsh, 'P', degree)
+  
+  return W
+
+def calculate_Bp(u, r, W):
   grad_u = project(grad(u), W)
 
-  return as_vector( (-1/r * grad_u[1], 1/r * grad_u[0]) ), W
+  return as_vector( (-1/r * grad_u[1], 1/r * grad_u[0]) )
 
 def calculate_orts(W):
   er = Expression(("1", "0"), degree = 1)
@@ -100,9 +107,6 @@ def calculate_omega(r, gmsh):
 
 def calculate_plasma_cross_surface(gmsh):
   return assemble(Constant(1) * dx(gmsh))
-
-def boundary_length(ds):
-  return assemble(Constant(1) * ds)
 
 def circulation(vector, n, ds):
   tangent = as_vector([n[1], -n[0]])
