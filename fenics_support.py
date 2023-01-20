@@ -96,6 +96,12 @@ def calculate_Bp(u, r, W):
 
   return as_vector( (-1/r * grad_u[1], 1/r * grad_u[0]) )
 
+def circulation(vector, n, ds):
+  tangent = as_vector([n[1], -n[0]])
+  scalar_product = dot(vector, tangent)
+  
+  return assemble(scalar_product * ds)
+
 def calculate_orts(W):
   er = Expression(("1", "0"), degree = 1)
   ez = Expression(("0", "1"), degree = 1)
@@ -107,12 +113,6 @@ def calculate_omega(r, gmsh):
 
 def calculate_plasma_cross_surface(gmsh):
   return assemble(Constant(1) * dx(gmsh))
-
-def circulation(vector, n, ds):
-  tangent = as_vector([n[1], -n[0]])
-  scalar_product = dot(vector, tangent)
-  
-  return assemble(scalar_product * ds)
 
 def return_R0(u, V): # multiply by 1.1 and S1 = 2
   max_index = numpy.argmax(u.vector()[:])
