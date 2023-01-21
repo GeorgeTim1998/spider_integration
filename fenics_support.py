@@ -110,7 +110,7 @@ def form_vector_space(u):
 def calculate_Bp(u, r, W):
   grad_u = project(grad(u), W)
 
-  return as_vector( (-1/r * grad_u[1], 1/r * grad_u[0]) )
+  return project(as_vector( (-1/r * grad_u[1], 1/r * grad_u[0]) ), W)
 
 def circulation(vector, n, ds):
   # checked for er. Circ = 0. OK
@@ -143,14 +143,15 @@ def return_R0(u, V): # multiply by 1.1 and S1 = 2
   
   return max_point[max_index][0]
 
-def return_q(r, z, R0, V):
+def return_q(r, z, R0, V, W):
+  # checked all q vectors are ok!
   q = []
   R0 = interpolate(Constant(R0), V)
   zero = interpolate(Constant(0), V)
   
-  q.append( as_vector( (r - R0, z) ) )
-  q.append( as_vector( (R0, zero) ) )
-  q.append( as_vector( (zero, z) ) )
+  q.append( project(as_vector( (r - R0, z) ), W) )
+  q.append( project(as_vector( (R0, zero) ), W) )
+  q.append( project(as_vector( (zero, z) ), W) )
   
   return q
   

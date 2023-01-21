@@ -35,15 +35,16 @@ v = TestFunction(V)
 [r_2, r, z] = fsup.operator_weights(V)
 
 a = dot(grad(u)/r, grad(r_2*v))*dx
-I = 10
+I = 1
 sigma = 1
-f = fsup.point_source(I=I, sigma=sigma, R0=142.5)
+R0=142.5
+f = fsup.point_source(I=I, sigma=sigma, R0=R0)
 L = fsup.M0*r * f*v*dx
 #%% Compute solution
 u = Function(V)
 solve(a == L, u, bc)
 
-fsup.countour_plot_via_mesh(gmsh, u, levels = 30, colorbar=True, grid=True)
+# fsup.countour_plot_via_mesh(gmsh, u, levels = 30, colorbar=True, grid=True)
 
 #%% Post solve calculus
 boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
@@ -63,16 +64,19 @@ Spl = fsup.calculate_plasma_surface(r, ds)
 Rt = 1/(2*pi) * omega / S_
 R0 = fsup.return_R0(u, V)
 
-print('Omega =', omega)
-print('Spl =', Spl)
-print('S_ =', S_)
-print('L =', L)
-print("Bp*dl = %e" % fsup.circulation(Bp, n, ds))
-print("Bp*dl = %e" % (fsup.M0 * I))
-print("Bp*dl = %e" % ( fsup.circulation(Bp, n, ds) / (fsup.M0 * I) ))
-print("Bp*dl = %e" % ( fsup.circulation(Bp, n, ds) / (fsup.M0 * I) )**-1)
+a = 37*0.9
+print("Bp(top) = %e" % Bp(R0, a)[0])
+print("Bp(top) = %e" % ( fsup.M0*I / (2*pi*a) ))
+# print('Omega =', omega)
+# print('Spl =', Spl)
+# print('S_ =', S_)
+# print('L =', L)
+# print("Bp*dl = %e" % fsup.circulation(Bp, n, ds))
+# print("Bp*dl = %e" % (fsup.M0 * I))
+# print("Bp*dl = %e" % ( fsup.circulation(Bp, n, ds) / (fsup.M0 * I) ))
+# print("Bp*dl = %e" % ( fsup.circulation(Bp, n, ds) / (fsup.M0 * I) )**-1)
 
-q = fsup.return_q(r, z, R0, V)
+q = fsup.return_q(r, z, R0, V, W)
 S = fsup.calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds)
 
 print(mesh_size, S['S1'])
