@@ -8,7 +8,6 @@ dim = 2
 mesh_size = 1
 ellipse_center = [lao_hash['Rt'][0], 0, 0]
 for ellipse_ratio in lao_hash['E']:
-  # ellipse_ratio = 1 # lao_hash['E'][0]
   ellipse_a = lao_hash['a']
   ellipse_b = ellipse_ratio * ellipse_a
 
