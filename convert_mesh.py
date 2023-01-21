@@ -17,16 +17,12 @@ if msh_files != xml_files:
   if len(xml_files) == 0:
     convert_indexes = range(len(msh_files))
   
-  converted = 0
-  
   for i, xml in enumerate(xml_files):
     for j, msh in enumerate(msh_files):
       if msh != xml:
-        convert_indexes.append(j)
-        converted += 1
-        print(converted)
-        
+        convert_indexes.append(j)     
       
   for i in convert_indexes:
     bash_command = "dolfin-convert %s/%s.msh %s/%s.xml" % (msh_folder, msh_files[i], xml_folder, msh_files[i])
     os.system(bash_command)
+    print(len(convert_indexes))
