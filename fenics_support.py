@@ -97,6 +97,9 @@ def calculate_Bp(u, r, W):
   return as_vector( (-1/r * grad_u[1], 1/r * grad_u[0]) )
 
 def circulation(vector, n, ds):
+  # checked for er. Circ = 0
+  # checked for z*er. Circ = pi*a**2
+  
   tangent = as_vector([n[1], -n[0]])
   scalar_product = dot(vector, tangent)
   

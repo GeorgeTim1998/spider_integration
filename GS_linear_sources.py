@@ -8,7 +8,8 @@ import numpy as np
 folder = sup.xml_files_folder()
 
 # filenames = ['a_37.000_ratio_1.600_msh_1.0e-01', 'a_37.000_ratio_1.600_msh_2.5e-01', 'a_37.000_ratio_1.600_msh_5.0e-01', 'a_37.000_ratio_1.600_msh_1.0e+00']
-filenames = ['a_37.000_ratio_1.600_msh_2.5e-01', 'a_37.000_ratio_1.600_msh_5.0e-01', 'a_37.000_ratio_1.600_msh_1.0e+00']
+# filenames = ['a_37.000_ratio_1.600_msh_2.5e-01', 'a_37.000_ratio_1.600_msh_5.0e-01', 'a_37.000_ratio_1.600_msh_1.0e+00']
+filenames = ['a_37.000_ratio_1.000_msh_1.0e+00']
 # for filename in filenames:
 filename = filenames[-1]
 mesh_size = sup.mesh_size(filename)
@@ -41,7 +42,7 @@ L = f*v*dx
 u = Function(V)
 solve(a == L, u, bc)
 
-# fsup.countour_plot_via_mesh(gmsh, u, levels = 30, colorbar=True, grid=True)
+fsup.countour_plot_via_mesh(gmsh, u, levels = 30, colorbar=True, grid=True)
 
 #%% Post solve calculus
 boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
@@ -60,6 +61,13 @@ S_ = fsup.calculate_plasma_cross_surface(gmsh)
 Spl = fsup.calculate_plasma_surface(r, ds)
 Rt = 1/(2*pi) * omega / S_
 R0 = fsup.return_R0(u, V)
+
+print('Omega =', omega)
+print('Spl =', Spl)
+print('S_ =', S_)
+print('L =', L)
+print('[1,0] circ = ', fsup.circulation(er, n, ds))
+print('[z,0] circ = ', fsup.circulation(z*er, n, ds))
 
 q = fsup.return_q(r, z, R0, V)
 S = fsup.calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds)
