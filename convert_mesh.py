@@ -1,5 +1,6 @@
 import os 
 import support as sup
+import math
 
 msh_folder = sup.msh_files_folder()
 msh_files = sup.drop_files_ext(os.listdir(msh_folder))
@@ -22,7 +23,10 @@ if msh_files != xml_files:
       if msh != xml:
         convert_indexes.append(j)     
       
-  for i in convert_indexes:
-    bash_command = "dolfin-convert %s/%s.msh %s/%s.xml" % (msh_folder, msh_files[i], xml_folder, msh_files[i])
+  print(len(convert_indexes))
+  
+  for i, index in enumerate(convert_indexes):
+    print("\n")
+    print(math.floor(i/len(convert_indexes)*100))
+    bash_command = "dolfin-convert %s/%s.msh %s/%s.xml" % (msh_folder, msh_files[index], xml_folder, msh_files[index])
     os.system(bash_command)
-    print(len(convert_indexes))
