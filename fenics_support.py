@@ -108,6 +108,8 @@ def form_vector_space(u):
   return W
 
 def calculate_Bp(u, r, W):
+  # this works correctly for u = r**2
+  # I get [0, 2]
   grad_u = project(grad(u), W)
 
   return project(as_vector( (-1/r * grad_u[1], 1/r * grad_u[0]) ), W)
