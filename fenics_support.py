@@ -36,12 +36,10 @@ def point_source(I, sigma, R0):
 
   j0 = I/(pi*sigma**2)
 
-  f_expr = M0*x*j0 * sympy.exp(-((x-R0)**2 + z**2) / sigma**2)
+  f_expr = j0 * sympy.exp(-((x-R0)**2 + z**2) / sigma**2)
 
   f_text = sympy.printing.ccode(f_expr)
   f_text = f_text.replace('exp', 'std::exp')
-
-  # sympy.pprint(f_expr)
 
   return Expression(f_text, degree=2)
   

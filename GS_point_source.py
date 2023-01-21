@@ -35,8 +35,10 @@ v = TestFunction(V)
 [r_2, r, z] = fsup.operator_weights(V)
 
 a = dot(grad(u)/r, grad(r_2*v))*dx
-f = fsup.point_source(I=1, sigma=2, R0=142.5)
-L = f*v*dx
+I = 10
+sigma = 1
+f = fsup.point_source(I=I, sigma=sigma, R0=142.5)
+L = fsup.M0*r * f*v*dx
 #%% Compute solution
 u = Function(V)
 solve(a == L, u, bc)
@@ -65,7 +67,10 @@ print('Omega =', omega)
 print('Spl =', Spl)
 print('S_ =', S_)
 print('L =', L)
-print('Bp*dl = ', fsup.circulation(Bp, n, ds))
+print("Bp*dl = %e" % fsup.circulation(Bp, n, ds))
+print("Bp*dl = %e" % (fsup.M0 * I))
+print("Bp*dl = %e" % ( fsup.circulation(Bp, n, ds) / (fsup.M0 * I) ))
+print("Bp*dl = %e" % ( fsup.circulation(Bp, n, ds) / (fsup.M0 * I) )**-1)
 
 q = fsup.return_q(r, z, R0, V)
 S = fsup.calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds)
