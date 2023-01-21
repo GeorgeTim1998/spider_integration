@@ -115,7 +115,7 @@ def calculate_Bp(u, r, W):
 def circulation(vector, n, ds):
   # checked for er. Circ = 0. OK
   # checked for z*er. Circ = pi*a**2. OK
-  # checked for point source. False!!!
+  # checked for point source. False!!! Coefficients missing?
   
   tangent = as_vector([n[1], -n[0]])
   scalar_product = dot(vector, tangent)
