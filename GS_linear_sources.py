@@ -7,11 +7,8 @@ import numpy as np
 
 folder = sup.xml_files_folder()
 
-# filenames = ['a_37.000_ratio_1.600_msh_1.0e-01', 'a_37.000_ratio_1.600_msh_2.5e-01', 'a_37.000_ratio_1.600_msh_5.0e-01', 'a_37.000_ratio_1.600_msh_1.0e+00']
-# filenames = ['a_37.000_ratio_1.600_msh_2.5e-01', 'a_37.000_ratio_1.600_msh_5.0e-01', 'a_37.000_ratio_1.600_msh_1.0e+00']
 filenames = ['a_37.000_ratio_1.000_msh_1.0e+00', 'a_37.000_ratio_1.100_msh_1.0e+00', 'a_37.000_ratio_1.200_msh_1.0e+00', 'a_37.000_ratio_1.300_msh_1.0e+00', 'a_37.000_ratio_1.400_msh_1.0e+00', 'a_37.000_ratio_1.500_msh_1.0e+00', 'a_37.000_ratio_1.600_msh_1.0e+00', 'a_37.000_ratio_1.700_msh_1.0e+00', 'a_37.000_ratio_1.800_msh_1.0e+00', 'a_37.000_ratio_1.900_msh_1.0e+00', 'a_37.000_ratio_2.000_msh_1.0e+00']
 for filename in filenames:
-# filename = filenames[-1]
     mesh_size = sup.mesh_size(filename)
 
     xml_file = "%s/%s.xml" % (folder, filename)
