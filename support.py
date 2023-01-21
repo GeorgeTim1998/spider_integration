@@ -1,4 +1,5 @@
 import os
+import numpy
 import regex
 
 def msh_files_folder():
@@ -9,7 +10,8 @@ def xml_files_folder():
 
 def lao_hash():
   Rt = [142.5, 142.5, 142.6, 142.3] # sm
-  E =  [1.60, 1.59, 1.59, 1.60] # elongation
+  # E =  [1.60, 1.59, 1.59, 1.60] # elongation
+  E =  numpy.linspace(1, 2, 11)
   betta_p = [0.91, 0.91, 0.90, 0.92] # poloidal betta
   a = 37
   
