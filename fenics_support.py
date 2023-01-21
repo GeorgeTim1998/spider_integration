@@ -4,9 +4,12 @@ import datetime
 import numpy
 import matplotlib.tri as tri
 import matplotlib.pyplot as matplt
+import sympy
 
 DPI = 240
 PICS_FOLDER = 'Pics'
+
+M0 = 1.25e-6
 
 def operator_weights(V):
   r_2 = interpolate(Expression('x[0]*x[0]', degree = 2), V) # interpolation is needed so that 'a' could evaluate deriviations and such
@@ -26,6 +29,21 @@ def Time_name():
     ttime = datetime.datetime.now().strftime("%d%m%Y_%H%M%S")
     time_title = str(ttime)  # get current time to make figure name unique
     return time_title
+
+def point_source(I, sigma, R0):
+  x = sympy.symbols('x[0]')
+  z = sympy.symbols('x[1]')
+
+  j0 = I/(pi*sigma**2)
+
+  f_expr = M0*x*j0 * sympy.exp(-((x-R0)**2 + z**2) / sigma**2)
+
+  f_text = sympy.printing.ccode(f_expr)
+  f_text = f_text.replace('exp', 'std::exp')
+
+  # sympy.pprint(f_expr)
+
+  return Expression(f_text, degree=2)
   
 def countour_plot_via_mesh(gmsh, u, levels,
                            plot_title='',
