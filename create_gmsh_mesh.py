@@ -4,6 +4,7 @@ import support as sup
 folder = sup.msh_files_folder()
 lao_hash = sup.lao_hash()
 
+file_names = []
 dim = 2
 mesh_size = 1
 ellipse_center = [lao_hash['Rt'][0], 0, 0]
@@ -27,7 +28,10 @@ for ellipse_ratio in lao_hash['E']:
   # gmsh.fltk.run()
 
   file_name = "a_%.3f_ratio_%.3f_msh_%.1e" % (ellipse_a, ellipse_ratio, mesh_size)
+  file_names.append(file_name)
   gmsh.option.setNumber('Mesh.MshFileVersion', 2.2) # setting ascii 2 version so fenics understands whats up
   gmsh.write("%s/%s.msh" % (folder, file_name))
 
   gmsh.finalize()
+
+print(file_names)
