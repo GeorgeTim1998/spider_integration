@@ -34,8 +34,8 @@ for filename in filenames:
     [p0, f0_2, psi0] = fsup.linear_profiles()
 
     a = dot(grad(u)/r, grad(r_2*v))*dx
-    f = Constant( (4 * pi * p0 + 0.5 * f0_2) / psi0 )
-    L = f*v*dx
+    f = Constant( (pi * p0) )
+    L = f * r*v*dx
 #%% Compute solution
     u = Function(V)
     solve(a == L, u, bc)
@@ -60,12 +60,12 @@ for filename in filenames:
     Rt = 1/(2*pi) * omega / S_
     R0 = fsup.return_R0(u, V)
 
-    # print('Omega =', omega)
-    # print('Spl =', Spl)
-    # print('S_ =', S_)
-    # print('L =', L)
-    # print('[1,0] circ = ', fsup.circulation(er, n, ds))
-    # print('[z,0] circ = ', fsup.circulation(z*er, n, ds))
+    print('Omega =', omega)
+    print('Spl =', Spl)
+    print('S_ =', S_)
+    print('L =', L)
+    print('[1,0] circ = ', fsup.circulation(er, n, ds))
+    print('[z,0] circ = ', fsup.circulation(z*er, n, ds))
 
     q = fsup.return_q(r, z, R0, V, W)
     S = fsup.calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds)
