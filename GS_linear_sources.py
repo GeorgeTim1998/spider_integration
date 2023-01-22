@@ -8,10 +8,11 @@ import numpy as np
 folder = sup.xml_files_folder()
 lao_hash = sup.lao_hash()
 Re = lao_hash['Rt'][0] # ellipse center
+E = lao_hash['E'] # ellipse elongation
 
-# filenames = ['a_37.000_ratio_1.000_msh_1.0e+00', 'a_37.000_ratio_1.100_msh_1.0e+00', 'a_37.000_ratio_1.200_msh_1.0e+00', 'a_37.000_ratio_1.300_msh_1.0e+00', 'a_37.000_ratio_1.400_msh_1.0e+00', 'a_37.000_ratio_1.500_msh_1.0e+00', 'a_37.000_ratio_1.600_msh_1.0e+00', 'a_37.000_ratio_1.700_msh_1.0e+00', 'a_37.000_ratio_1.800_msh_1.0e+00', 'a_37.000_ratio_1.900_msh_1.0e+00', 'a_37.000_ratio_2.000_msh_1.0e+00']
-filenames = ['a_37.000_ratio_1.000_msh_1.0e+00']
-for filename in filenames:
+filenames = ['a_37.000_ratio_1.300_msh_1.0e+00', 'a_37.000_ratio_1.400_msh_1.0e+00', 'a_37.000_ratio_1.500_msh_1.0e+00', 'a_37.000_ratio_1.600_msh_1.0e+00', 'a_37.000_ratio_1.700_msh_1.0e+00', 'a_37.000_ratio_1.800_msh_1.0e+00', 'a_37.000_ratio_1.900_msh_1.0e+00', 'a_37.000_ratio_2.000_msh_1.0e+00']
+# filenames = ['a_37.000_ratio_1.100_msh_1.0e+00']
+for i, filename in enumerate(filenames):
     mesh_size = sup.mesh_size(filename)
 
     xml_file = "%s/%s.xml" % (folder, filename)
@@ -60,6 +61,7 @@ for filename in filenames:
     S_ = fsup.calculate_plasma_cross_surface(gmsh)
     Spl = fsup.calculate_plasma_surface(r, ds)
     Rt = 1/(2*pi) * omega / S_
+    alpha = 2 * E[i]**2 / (E[i]**2 + 1)
     R0 = fsup.return_R0(u, V)
 
     print('Omega =', omega)
@@ -75,3 +77,7 @@ for filename in filenames:
     print(mesh_size, S['S1'])
     print(mesh_size, S['S2'])
     print(mesh_size, S['S3'])
+    
+#%% Calc magnetic values
+    plasma_vals = fsup.solve_SLAE(alpha, S, Rt, R0)
+    print(plasma_vals)

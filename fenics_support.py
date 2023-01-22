@@ -168,3 +168,24 @@ def calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds):
     S[Si] = 1 / Bpa**2 / omega * assemble( dot(Bp, Bp) * dot(qi, n) * 2*pi*r*ds )
     
   return S
+
+def solve_SLAE(alpha, S, Rt, R0):
+  matrix = numpy.array(
+    [
+      [3,            1, -1],
+      [1,            1,  1],
+      [1, -(alpha - 1), -1]
+    ]
+  )
+  
+  f1 = S['S1'] + S['S2']
+  f2 = Rt/R0 * S['S2']
+  f3 = S['S3']
+  
+  f = numpy.array([f1, f2, f3])
+  
+  x = numpy.linalg.solve(matrix, f)
+  
+  print(numpy.allclose(numpy.dot(matrix, x), f))
+
+  return x
