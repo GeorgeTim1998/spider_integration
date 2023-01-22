@@ -6,6 +6,8 @@ from math import pi
 import numpy as np
 
 folder = sup.xml_files_folder()
+lao_hash = sup.lao_hash()
+Re = lao_hash['Rt'][0] # ellipse center
 
 # filenames = ['a_37.000_ratio_1.000_msh_1.0e+00', 'a_37.000_ratio_1.100_msh_1.0e+00', 'a_37.000_ratio_1.200_msh_1.0e+00', 'a_37.000_ratio_1.300_msh_1.0e+00', 'a_37.000_ratio_1.400_msh_1.0e+00', 'a_37.000_ratio_1.500_msh_1.0e+00', 'a_37.000_ratio_1.600_msh_1.0e+00', 'a_37.000_ratio_1.700_msh_1.0e+00', 'a_37.000_ratio_1.800_msh_1.0e+00', 'a_37.000_ratio_1.900_msh_1.0e+00', 'a_37.000_ratio_2.000_msh_1.0e+00']
 filenames = ['a_37.000_ratio_1.000_msh_1.0e+00']
@@ -31,10 +33,10 @@ for filename in filenames:
     v = TestFunction(V)
 
     [r_2, r, z] = fsup.operator_weights(V)
-    [p0, f0_2, psi0] = fsup.linear_profiles()
+    [bp, f0_2, psi0] = fsup.linear_profiles()
 
     a = dot(grad(u)/r, grad(r_2*v))*dx
-    f = Constant( (pi * p0) )
+    f = r_2 * Constant(pi * bp / Re**2)
     L = f * r*v*dx
 #%% Compute solution
     u = Function(V)

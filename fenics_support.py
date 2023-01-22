@@ -19,11 +19,11 @@ def operator_weights(V):
   return r_2, r, z
 
 def linear_profiles():
-  p0 = 1
+  bp = 0.9
   f0_2 = 1
   psi0 = 1
   
-  return p0, f0_2, psi0
+  return bp, f0_2, psi0
 
 def Time_name():
     ttime = datetime.datetime.now().strftime("%d%m%Y_%H%M%S")
@@ -65,8 +65,8 @@ def countour_plot_via_mesh(gmsh, u, levels,
     
     matplt.xlim(gmsh_coordinates[0].min(), gmsh_coordinates[0].max())
     matplt.ylim(gmsh_coordinates[1].min(), gmsh_coordinates[1].max())
-    matplt.xlabel("r, см")
-    matplt.ylabel("z, см")
+    matplt.xlabel("r, м")
+    matplt.ylabel("z, м")
     
     if xticks_array != []:
         matplt.xticks(numpy.array(xticks_array))
@@ -77,7 +77,7 @@ def countour_plot_via_mesh(gmsh, u, levels,
         matplt.grid(True)
     
     if colorbar == True:
-        matplt.colorbar(fig).set_label("\u03C8(r, z), Вб (СГС)")
+        matplt.colorbar(fig).set_label("\u03C8(r, z), Вб")
 
     save_contour_plot(plot_title)
 
