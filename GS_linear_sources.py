@@ -7,7 +7,8 @@ import numpy as np
 
 folder = sup.xml_files_folder()
 
-filenames = ['a_37.000_ratio_1.000_msh_1.0e+00', 'a_37.000_ratio_1.100_msh_1.0e+00', 'a_37.000_ratio_1.200_msh_1.0e+00', 'a_37.000_ratio_1.300_msh_1.0e+00', 'a_37.000_ratio_1.400_msh_1.0e+00', 'a_37.000_ratio_1.500_msh_1.0e+00', 'a_37.000_ratio_1.600_msh_1.0e+00', 'a_37.000_ratio_1.700_msh_1.0e+00', 'a_37.000_ratio_1.800_msh_1.0e+00', 'a_37.000_ratio_1.900_msh_1.0e+00', 'a_37.000_ratio_2.000_msh_1.0e+00']
+# filenames = ['a_37.000_ratio_1.000_msh_1.0e+00', 'a_37.000_ratio_1.100_msh_1.0e+00', 'a_37.000_ratio_1.200_msh_1.0e+00', 'a_37.000_ratio_1.300_msh_1.0e+00', 'a_37.000_ratio_1.400_msh_1.0e+00', 'a_37.000_ratio_1.500_msh_1.0e+00', 'a_37.000_ratio_1.600_msh_1.0e+00', 'a_37.000_ratio_1.700_msh_1.0e+00', 'a_37.000_ratio_1.800_msh_1.0e+00', 'a_37.000_ratio_1.900_msh_1.0e+00', 'a_37.000_ratio_2.000_msh_1.0e+00']
+filenames = ['a_37.000_ratio_1.000_msh_1.0e+00']
 for filename in filenames:
     mesh_size = sup.mesh_size(filename)
 
@@ -18,14 +19,14 @@ for filename in filenames:
     gmsh = Mesh(xml_file)
 
     V = FunctionSpace(gmsh, 'P', 1)
-    #%% Define boundary condition
+#%% Define boundary condition
     u_D = Expression('0', degree=2)
 
     def boundary(x, on_boundary):
         return on_boundary
 
     bc = DirichletBC(V, u_D, boundary)
-    #%% Define variational problem
+#%% Define variational problem
     u = TrialFunction(V)
     v = TestFunction(V)
 
@@ -35,13 +36,13 @@ for filename in filenames:
     a = dot(grad(u)/r, grad(r_2*v))*dx
     f = Constant( (4 * pi * p0 + 0.5 * f0_2) / psi0 )
     L = f*v*dx
-    #%% Compute solution
+#%% Compute solution
     u = Function(V)
     solve(a == L, u, bc)
 
     fsup.countour_plot_via_mesh(gmsh, u, levels = 30, colorbar=True, grid=True)
 
-    #%% Post solve calculus
+#%% Post solve calculus
     boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
     ds = Measure('ds', domain=gmsh, subdomain_data=boundaries)
     n = FacetNormal(gmsh) # normal to plasma boundary
