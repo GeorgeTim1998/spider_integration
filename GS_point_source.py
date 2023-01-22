@@ -37,9 +37,9 @@ v = TestFunction(V)
 a = dot(grad(u)/r, grad(r_2*v))*dx
 I = 1
 sigma = 1
-R0=142.5
-f = fsup.point_source(I=I, sigma=sigma, R0=R0)
-L = fsup.M0*r * f*v*dx
+R0pi=142.5
+f = fsup.point_source(I=I, sigma=sigma, R0=R0pi)
+L = fsup.M0*r * f * r*v*dx
 #%% Compute solution
 u = Function(V)
 solve(a == L, u, bc)
@@ -64,9 +64,10 @@ Spl = fsup.calculate_plasma_surface(r, ds)
 Rt = 1/(2*pi) * omega / S_
 R0 = fsup.return_R0(u, V)
 
-a = 37*0.9
-print("Bp(top) = %e" % Bp(R0, a)[0])
+a = 10
+print("Bp(top) = %e" % Bp(142.5, a)[0])
 print("Bp(top) = %e" % ( fsup.M0*I / (2*pi*a) ))
+
 # print('Omega =', omega)
 # print('Spl =', Spl)
 # print('S_ =', S_)
@@ -79,6 +80,6 @@ print("Bp(top) = %e" % ( fsup.M0*I / (2*pi*a) ))
 q = fsup.return_q(r, z, R0, V, W)
 S = fsup.calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds)
 
-print(mesh_size, S['S1'])
-print(mesh_size, S['S2'])
-print(mesh_size, S['S3'])
+# print(mesh_size, S['S1'])
+# print(mesh_size, S['S2'])
+# print(mesh_size, S['S3'])
