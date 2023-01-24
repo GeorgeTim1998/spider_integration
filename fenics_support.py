@@ -83,7 +83,7 @@ def countour_plot_via_mesh(gmsh, u, levels,
 
   return u_max
 
-def save_contour_plot(plot_title):
+def save_contour_plot(plot_title = ''):
   time_title = Time_name()
 
   path_my_file = '%s/%s' % (PICS_FOLDER, time_title)
@@ -189,3 +189,44 @@ def solve_SLAE(alpha, S, Rt, R0):
   print(numpy.allclose(numpy.dot(matrix, x), f))
 
   return x
+
+def form_dict():
+  problem_dict = {}
+  
+  problem_dict['omega'] = []
+  problem_dict['S_'] = []
+  problem_dict['Spl'] = []
+  problem_dict['Rt'] = []
+  problem_dict['alpha_LB'] = []
+  problem_dict['R0'] = []
+  problem_dict['S1'] = []
+  problem_dict['S2'] = []
+  problem_dict['S3'] = []
+  problem_dict['bp'] = []
+  problem_dict['li'] = []
+  problem_dict['mu_i'] = []
+  
+  return problem_dict
+
+
+def plot_1D(x, y, xlabel='', ylabel=''):
+
+  matplt.scatter(x, y)
+
+  matplt.grid("True")
+  
+  if xlabel != '':
+    matplt.xlabel(xlabel)
+  
+  if ylabel != '':
+    matplt.ylabel(ylabel)
+
+  save_contour_plot()
+    
+def acceptable_value(plasma_vals):
+  answer = True
+  for value in plasma_vals:
+    if abs(value) >= 100:
+      answer = False
+      
+  return answer

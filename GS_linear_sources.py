@@ -9,8 +9,18 @@ folder = sup.xml_files_folder()
 lao_hash = sup.lao_hash()
 Re = lao_hash['Rt'][0] # ellipse center
 E = lao_hash['E'] # ellipse elongation
+problem_data = fsup.form_dict()
 
-filenames = ['a_37.000_ratio_1.300_msh_1.0e+00', 'a_37.000_ratio_1.400_msh_1.0e+00', 'a_37.000_ratio_1.500_msh_1.0e+00', 'a_37.000_ratio_1.600_msh_1.0e+00', 'a_37.000_ratio_1.700_msh_1.0e+00', 'a_37.000_ratio_1.800_msh_1.0e+00', 'a_37.000_ratio_1.900_msh_1.0e+00', 'a_37.000_ratio_2.000_msh_1.0e+00']
+filenames = ['a_37.000_ratio_1.100_msh_1.0e+00', 
+             'a_37.000_ratio_1.200_msh_1.0e+00', 
+             'a_37.000_ratio_1.300_msh_1.0e+00', 
+             'a_37.000_ratio_1.400_msh_1.0e+00', 
+             'a_37.000_ratio_1.500_msh_1.0e+00', 
+             'a_37.000_ratio_1.600_msh_1.0e+00', 
+             'a_37.000_ratio_1.700_msh_1.0e+00', 
+             'a_37.000_ratio_1.800_msh_1.0e+00', 
+             'a_37.000_ratio_1.900_msh_1.0e+00', 
+             'a_37.000_ratio_2.000_msh_1.0e+00']
 # filenames = ['a_37.000_ratio_1.100_msh_1.0e+00']
 for i, filename in enumerate(filenames):
     mesh_size = sup.mesh_size(filename)
@@ -61,7 +71,7 @@ for i, filename in enumerate(filenames):
     S_ = fsup.calculate_plasma_cross_surface(gmsh)
     Spl = fsup.calculate_plasma_surface(r, ds)
     Rt = 1/(2*pi) * omega / S_
-    alpha = 2 * E[i]**2 / (E[i]**2 + 1)
+    alpha_LB = 2 * E[i]**2 / (E[i]**2 + 1)
     R0 = fsup.return_R0(u, V)
 
     print('Omega =', omega)
@@ -79,5 +89,35 @@ for i, filename in enumerate(filenames):
     print(mesh_size, S['S3'])
     
 #%% Calc magnetic values
-    plasma_vals = fsup.solve_SLAE(alpha, S, Rt, R0)
+    plasma_vals = fsup.solve_SLAE(alpha_LB, S, Rt, R0)
+
     print(plasma_vals)
+    
+    problem_data['omega'].append(omega)
+    problem_data['S_'].append(S_)
+    problem_data['Spl'].append(Spl)
+    problem_data['Rt'].append(Rt)
+    problem_data['alpha_LB'].append(alpha_LB)
+    problem_data['R0'].append(R0)
+    problem_data['S1'].append(S['S1'])
+    problem_data['S2'].append(S['S2'])
+    problem_data['S3'].append(S['S3'])
+    problem_data['bp'].append(plasma_vals[0])
+    problem_data['li'].append(plasma_vals[1])
+    problem_data['mu_i'].append(plasma_vals[2])
+
+fsup.plot_1D(E, problem_data['omega'], xlabel='elongation', ylabel='Plasma volume, m**3')
+fsup.plot_1D(E, problem_data['S_'], xlabel='elongation', ylabel='Plasma cross surface, m**2')
+fsup.plot_1D(E, problem_data['Spl'], xlabel='elongation', ylabel='Plasma surface, m**2')
+
+fsup.plot_1D(E, problem_data['Rt'], xlabel='elongation', ylabel='Rt')
+fsup.plot_1D(E, problem_data['alpha_LB'], xlabel='elongation', ylabel='2E**2 / (E**2 + 1)')
+fsup.plot_1D(E, problem_data['R0'], xlabel='elongation', ylabel='Magnetic axis, m')
+
+fsup.plot_1D(E, problem_data['S1'], xlabel='elongation', ylabel='S1')
+fsup.plot_1D(E, problem_data['S2'], xlabel='elongation', ylabel='S2')
+fsup.plot_1D(E, problem_data['S3'], xlabel='elongation', ylabel='S3')
+
+fsup.plot_1D(E, problem_data['bp'], xlabel='elongation', ylabel='bp')
+fsup.plot_1D(E, problem_data['li'], xlabel='elongation', ylabel='li')
+fsup.plot_1D(E, problem_data['mu_i'], xlabel='elongation', ylabel='mu_i')
