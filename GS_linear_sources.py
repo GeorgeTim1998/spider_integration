@@ -82,16 +82,16 @@ for i, filename in enumerate(filenames):
     print('[z,0] circ = ', fsup.circulation(z*er, n, ds))
 
     q = fsup.return_q(r, z, R0, V, W)
-    S = fsup.calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds)
+    S1, S2, S3 = fsup.calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds)
 
-    print(mesh_size, S['S1'])
-    print(mesh_size, S['S2'])
-    print(mesh_size, S['S3'])
+    print(mesh_size, S1)
+    print(mesh_size, S2)
+    print(mesh_size, S3)
     
 #%% Calc magnetic values
-    plasma_vals = fsup.solve_SLAE(alpha_LB, S, Rt, R0)
+    bp, li, mu_i = fsup.solve_SLAE(alpha_LB, [S1, S2, S3], Rt, R0)
 
-    print(plasma_vals)
+    print([bp, li, mu_i])
     
     problem_data['omega'].append(omega)
     problem_data['S_'].append(S_)
@@ -99,12 +99,12 @@ for i, filename in enumerate(filenames):
     problem_data['Rt'].append(Rt)
     problem_data['alpha_LB'].append(alpha_LB)
     problem_data['R0'].append(R0)
-    problem_data['S1'].append(S['S1'])
-    problem_data['S2'].append(S['S2'])
-    problem_data['S3'].append(S['S3'])
-    problem_data['bp'].append(plasma_vals[0])
-    problem_data['li'].append(plasma_vals[1])
-    problem_data['mu_i'].append(plasma_vals[2])
+    problem_data['S1'].append(S1)
+    problem_data['S2'].append(S2)
+    problem_data['S3'].append(S3)
+    problem_data['bp'].append(bp)
+    problem_data['li'].append(li)
+    problem_data['mu_i'].append(mu_i)
 
 fsup.plot_1D(E, problem_data['omega'], xlabel='elongation', ylabel='Plasma volume, m**3')
 fsup.plot_1D(E, problem_data['S_'], xlabel='elongation', ylabel='Plasma cross surface, m**2')
