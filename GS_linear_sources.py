@@ -90,21 +90,12 @@ for i, filename in enumerate(filenames):
     
 #%% Calc magnetic values
     bp, li, mu_i = fsup.solve_SLAE(alpha_LB, [S1, S2, S3], Rt, R0)
-
     print([bp, li, mu_i])
     
-    problem_data['omega'].append(omega)
-    problem_data['S_'].append(S_)
-    problem_data['Spl'].append(Spl)
-    problem_data['Rt'].append(Rt)
-    problem_data['alpha_LB'].append(alpha_LB)
-    problem_data['R0'].append(R0)
-    problem_data['S1'].append(S1)
-    problem_data['S2'].append(S2)
-    problem_data['S3'].append(S3)
-    problem_data['bp'].append(bp)
-    problem_data['li'].append(li)
-    problem_data['mu_i'].append(mu_i)
+    vars = globals()
+    keys = list(problem_data.keys())
+    for key in keys:
+        problem_data[key].append(vars[key])
 
 fsup.plot_1D(E, problem_data['omega'], xlabel='elongation', ylabel='Plasma volume, m**3')
 fsup.plot_1D(E, problem_data['S_'], xlabel='elongation', ylabel='Plasma cross surface, m**2')
