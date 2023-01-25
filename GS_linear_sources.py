@@ -73,6 +73,7 @@ for i, filename in enumerate(filenames):
     Rt = 1/(2*pi) * omega / S_
     alpha = fsup.calculate_alpha(Bp, ez, gmsh, dx)
     alpha_LB = 2 * E[i]**2 / (E[i]**2 + 1)
+    eps_K = (E[i]**2 - 1) / (E[i]**2 + 1)
     R0 = fsup.return_R0(u, V)
 
     print('Omega =', omega)

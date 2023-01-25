@@ -202,13 +202,18 @@ def form_dict():
   problem_dict['omega'] = []
   problem_dict['S_'] = []
   problem_dict['Spl'] = []
+  
   problem_dict['Rt'] = []
+  
   problem_dict['alpha'] = []
   problem_dict['alpha_LB'] = []
+  problem_dict['eps_K'] = []
   problem_dict['R0'] = []
+  
   problem_dict['S1'] = []
   problem_dict['S2'] = []
   problem_dict['S3'] = []
+  
   problem_dict['bp'] = []
   problem_dict['li'] = []
   problem_dict['mu_i'] = []
