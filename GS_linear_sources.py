@@ -91,24 +91,13 @@ for i, filename in enumerate(filenames):
 #%% Calc magnetic values
     bp, li, mu_i = fsup.solve_SLAE(alpha_LB, [S1, S2, S3], Rt, R0)
     print([bp, li, mu_i])
-    
+
     vars = globals()
     keys = list(problem_data.keys())
     for key in keys:
         problem_data[key].append(vars[key])
 
-fsup.plot_1D(E, problem_data['omega'], xlabel='elongation', ylabel='Plasma volume, m**3')
-fsup.plot_1D(E, problem_data['S_'], xlabel='elongation', ylabel='Plasma cross surface, m**2')
-fsup.plot_1D(E, problem_data['Spl'], xlabel='elongation', ylabel='Plasma surface, m**2')
-
-fsup.plot_1D(E, problem_data['Rt'], xlabel='elongation', ylabel='Rt')
-fsup.plot_1D(E, problem_data['alpha_LB'], xlabel='elongation', ylabel='2E**2 / (E**2 + 1)')
-fsup.plot_1D(E, problem_data['R0'], xlabel='elongation', ylabel='Magnetic axis, m')
-
-fsup.plot_1D(E, problem_data['S1'], xlabel='elongation', ylabel='S1')
-fsup.plot_1D(E, problem_data['S2'], xlabel='elongation', ylabel='S2')
-fsup.plot_1D(E, problem_data['S3'], xlabel='elongation', ylabel='S3')
-
-fsup.plot_1D(E, problem_data['bp'], xlabel='elongation', ylabel='bp')
-fsup.plot_1D(E, problem_data['li'], xlabel='elongation', ylabel='li')
-fsup.plot_1D(E, problem_data['mu_i'], xlabel='elongation', ylabel='mu_i')
+#%% post problem plot
+keys = list(problem_data.keys())
+for key in keys:
+    fsup.plot_1D(E, problem_data[key], xlabel='elongation', ylabel=key) # maybe add special funcs for certain values
