@@ -90,7 +90,7 @@ for i, filename in enumerate(filenames):
     print(mesh_size, S3)
     
 #%% Calc magnetic values
-    bp, li, mu_i = fsup.solve_SLAE(alpha_LB, [S1, S2, S3], Rt, R0)
+    bp, li, mu_i = fsup.solve_SLAE(alpha, [S1, S2, S3], Rt, R0)
     print([bp, li, mu_i])
 
     vars = globals()
