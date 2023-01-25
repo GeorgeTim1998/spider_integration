@@ -71,6 +71,7 @@ for i, filename in enumerate(filenames):
     S_ = fsup.calculate_plasma_cross_surface(gmsh)
     Spl = fsup.calculate_plasma_surface(r, ds)
     Rt = 1/(2*pi) * omega / S_
+    alpha = fsup.calculate_alpha(Bp, ez, gmsh, dx)
     alpha_LB = 2 * E[i]**2 / (E[i]**2 + 1)
     R0 = fsup.return_R0(u, V)
 
@@ -78,8 +79,8 @@ for i, filename in enumerate(filenames):
     print('Spl =', Spl)
     print('S_ =', S_)
     print('L =', L)
-    print('[1,0] circ = ', fsup.circulation(er, n, ds))
-    print('[z,0] circ = ', fsup.circulation(z*er, n, ds))
+    print('alpha = ', alpha)
+    print('alpha_LB =', alpha_LB)
 
     q = fsup.return_q(r, z, R0, V, W)
     S1, S2, S3 = fsup.calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds)

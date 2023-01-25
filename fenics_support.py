@@ -143,6 +143,12 @@ def calculate_plasma_surface(r, ds):
   # checked against circle tor
   return assemble(2*pi * r*ds)
 
+def calculate_alpha(Bp, ez, gmsh, dx):
+  numerator = 2 * assemble(dot(Bp, ez) * dot(Bp, ez) * dx(gmsh))
+  denominator = assemble(dot(Bp, Bp) * dx(gmsh))
+  
+  return numerator/denominator
+
 def return_R0(u, V): # multiply by 1.1 and S1 = 2
   max_index = numpy.argmax(u.vector()[:])
   max_point = V.tabulate_dof_coordinates() # can be used for assigning?? from known data
@@ -197,6 +203,7 @@ def form_dict():
   problem_dict['S_'] = []
   problem_dict['Spl'] = []
   problem_dict['Rt'] = []
+  problem_dict['alpha'] = []
   problem_dict['alpha_LB'] = []
   problem_dict['R0'] = []
   problem_dict['S1'] = []
