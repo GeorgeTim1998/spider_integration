@@ -245,14 +245,14 @@ def calculate_bp_theory(Bpa, omega, p_psi, dx, gmsh, r):
   # this gives simelar results that SLAE does
   return 2*M0/Bpa**2/omega * assemble(p_psi * 2*pi*r*dx(gmsh))
 
+def calculate_li_theory(Bpa, omega, Bp, dx, gmsh, r):
+  # this gives simelar results that SLAE does. But 6% off
+  return 1/Bpa**2/omega * assemble(dot(Bp, Bp) * 2*pi*r*dx(gmsh))
+
 def calculate_mu_i_theory(Bpa, omega, Bt, dx, gmsh, r, Bt0 = 0):
   # this gives simelar results that SLAE does
   if Bt0 == 0:
     return -1/Bpa**2/omega * assemble(dot(Bt, Bt) * 2*pi*r*dx(gmsh))
-
-def calculate_li_theory(Bpa, omega, Bp, dx, gmsh, r):
-  # this gives simelar results that SLAE does
-  return 1/Bpa**2/omega * assemble(dot(Bp, Bp) * 2*pi*r*dx(gmsh))
 
 def append_problem_data(vars, problem_data):
   keys = list(problem_data.keys())
