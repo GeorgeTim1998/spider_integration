@@ -241,6 +241,23 @@ def solve_SLAE(alpha, S, Rt, R0):
 
   return x
 
+def calculate_bp_theory(Bpa, omega, p_psi, dx, gmsh):
+  return 2*M0/Bpa**2/omega * assemble(p_psi * dx(gmsh))
+
+def calculate_li_theory(Bpa, omega, Bt, dx, gmsh, Bt0 = 0):
+  if Bt0 == 0:
+    return -1/Bpa**2/omega * assemble(dot(Bt, Bt) * dx(gmsh))
+
+def calculate_mu_i_theory(Bpa, omega, Bp, dx, gmsh):
+  return 1/Bpa**2/omega * assemble(dot(Bp, Bp) * dx(gmsh))
+
+def append_problem_data(vars, problem_data):
+  keys = list(problem_data.keys())
+  for key in keys:
+    problem_data[key].append(vars[key])
+    
+  return problem_data
+
 def form_dict():
   problem_dict = {}
   

@@ -93,7 +93,6 @@ for i, filename in enumerate(filenames):
     omega = fsup.calculate_omega(r, gmsh)
     S_ = fsup.calculate_plasma_cross_surface(gmsh)
     Spl = fsup.calculate_plasma_surface(r, ds)
-    # Rt = 1/(2*pi) * omega / S_
     alpha = fsup.calculate_alpha(Bp, ez, gmsh, dx)
     alpha_LB = 2 * E[i]**2 / (E[i]**2 + 1)
     eps_K = (E[i]**2 - 1) / (E[i]**2 + 1)
@@ -117,10 +116,13 @@ for i, filename in enumerate(filenames):
     bp, li, mu_i = fsup.solve_SLAE(alpha, [S1, S2, S3], Rt, R0)
     print([bp, li, mu_i])
 
-    vars = globals()
-    keys = list(problem_data.keys())
-    for key in keys:
-        problem_data[key].append(vars[key])
+    bp_theory = fsup.calculate_bp_theory(Bpa, omega, p_psi, dx, gmsh)
+    li_theory = fsup.calculate_li_theory(Bpa, omega, Bt, dx, gmsh)
+    mu_i_theory = fsup.calculate_mu_i_theory(Bpa, omega, Bp, dx, gmsh)
+    
+    print([bp_theory, li_theory, mu_i_theory])
+    
+    problem_data = fsup.append_problem_data(globals(), problem_data)
 
 #%% post problem plot
 keys = list(problem_data.keys())
