@@ -51,5 +51,5 @@ def mesh_size(filename):
   
   return numbers[-1]
 
-def print_colored(color_srt, color='white', str='', attrs=[]):
-  print(colored(color_srt, color, attrs), str)
+def print_colored(color_srt, color='white', str=''):
+  print(colored(color_srt, color), str)
