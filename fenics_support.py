@@ -137,14 +137,20 @@ def calculate_d_at_boundary(u, psi0):
   u_array = u.compute_vertex_values(gmsh)
 
   fig = matplt.tricontour(triang, u_array, [0, psi0], zorder=2)
-  contour = fig.allsegs[-1][0].transpose() # last contour w/ psi0 basically
-  matplt.close()
   
+  contour = fig.allsegs[-1][0].transpose() # last contour w/ psi0 basically
   a_psi_level = 0.5 * (contour[0].max() - contour[0].min())
   b_psi_level = 0.5 * (contour[1].max() - contour[1].min())
-  
   E_psi_level = b_psi_level/a_psi_level
-  return E_psi_level, a_psi_level
+  
+  zero_contour = gmsh.coordinates().transpose()
+  a = 0.5*(zero_contour[0].max() - zero_contour[0].min())
+  b = 0.5*(zero_contour[1].max() - zero_contour[1].min())
+  E = b/a
+  
+  matplt.close()
+  der_E = (E - E_psi_level)/(a - a_psi_level)
+  return a * der_E / (2*E)
 
 def save_contour_plot(note, plot_title = ''):
   time_title = Time_name()

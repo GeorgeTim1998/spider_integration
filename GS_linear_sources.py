@@ -17,7 +17,7 @@ ell_a = lao_hash['a']
 
 bp_problem = 0.9 # poloidal betta from lao1985
 q_problem = 1 # stability from lao1985
-psi_level = 2 # used to calc contours with known desired psi_level
+psi_level = 0.1 # used to calc contours with known desired psi_level
 
 problem_data = fsup.form_dict()
 theory_data = fsup.form_dict_additions()
@@ -76,7 +76,8 @@ for i, filename in enumerate(filenames):
   [u, psi0] = fsup.measure_u(Re, ell_a, ell_b, I, bp_problem, inverced_r_integral, E[i], q_problem, u, V) # de de-measure solution
   
   fsup.countour_plot_via_mesh(gmsh, u, levels = 5, colorbar=True, grid=True)
-  fsup.calculate_d_at_boundary(u, psi_level)
+  d = fsup.calculate_d_at_boundary(u, psi_level)
+  fsup.print_colored("d", 'green', d)
   print("\n")
   exit()
   
