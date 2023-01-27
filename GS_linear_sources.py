@@ -7,7 +7,7 @@ import numpy as np
 
 folder = sup.xml_files_folder()
 lao_hash = sup.lao_hash()
-Re = lao_hash['Rt'][0] # ellipse center
+Re = lao_hash['Rt'][0] # ellipse center which sometimes can be R0 in your writings
 E = lao_hash['E'] # ellipse elongation
 problem_data = fsup.form_dict()
 
