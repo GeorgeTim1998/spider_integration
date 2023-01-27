@@ -275,38 +275,58 @@ def form_dict():
   
   
   problem_dict['alpha'] = []
-  problem_dict['alpha_LB'] = []
-  
   problem_dict['eps_K'] = []
-  
-  problem_dict['R0'] = []
   problem_dict['Rt'] = []
   
   problem_dict['S1'] = []
-  problem_dict['S1_theory'] = []
-  
   problem_dict['S2'] = []
-  problem_dict['S2_theory'] = []
-  
   problem_dict['S3'] = []
-  problem_dict['S3_theory'] = []
   
   problem_dict['bp'] = []
-  problem_dict['bp_theory'] = []
-  
   problem_dict['li'] = []
-  problem_dict['li_theory'] = []
-  
   problem_dict['mu_i'] = []
-  problem_dict['mu_i_theory'] = []
-  
   
   return problem_dict
 
+def form_dict_additions():
+  problem_dict = {}
+  
+  problem_dict['alpha_LB'] = []
+  
+  problem_dict['R0'] = []
+  
+  problem_dict['S1_theory'] = []
+  problem_dict['S2_theory'] = []
+  problem_dict['S3_theory'] = []
+  
+  problem_dict['bp_theory'] = []
+  problem_dict['li_theory'] = []
+  problem_dict['mu_i_theory'] = []
+  
+  return problem_dict
 
-def plot_1D(x, y, xlabel='', ylabel='', note=''):
+def addition_keys():
+  addition = {}
+  
+  addition['alpha'] = 'alpha_LB'
+  
+  addition['Rt'] = 'R0'
+  
+  addition['S1'] = 'S1_theory'
+  addition['S2'] = 'S2_theory'
+  addition['S3'] = 'S3_theory'
+  
+  addition['bp'] = 'bp_theory'
+  addition['li'] = 'li_theory'
+  addition['mu_i'] = 'mu_i_theory'
+  
+  return addition
+
+def plot_1D(x, y, xlabel='', ylabel='', note='', additions=[]):
 
   matplt.scatter(x, y)
+  if additions != []:
+    matplt.scatter(x, additions)
 
   matplt.grid("True")
   

@@ -19,7 +19,8 @@ bp_problem = 0.9 # poloidal betta from lao1985
 q_problem = 1 # stability from lao1985
 
 problem_data = fsup.form_dict()
-plot_keys = fsup # do later smth with it
+theory_data = fsup.form_dict_additions()
+plot_keys = fsup.addition_keys() # do later smth with it
 
 filenames = ['a_37.000_ratio_1.100_msh_1.0e+00', 
              'a_37.000_ratio_1.200_msh_1.0e+00', 
@@ -137,11 +138,18 @@ for i, filename in enumerate(filenames):
   S1_theory = 2
   S2_theory = 2*bp_theory + li_theory - 1
   S3_theory = 0
-  
-  problem_data = fsup.append_problem_data(globals(), problem_data)
 
+#%% append data
+  problem_data = fsup.append_problem_data(globals(), problem_data)
+  theory_data = fsup.append_problem_data(globals(), theory_data)
 #%% post problem plot
 fsup.print_colored('Save 2D plots...', 'green', attrs=['bold'])
 keys = list(problem_data.keys())
 for key in keys:
-  fsup.plot_1D(E, problem_data[key], xlabel='elongation', ylabel=key, note=key) # maybe add special funcs for certain values
+  if key in list(plot_keys.keys()):
+    fsup.plot_1D(E, problem_data[key],
+                xlabel='elongation', ylabel=key, note=key,
+                additions=theory_data[plot_keys[key]]) # maybe add special funcs for certain values
+  else:
+    fsup.plot_1D(E, problem_data[key],
+                xlabel='elongation', ylabel=key, note=key) # maybe add special funcs for certain values
