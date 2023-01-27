@@ -19,6 +19,7 @@ bp_problem = 0.9 # poloidal betta from lao1985
 q_problem = 1 # stability from lao1985
 
 problem_data = fsup.form_dict()
+plot_keys = fsup
 
 filenames = ['a_37.000_ratio_1.100_msh_1.0e+00', 
              'a_37.000_ratio_1.200_msh_1.0e+00', 
@@ -31,112 +32,112 @@ filenames = ['a_37.000_ratio_1.100_msh_1.0e+00',
              'a_37.000_ratio_1.900_msh_1.0e+00', 
              'a_37.000_ratio_2.000_msh_1.0e+00']
 # filenames = ['a_37.000_ratio_1.100_msh_1.0e+00']
+
 for i, filename in enumerate(filenames):
-    fsup.print_colored("Iteration N0 %d out of %d for file:" % (i, len(filenames)), 'green', filename, attrs=['bold'])
-    print("\n")
+  fsup.print_colored("Iteration N0 %d out of %d for file:" % (i, len(filenames)), 'green', filename, attrs=['bold'])
+  print("\n")
     
-    
-    mesh_size = sup.mesh_size(filename)
+  mesh_size = sup.mesh_size(filename)
 
-    xml_file = "%s/%s.xml" % (folder, filename)
-    xml_file_facet = "%s/%s_facet_region.xml" % (folder, filename) # triangle surfaces
-    xml_file_physical_region = "%s/%s_physical_region.xml" % (folder, filename) # domains
+  xml_file = "%s/%s.xml" % (folder, filename)
+  xml_file_facet = "%s/%s_facet_region.xml" % (folder, filename) # triangle surfaces
+  xml_file_physical_region = "%s/%s_physical_region.xml" % (folder, filename) # domains
 
-    gmsh = Mesh(xml_file)
+  gmsh = Mesh(xml_file)
 
-    V = FunctionSpace(gmsh, 'P', 1)
+  V = FunctionSpace(gmsh, 'P', 1)
 #%% Define boundary condition
-    u_D = Expression('0', degree=2)
+  u_D = Expression('0', degree=2)
 
-    def boundary(x, on_boundary):
-        return on_boundary
+  def boundary(x, on_boundary):
+    return on_boundary
 
-    bc = DirichletBC(V, u_D, boundary)
+  bc = DirichletBC(V, u_D, boundary)
 #%% Define variational problem
-    u = TrialFunction(V)
-    v = TestFunction(V)
+  u = TrialFunction(V)
+  v = TestFunction(V)
 
-    ell_b = ell_a * E[i]
-    [r_2, r, z] = fsup.operator_weights(V)
-    
-    p_part = fsup.linear_pressure(bp_problem, Re)
-    F_part = fsup.linear_tor_function(q_problem, E[i], Re)
-    
-    a = dot(grad(u)/r, grad(r_2*v))*dx
-    f = Constant(p_part) * r_2 + Constant(F_part)
-    L = f * r*v*dx
+  ell_b = ell_a * E[i]
+  [r_2, r, z] = fsup.operator_weights(V)
+  
+  p_part = fsup.linear_pressure(bp_problem, Re)
+  F_part = fsup.linear_tor_function(q_problem, E[i], Re)
+  
+  a = dot(grad(u)/r, grad(r_2*v))*dx
+  f = Constant(p_part) * r_2 + Constant(F_part)
+  L = f * r*v*dx
     
 #%% Compute solution and p(psi), F(psi)
-    u = Function(V)
-    solve(a == L, u, bc)
+  u = Function(V)
+  solve(a == L, u, bc)
 
-    inverced_r_integral = fsup.inverced_r_integral(Re, ell_a, ell_b, r, dx, gmsh)
-    [u, psi0] = fsup.measure_u(Re, ell_a, ell_b, I, bp_problem, inverced_r_integral, E[i], q_problem, u, V) # de de-measure solution
-    
-    fsup.countour_plot_via_mesh(gmsh, u, levels = 30, colorbar=True, grid=True)
-    print("\n")
+  inverced_r_integral = fsup.inverced_r_integral(Re, ell_a, ell_b, r, dx, gmsh)
+  [u, psi0] = fsup.measure_u(Re, ell_a, ell_b, I, bp_problem, inverced_r_integral, E[i], q_problem, u, V) # de de-measure solution
+  
+  fsup.countour_plot_via_mesh(gmsh, u, levels = 30, colorbar=True, grid=True)
+  print("\n")
 
-    [p_psi, p0] = fsup.calculate_p_psi(bp_problem, psi0, u, Re)
-    [F_2_psi, F_20] = fsup.calculate_Fpow2_psi(E[i], psi0, q_problem, u, Re)
+  [p_psi, p0] = fsup.calculate_p_psi(bp_problem, psi0, u, Re)
+  [F_2_psi, F_20] = fsup.calculate_Fpow2_psi(E[i], psi0, q_problem, u, Re)
 
 #%% Post solve calculus
-    boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
-    ds = Measure('ds', domain=gmsh, subdomain_data=boundaries)
-    n = FacetNormal(gmsh) # normal to plasma boundary
+  boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
+  ds = Measure('ds', domain=gmsh, subdomain_data=boundaries)
+  n = FacetNormal(gmsh) # normal to plasma boundary
 
-    L = fsup.boundary_length(ds)
-    W = fsup.form_vector_space(u)
-    Bp = fsup.calculate_Bp(u, r, W)
-    Bpa = 1/L * fsup.circulation(Bp, n, ds)
+  L = fsup.boundary_length(ds)
+  W = fsup.form_vector_space(u)
+  Bp = fsup.calculate_Bp(u, r, W)
+  Bpa = 1/L * fsup.circulation(Bp, n, ds)
 
-    Bt = fsup.calculate_Bt(F_2_psi, r)
-    g_sol = fsup.calculate_g(p_psi, Bp, Bt)
-    Rt = fsup.calculate_Rt(g_sol, r, dx, gmsh)
+  Bt = fsup.calculate_Bt(F_2_psi, r)
+  g_sol = fsup.calculate_g(p_psi, Bp, Bt)
+  Rt = fsup.calculate_Rt(g_sol, r, dx, gmsh)
 
-    [er, ez] = fsup.calculate_orts(W)
+  [er, ez] = fsup.calculate_orts(W)
 
-    omega = fsup.calculate_omega(r, gmsh)
-    S_ = fsup.calculate_plasma_cross_surface(gmsh)
-    Spl = fsup.calculate_plasma_surface(r, ds)
-    alpha = fsup.calculate_alpha(Bp, ez, gmsh, dx)
-    alpha_LB = 2 * E[i]**2 / (E[i]**2 + 1)
-    eps_K = (E[i]**2 - 1) / (E[i]**2 + 1)
-    R0 = fsup.return_R0(u, V)
+  omega = fsup.calculate_omega(r, gmsh)
+  S_ = fsup.calculate_plasma_cross_surface(gmsh)
+  Spl = fsup.calculate_plasma_surface(r, ds)
+  alpha = fsup.calculate_alpha(Bp, ez, gmsh, dx)
+  alpha_LB = 2 * E[i]**2 / (E[i]**2 + 1)
+  eps_K = (E[i]**2 - 1) / (E[i]**2 + 1)
+  R0 = fsup.return_R0(u, V)
 
-    fsup.print_colored("\u03A9 =", 'blue', omega)
-    fsup.print_colored('Spl =', 'blue', Spl)
-    fsup.print_colored("S\u27C2 =", 'blue', S_)
-    fsup.print_colored('L =', 'blue', L)
-    fsup.print_colored("\u03B1 =", 'blue', alpha)
-    fsup.print_colored("\u03B1_LB =", 'blue', alpha_LB)
-    print("\n")
-    
-    q = fsup.return_q(r, z, R0, V, W)
-    S1, S2, S3 = fsup.calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds)
-    
-    fsup.print_colored('S1 =', 'blue', S1)
-    fsup.print_colored('S2 =', 'blue', S2)
-    fsup.print_colored('S3 =', 'blue', S3)
-    print("\n")
-    
+  fsup.print_colored("\u03A9 =", 'blue', omega)
+  fsup.print_colored('Spl =', 'blue', Spl)
+  fsup.print_colored("S\u27C2 =", 'blue', S_)
+  fsup.print_colored('L =', 'blue', L)
+  fsup.print_colored("\u03B1 =", 'blue', alpha)
+  fsup.print_colored("\u03B1_LB =", 'blue', alpha_LB)
+  print("\n")
+  
+  q = fsup.return_q(r, z, R0, V, W)
+  S1, S2, S3 = fsup.calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds)
+  
+  fsup.print_colored('S1 =', 'blue', S1)
+  fsup.print_colored('S2 =', 'blue', S2)
+  fsup.print_colored('S3 =', 'blue', S3)
+  print("\n")
+  
 #%% Calc magnetic values
-    bp, li, mu_i = fsup.solve_SLAE(alpha, [S1, S2, S3], Rt, R0)
-    fsup.print_colored('SLAE', 'blue', attrs=['bold'])
-    fsup.print_colored('bp, li, mui', 'blue', [bp, li, mu_i])
+  bp, li, mu_i = fsup.solve_SLAE(alpha, [S1, S2, S3], Rt, R0)
+  fsup.print_colored('SLAE', 'blue', attrs=['bold'])
+  fsup.print_colored('bp, li, mui', 'blue', [bp, li, mu_i])
 
-    bp_theory = fsup.calculate_bp_theory(Bpa, omega, p_psi, dx, gmsh, r)
-    li_theory = fsup.calculate_li_theory(Bpa, omega, Bp, dx, gmsh, r)
-    mu_i_theory = fsup.calculate_mu_i_theory(Bpa, omega, Bt, dx, gmsh, r)
-    
-    fsup.print_colored('Theory', 'blue', attrs=['bold'])
-    fsup.print_colored('bp, li, mui', 'blue', [bp_theory, li_theory, mu_i_theory])
-    print("\n")
-    
-    problem_data = fsup.append_problem_data(globals(), problem_data)
+  bp_theory = fsup.calculate_bp_theory(Bpa, omega, p_psi, dx, gmsh, r)
+  li_theory = fsup.calculate_li_theory(Bpa, omega, Bp, dx, gmsh, r)
+  mu_i_theory = fsup.calculate_mu_i_theory(Bpa, omega, Bt, dx, gmsh, r)
+  
+  fsup.print_colored('Theory', 'blue', attrs=['bold'])
+  fsup.print_colored('bp, li, mui', 'blue', [bp_theory, li_theory, mu_i_theory])
+  print("\n")
+  
+  problem_data = fsup.append_problem_data(globals(), problem_data)
 
 #%% post problem plot
 
 fsup.print_colored('Save 2D plots...', 'green', attrs=['bold'])
 keys = list(problem_data.keys())
 for key in keys:
-    fsup.plot_1D(E, problem_data[key], xlabel='elongation', ylabel=key) # maybe add special funcs for certain values
+  fsup.plot_1D(E, problem_data[key], xlabel='elongation', ylabel=key) # maybe add special funcs for certain values
