@@ -311,7 +311,4 @@ def acceptable_value(plasma_vals):
   return answer
 
 def print_colored(color_srt, color='white', white_str='', attrs=[]):
-  if attrs == []:
-    print(colored(color_srt, color), white_str)
-  else:
-    print(colored(color_srt, color, attrs=attrs), white_str)
+  print(colored(color_srt, color, attrs=attrs), white_str)
