@@ -52,6 +52,24 @@ def calculate_Fpow2_psi(E, psi0, q, u, Re):
   
   return project(F_20 * u/psi0, V), F_20
 
+def calculate_Bt(F_2_psi, r):
+  V = F_2_psi.function_space()
+  
+  return project(sqrt(F_2_psi)/r, V)
+  
+
+def calculate_g(p_psi, Bp, Bt, Bt0 = 0):
+  V = p_psi.function_space()
+  
+  if Bt0 == 0:
+    return project(2*M0 * p_psi + dot(Bp, Bp) - dot(Bt, Bt), V)
+
+def calculate_Rt(g, r, dx, gmsh):
+  upper = assemble(g * dx(gmsh)) 
+  downer = assemble(g/r * dx(gmsh)) 
+  
+  return upper/downer
+
 def Time_name():
     ttime = datetime.datetime.now().strftime("%d%m%Y_%H%M%S")
     time_title = str(ttime)  # get current time to make figure name unique

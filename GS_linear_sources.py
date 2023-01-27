@@ -71,9 +71,9 @@ for i, filename in enumerate(filenames):
     
     fsup.countour_plot_via_mesh(gmsh, u, levels = 30, colorbar=True, grid=True)
 
-    [p_sol, p0] = fsup.calculate_p_psi(bp_problem, psi0, u, Re)
-    [F_2_sol, F_20] = fsup.calculate_Fpow2_psi(E[i], psi0, q_problem, u, Re)
-
+    [p_psi, p0] = fsup.calculate_p_psi(bp_problem, psi0, u, Re)
+    [F_2_psi, F_20] = fsup.calculate_Fpow2_psi(E[i], psi0, q_problem, u, Re)
+    # g_sol = 2*fsup.M0 * p_psi + dot(Bp, Bp) - dot(Bt, Bt)
 #%% Post solve calculus
     boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
     ds = Measure('ds', domain=gmsh, subdomain_data=boundaries)
@@ -84,12 +84,16 @@ for i, filename in enumerate(filenames):
     Bp = fsup.calculate_Bp(u, r, W)
     Bpa = 1/L * fsup.circulation(Bp, n, ds)
 
+    Bt = fsup.calculate_Bt(F_2_psi, r)
+    g_sol = fsup.calculate_g(p_psi, Bp, Bt)
+    Rt = fsup.calculate_Rt(g_sol, r, dx, gmsh)
+
     [er, ez] = fsup.calculate_orts(W)
 
     omega = fsup.calculate_omega(r, gmsh)
     S_ = fsup.calculate_plasma_cross_surface(gmsh)
     Spl = fsup.calculate_plasma_surface(r, ds)
-    Rt = 1/(2*pi) * omega / S_
+    # Rt = 1/(2*pi) * omega / S_
     alpha = fsup.calculate_alpha(Bp, ez, gmsh, dx)
     alpha_LB = 2 * E[i]**2 / (E[i]**2 + 1)
     eps_K = (E[i]**2 - 1) / (E[i]**2 + 1)
