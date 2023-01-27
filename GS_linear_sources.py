@@ -139,4 +139,4 @@ for i, filename in enumerate(filenames):
 fsup.print_colored('Save 2D plots...', 'green', attrs=['bold'])
 keys = list(problem_data.keys())
 for key in keys:
-  fsup.plot_1D(E, problem_data[key], xlabel='elongation', ylabel=key) # maybe add special funcs for certain values
+  fsup.plot_1D(E, problem_data[key], xlabel='elongation', ylabel=key, note=key) # maybe add special funcs for certain values

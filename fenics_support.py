@@ -291,7 +291,7 @@ def form_dict():
   return problem_dict
 
 
-def plot_1D(x, y, xlabel='', ylabel=''):
+def plot_1D(x, y, xlabel='', ylabel='', note=''):
 
   matplt.scatter(x, y)
 
@@ -303,8 +303,8 @@ def plot_1D(x, y, xlabel='', ylabel=''):
   if ylabel != '':
     matplt.ylabel(ylabel)
 
-  save_contour_plot(note='2D plot saved to PATH:')
-    
+  save_contour_plot(note="2D plot of %s saved to PATH:" % note)
+
 def acceptable_value(plasma_vals):
   answer = True
   for value in plasma_vals:
