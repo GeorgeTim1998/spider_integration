@@ -79,7 +79,6 @@ for i, filename in enumerate(filenames):
   d = fsup.calculate_d_at_boundary(u, psi_level)
   fsup.print_colored("d", 'green', d)
   print("\n")
-  exit()
   
   [p_psi, p0] = fsup.calculate_p_psi(bp_problem, psi0, u, Re)
   [F_2_psi, F_20] = fsup.calculate_Fpow2_psi(E[i], psi0, q_problem, u, Re)
@@ -141,7 +140,7 @@ for i, filename in enumerate(filenames):
 #%% Calculate S1-S3 based on known bp, li, mu_i  
   S1_theory = 2
   S2_theory = 2*bp_theory + li_theory - 1
-  S3_theory = 0
+  S3_theory = 1 - eps_K/2 - d*(1 - eps_K**2/2)
 
 #%% append data
   problem_data = fsup.append_problem_data(globals(), problem_data)
