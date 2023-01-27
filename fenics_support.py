@@ -325,8 +325,10 @@ def addition_keys():
 def plot_1D(x, y, xlabel='', ylabel='', note='', additions=[]):
 
   matplt.scatter(x, y)
+  matplt.legend([note], loc='best')
   if additions != []:
     matplt.scatter(x, additions)
+    matplt.legend([note, addition_keys()[note]], loc='best')
 
   matplt.grid("True")
   
