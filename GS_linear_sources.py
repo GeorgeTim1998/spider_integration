@@ -5,7 +5,8 @@ import fenics_support as fsup
 from math import pi
 import numpy as np
 
-fsup.print_colored("Launch program for linear p(\u03C8) and F**2(\u03C8)", 'red', "\n", ["bold"])
+fsup.print_colored("Launch program for linear p(\u03C8) and F\u00b2(\u03C8)", 'red', "\n", ["bold"])
+print("\n")
 
 folder = sup.xml_files_folder()
 lao_hash = sup.lao_hash()
@@ -31,6 +32,10 @@ filenames = ['a_37.000_ratio_1.100_msh_1.0e+00',
              'a_37.000_ratio_2.000_msh_1.0e+00']
 # filenames = ['a_37.000_ratio_1.100_msh_1.0e+00']
 for i, filename in enumerate(filenames):
+    fsup.print_colored("Iteration N0 %d out of %d for file:" % (i, len(filenames)), 'green', filename, attrs=['bold'])
+    print("\n")
+    
+    
     mesh_size = sup.mesh_size(filename)
 
     xml_file = "%s/%s.xml" % (folder, filename)
@@ -57,10 +62,7 @@ for i, filename in enumerate(filenames):
     p_part = fsup.linear_pressure(bp_problem, Re)
     F_part = fsup.linear_tor_function(q_problem, E[i], Re)
     
-    # [bp, f0_2, psi0] = fsup.linear_profiles()
-
     a = dot(grad(u)/r, grad(r_2*v))*dx
-    # f = r_2 * Constant(pi * bp / Re**2)
     f = Constant(p_part) * r_2 + Constant(F_part)
     L = f * r*v*dx
     
@@ -72,10 +74,11 @@ for i, filename in enumerate(filenames):
     [u, psi0] = fsup.measure_u(Re, ell_a, ell_b, I, bp_problem, inverced_r_integral, E[i], q_problem, u, V) # de de-measure solution
     
     fsup.countour_plot_via_mesh(gmsh, u, levels = 30, colorbar=True, grid=True)
+    print("\n")
 
     [p_psi, p0] = fsup.calculate_p_psi(bp_problem, psi0, u, Re)
     [F_2_psi, F_20] = fsup.calculate_Fpow2_psi(E[i], psi0, q_problem, u, Re)
-    # g_sol = 2*fsup.M0 * p_psi + dot(Bp, Bp) - dot(Bt, Bt)
+
 #%% Post solve calculus
     boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
     ds = Measure('ds', domain=gmsh, subdomain_data=boundaries)
@@ -100,29 +103,34 @@ for i, filename in enumerate(filenames):
     eps_K = (E[i]**2 - 1) / (E[i]**2 + 1)
     R0 = fsup.return_R0(u, V)
 
-    print('Omega =', omega)
-    print('Spl =', Spl)
-    print('S_ =', S_)
-    print('L =', L)
-    print('alpha = ', alpha)
-    print('alpha_LB =', alpha_LB)
-
+    fsup.print_colored("\u03A9 =", 'blue', omega)
+    fsup.print_colored('Spl =', 'blue', Spl)
+    fsup.print_colored("S\u27C2 =", 'blue', S_)
+    fsup.print_colored('L =', 'blue', L)
+    fsup.print_colored("\u03B1 =", 'blue', alpha)
+    fsup.print_colored("\u03B1_LB =", 'blue', alpha_LB)
+    print("\n")
+    
     q = fsup.return_q(r, z, R0, V, W)
     S1, S2, S3 = fsup.calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds)
-
-    print(mesh_size, S1)
-    print(mesh_size, S2)
-    print(mesh_size, S3)
+    
+    fsup.print_colored('S1 =', 'blue', S1)
+    fsup.print_colored('S2 =', 'blue', S2)
+    fsup.print_colored('S3 =', 'blue', S3)
+    print("\n")
     
 #%% Calc magnetic values
     bp, li, mu_i = fsup.solve_SLAE(alpha, [S1, S2, S3], Rt, R0)
-    print([bp, li, mu_i])
+    fsup.print_colored('SLAE', 'blue', attrs=['bold'])
+    fsup.print_colored('bp, li, mui', 'blue', [bp, li, mu_i])
 
     bp_theory = fsup.calculate_bp_theory(Bpa, omega, p_psi, dx, gmsh, r)
     li_theory = fsup.calculate_li_theory(Bpa, omega, Bp, dx, gmsh, r)
     mu_i_theory = fsup.calculate_mu_i_theory(Bpa, omega, Bt, dx, gmsh, r)
     
-    print([bp_theory, li_theory, mu_i_theory])
+    fsup.print_colored('Theory', 'blue', attrs=['bold'])
+    fsup.print_colored('bp, li, mui', 'blue', [bp_theory, li_theory, mu_i_theory])
+    print("\n")
     
     problem_data = fsup.append_problem_data(globals(), problem_data)
 

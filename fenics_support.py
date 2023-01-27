@@ -140,7 +140,7 @@ def save_contour_plot(note, plot_title = ''):
   matplt.savefig(file_path, dpi=DPI, bbox_inches="tight")
   matplt.close()
 
-  print_colored(note, color='green', str=file_path)
+  print_colored(note, color='green', white_str=file_path)
   time.sleep(1)
 
 def boundary_length(ds): 
@@ -239,7 +239,10 @@ def solve_SLAE(alpha, S, Rt, R0):
   
   x = numpy.linalg.solve(matrix, f)
   
-  print(numpy.allclose(numpy.dot(matrix, x), f))
+  if numpy.allclose(numpy.dot(matrix, x), f):
+    print_colored('Solution is:', 'green', 'True', attrs=['bold'])
+  else:
+    print_colored('Solution is:', 'red', 'True', attrs=['bold'])
 
   return x
 
@@ -300,7 +303,7 @@ def plot_1D(x, y, xlabel='', ylabel=''):
   if ylabel != '':
     matplt.ylabel(ylabel)
 
-  save_contour_plot()
+  save_contour_plot(note='2D plot saved to PATH:')
     
 def acceptable_value(plasma_vals):
   answer = True
