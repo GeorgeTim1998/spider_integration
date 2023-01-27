@@ -9,11 +9,13 @@ folder = sup.xml_files_folder()
 lao_hash = sup.lao_hash()
 Re = lao_hash['Rt'][0] # ellipse center which sometimes can be R0 in your writings
 E = lao_hash['E'] # ellipse elongation
-problem_data = fsup.form_dict()
 I = lao_hash['I']
+ell_a = lao_hash['a']
+
 bp_problem = 0.9 # poloidal betta from lao1985
 q_problem = 1 # stability from lao1985
-ell_a = lao_hash['a']
+
+problem_data = fsup.form_dict()
 
 filenames = ['a_37.000_ratio_1.100_msh_1.0e+00', 
              'a_37.000_ratio_1.200_msh_1.0e+00', 
