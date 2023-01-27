@@ -131,6 +131,7 @@ for i, filename in enumerate(filenames):
   
   fsup.print_colored('Theory', 'blue', attrs=['bold'])
   fsup.print_colored('bp, li, mui', 'blue', [bp_theory, li_theory, mu_i_theory])
+  fsup.print_colored('-'*50, 'yellow', attrs=['bold'])
   print("\n")
   
   problem_data = fsup.append_problem_data(globals(), problem_data)
