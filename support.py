@@ -14,12 +14,14 @@ def lao_hash():
   E =  numpy.linspace(1.1, 2, 10)
   betta_p = [0.91, 0.91, 0.90, 0.92] # poloidal betta
   a = 37
+  I = 345e3 # Amperes
   
   return {
     'Rt': Rt,
     'E': E,
     'betta_p': betta_p,
-    'a': a
+    'a': a,
+    'I': I
   }
 
 def drop_files_ext(files):

@@ -10,6 +10,10 @@ lao_hash = sup.lao_hash()
 Re = lao_hash['Rt'][0] # ellipse center which sometimes can be R0 in your writings
 E = lao_hash['E'] # ellipse elongation
 problem_data = fsup.form_dict()
+I = lao_hash['I']
+bp_problem = 0.9 # poloidal betta from lao1985
+q_problem = 1 # stability from lao1985
+ell_a = lao_hash['a']
 
 filenames = ['a_37.000_ratio_1.100_msh_1.0e+00', 
              'a_37.000_ratio_1.200_msh_1.0e+00', 
@@ -43,16 +47,26 @@ for i, filename in enumerate(filenames):
     u = TrialFunction(V)
     v = TestFunction(V)
 
+    ell_b = ell_a * E[i]
     [r_2, r, z] = fsup.operator_weights(V)
-    [bp, f0_2, psi0] = fsup.linear_profiles()
+    
+    p_part = fsup.linear_pressure(bp_problem, Re)
+    F_part = fsup.linear_tor_function(q_problem, E[i], Re)
+    
+    # [bp, f0_2, psi0] = fsup.linear_profiles()
 
     a = dot(grad(u)/r, grad(r_2*v))*dx
-    f = r_2 * Constant(pi * bp / Re**2)
+    # f = r_2 * Constant(pi * bp / Re**2)
+    f = Constant(p_part) * r_2 + Constant(F_part)
     L = f * r*v*dx
+    
 #%% Compute solution
     u = Function(V)
     solve(a == L, u, bc)
 
+    inverced_r_integral = fsup.inverced_r_integral(Re, ell_a, ell_b, r, dx, gmsh)
+    u = fsup.measure_u(Re, ell_a, ell_b, I, bp_problem, inverced_r_integral, E[i], q_problem, u, V) # de de-measure solution
+    
     fsup.countour_plot_via_mesh(gmsh, u, levels = 30, colorbar=True, grid=True)
 
 #%% Post solve calculus

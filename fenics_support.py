@@ -25,6 +25,21 @@ def linear_profiles():
   
   return bp, f0_2, psi0
 
+def linear_pressure(bp, Re):
+  # Re ellipse center which sometimes can be R0 in your writings
+  return 2*pi**2 * bp/Re**4
+
+def linear_tor_function(q, E, Re):
+  return 2*pi**2 * E**2 * q**2 / Re**2
+
+def inverced_r_integral(Re, a, b, r, dx, gmsh):
+  return Re/(pi*a*b) * assemble(1/r * dx(gmsh))
+
+def measure_u(Re, a, b, I, bp, alph, E, q, u, V):
+  psi0 = Re**3/(2*pi**3 * a*b) * M0*I/(bp + alph*E**2 * q**2)
+  
+  return project(psi0 * u, V)
+
 def Time_name():
     ttime = datetime.datetime.now().strftime("%d%m%Y_%H%M%S")
     time_title = str(ttime)  # get current time to make figure name unique
