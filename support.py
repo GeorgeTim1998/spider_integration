@@ -1,6 +1,7 @@
 import os
 import numpy
 import regex
+from termcolor import colored, cprint
 
 def msh_files_folder():
   return 'Mesh/msh'
@@ -49,3 +50,6 @@ def mesh_size(filename):
   numbers = regex.findall(e_number_pattern, filename)
   
   return numbers[-1]
+
+def print_colored(color_srt, color='white', str='', attrs=[]):
+  print(colored(color_srt, color, attrs), str)
