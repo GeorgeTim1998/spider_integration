@@ -76,7 +76,7 @@ for i, filename in enumerate(filenames):
   [u, psi0] = fsup.measure_u(Re, ell_a, ell_b, I, bp_problem, inverced_r_integral, E[i], q_problem, u, V) # de de-measure solution
   
   fsup.countour_plot_via_mesh(gmsh, u, levels = 5, colorbar=True, grid=True)
-  fsup.contour_psi0(u, psi_level)
+  fsup.calculate_d_at_boundary(u, psi_level)
   print("\n")
   exit()
   
