@@ -116,9 +116,9 @@ for i, filename in enumerate(filenames):
     bp, li, mu_i = fsup.solve_SLAE(alpha, [S1, S2, S3], Rt, R0)
     print([bp, li, mu_i])
 
-    bp_theory = fsup.calculate_bp_theory(Bpa, omega, p_psi, dx, gmsh)
-    li_theory = fsup.calculate_li_theory(Bpa, omega, Bt, dx, gmsh)
-    mu_i_theory = fsup.calculate_mu_i_theory(Bpa, omega, Bp, dx, gmsh)
+    bp_theory = fsup.calculate_bp_theory(Bpa, omega, p_psi, dx, gmsh, r)
+    li_theory = fsup.calculate_li_theory(Bpa, omega, Bp, dx, gmsh, r)
+    mu_i_theory = fsup.calculate_mu_i_theory(Bpa, omega, Bt, dx, gmsh, r)
     
     print([bp_theory, li_theory, mu_i_theory])
     
