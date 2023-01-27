@@ -5,6 +5,8 @@ import fenics_support as fsup
 from math import pi
 import numpy as np
 
+fsup.print_colored('Launch', 'red', "\n", ["bold"])
+
 folder = sup.xml_files_folder()
 lao_hash = sup.lao_hash()
 Re = lao_hash['Rt'][0] # ellipse center which sometimes can be R0 in your writings

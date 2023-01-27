@@ -5,6 +5,7 @@ import numpy
 import matplotlib.tri as tri
 import matplotlib.pyplot as matplt
 import sympy
+from termcolor import colored, cprint
 
 DPI = 240
 PICS_FOLDER = 'Pics'
@@ -93,7 +94,8 @@ def countour_plot_via_mesh(gmsh, u, levels,
                            xticks_array = [],
                            yticks_array = [],
                            grid = False,
-                           colorbar = False):
+                           colorbar = False,
+                           note='3D countour plot saved to PATH:'):
 
   u_min = u.vector()[:].min()
   u_max = u.vector()[:].max()
@@ -124,11 +126,11 @@ def countour_plot_via_mesh(gmsh, u, levels,
     if colorbar == True:
         matplt.colorbar(fig).set_label("\u03C8(r, z), Вб")
 
-    save_contour_plot(plot_title)
+    save_contour_plot(note, plot_title)
 
   return u_max
 
-def save_contour_plot(plot_title = ''):
+def save_contour_plot(note, plot_title = ''):
   time_title = Time_name()
 
   path_my_file = '%s/%s' % (PICS_FOLDER, time_title)
@@ -138,7 +140,7 @@ def save_contour_plot(plot_title = ''):
   matplt.savefig(file_path, dpi=DPI, bbox_inches="tight")
   matplt.close()
 
-  print("3D countour plot saved to PATH: %s" % file_path)
+  print_colored(note, color='green', str=file_path)
   time.sleep(1)
 
 def boundary_length(ds): 
@@ -307,3 +309,9 @@ def acceptable_value(plasma_vals):
       answer = False
       
   return answer
+
+def print_colored(color_srt, color='white', white_str='', attrs=[]):
+  if attrs == []:
+    print(colored(color_srt, color), white_str)
+  else:
+    print(colored(color_srt, color, attrs=attrs), white_str)
