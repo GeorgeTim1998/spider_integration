@@ -273,12 +273,14 @@ def form_dict():
   problem_dict['S_'] = []
   problem_dict['Spl'] = []
   
-  problem_dict['Rt'] = []
   
   problem_dict['alpha'] = []
   problem_dict['alpha_LB'] = []
+  
   problem_dict['eps_K'] = []
+  
   problem_dict['R0'] = []
+  problem_dict['Rt'] = []
   
   problem_dict['S1'] = []
   problem_dict['S1_theory'] = []
