@@ -19,7 +19,7 @@ bp_problem = 0.9 # poloidal betta from lao1985
 q_problem = 1 # stability from lao1985
 
 problem_data = fsup.form_dict()
-plot_keys = fsup
+plot_keys = fsup # do later smth with it
 
 filenames = ['a_37.000_ratio_1.100_msh_1.0e+00', 
              'a_37.000_ratio_1.200_msh_1.0e+00', 
@@ -44,7 +44,6 @@ for i, filename in enumerate(filenames):
   xml_file_physical_region = "%s/%s_physical_region.xml" % (folder, filename) # domains
 
   gmsh = Mesh(xml_file)
-
   V = FunctionSpace(gmsh, 'P', 1)
 #%% Define boundary condition
   u_D = Expression('0', degree=2)
@@ -133,6 +132,11 @@ for i, filename in enumerate(filenames):
   fsup.print_colored('bp, li, mui', 'blue', [bp_theory, li_theory, mu_i_theory])
   fsup.print_colored('-'*50, 'yellow', attrs=['bold'])
   print("\n")
+  
+#%% Calculate S1-S3 based on known bp, li, mu_i  
+  S1_theory = 2
+  S2_theory = 2*bp_theory + li_theory - 1
+  S3_theory = 0
   
   problem_data = fsup.append_problem_data(globals(), problem_data)
 
