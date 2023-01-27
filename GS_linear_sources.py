@@ -62,14 +62,17 @@ for i, filename in enumerate(filenames):
     f = Constant(p_part) * r_2 + Constant(F_part)
     L = f * r*v*dx
     
-#%% Compute solution
+#%% Compute solution and p(psi), F(psi)
     u = Function(V)
     solve(a == L, u, bc)
 
     inverced_r_integral = fsup.inverced_r_integral(Re, ell_a, ell_b, r, dx, gmsh)
-    u = fsup.measure_u(Re, ell_a, ell_b, I, bp_problem, inverced_r_integral, E[i], q_problem, u, V) # de de-measure solution
+    [u, psi0] = fsup.measure_u(Re, ell_a, ell_b, I, bp_problem, inverced_r_integral, E[i], q_problem, u, V) # de de-measure solution
     
     fsup.countour_plot_via_mesh(gmsh, u, levels = 30, colorbar=True, grid=True)
+
+    [p_sol, p0] = fsup.calculate_p_psi(bp_problem, psi0, u, Re)
+    [F_2_sol, F_20] = fsup.calculate_Fpow2_psi(E[i], psi0, q_problem, u, Re)
 
 #%% Post solve calculus
     boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh

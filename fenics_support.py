@@ -38,7 +38,19 @@ def inverced_r_integral(Re, a, b, r, dx, gmsh):
 def measure_u(Re, a, b, I, bp, alph, E, q, u, V):
   psi0 = Re**3/(2*pi**3 * a*b) * M0*I/(bp + alph*E**2 * q**2)
   
-  return project(psi0 * u, V)
+  return project(psi0 * u, V), psi0
+
+def calculate_p_psi(bp, psi0, u, Re):
+  V = u.function_space()
+  p0 = 2*pi**2 * psi0**2 * bp / (M0 * Re**4)
+  
+  return project(p0 * u/psi0, V), p0
+
+def calculate_Fpow2_psi(E, psi0, q, u, Re):
+  V = u.function_space()
+  F_20 = 4*pi**2 * E**2 * psi0**2 * q**2 / Re**2
+  
+  return project(F_20 * u/psi0, V), F_20
 
 def Time_name():
     ttime = datetime.datetime.now().strftime("%d%m%Y_%H%M%S")
