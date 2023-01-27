@@ -130,6 +130,30 @@ def countour_plot_via_mesh(gmsh, u, levels,
 
   return u_max
 
+def contour_psi0(u, psi0):
+  gmsh = u.function_space().mesh()
+  gmsh_coordinates = gmsh.coordinates().reshape((-1, 2)).T
+  triang = tri.Triangulation(*gmsh_coordinates, triangles=gmsh.cells())
+  u_array = u.compute_vertex_values(gmsh)
+
+  fig = matplt.tricontour(triang, u_array, [0, psi0], zorder=2) # it works up to this point
+  matplt.colorbar(fig).set_label("\u03C8(r, z), Вб")
+  matplt.gca().set_aspect("equal")
+  
+  contour = fig.allsegs[-1][0].transpose() # last contour w/ psi0 basically
+  
+  matplt.scatter(contour[0], contour[1])
+  matplt.show()
+  
+  matplt.xlim(gmsh_coordinates[0].min(), gmsh_coordinates[0].max())
+  matplt.ylim(gmsh_coordinates[1].min(), gmsh_coordinates[1].max())
+  matplt.xlabel("r, м")
+  matplt.ylabel("z, м")
+  
+  matplt.close()
+  
+  return contour
+
 def save_contour_plot(note, plot_title = ''):
   time_title = Time_name()
 
