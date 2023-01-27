@@ -281,12 +281,23 @@ def form_dict():
   problem_dict['R0'] = []
   
   problem_dict['S1'] = []
+  problem_dict['S1_theory'] = []
+  
   problem_dict['S2'] = []
+  problem_dict['S2_theory'] = []
+  
   problem_dict['S3'] = []
+  problem_dict['S3_theory'] = []
   
   problem_dict['bp'] = []
+  problem_dict['bp_theory'] = []
+  
   problem_dict['li'] = []
+  problem_dict['li_theory'] = []
+  
   problem_dict['mu_i'] = []
+  problem_dict['mu_i_theory'] = []
+  
   
   return problem_dict
 
