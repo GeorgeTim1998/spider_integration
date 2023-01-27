@@ -5,7 +5,7 @@ import fenics_support as fsup
 from math import pi
 import numpy as np
 
-fsup.print_colored('Launch', 'red', "\n", ["bold"])
+fsup.print_colored("Launch program for linear p(\u03C8) and F**2(\u03C8)", 'red', "\n", ["bold"])
 
 folder = sup.xml_files_folder()
 lao_hash = sup.lao_hash()
