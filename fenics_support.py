@@ -240,9 +240,9 @@ def solve_SLAE(alpha, S, Rt, R0):
   x = numpy.linalg.solve(matrix, f)
   
   if numpy.allclose(numpy.dot(matrix, x), f):
-    print_colored('Solution is:', 'green', 'True', attrs=['bold'])
+    print_colored('SLAE Solution is:', 'green', 'True', attrs=['bold'])
   else:
-    print_colored('Solution is:', 'red', 'True', attrs=['bold'])
+    print_colored('SLAE Solution is:', 'red', 'True', attrs=['bold'])
 
   return x
 
