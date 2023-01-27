@@ -136,7 +136,6 @@ for i, filename in enumerate(filenames):
   problem_data = fsup.append_problem_data(globals(), problem_data)
 
 #%% post problem plot
-
 fsup.print_colored('Save 2D plots...', 'green', attrs=['bold'])
 keys = list(problem_data.keys())
 for key in keys:
