@@ -14,7 +14,7 @@ def lao_hash():
   # E =  [1.60, 1.59, 1.59, 1.60] # elongation
   E =  numpy.linspace(1, 2, 11)
   betta_p = [0.91, 0.91, 0.90, 0.92] # poloidal betta
-  a = 37/10
+  a = 37/100
   I = 345e3 # Amperes
   
   return {
