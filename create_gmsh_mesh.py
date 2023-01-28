@@ -6,8 +6,8 @@ lao_hash = sup.lao_hash()
 
 file_names = []
 dim = 2
-mesh_size = 1
-ellipse_center = [lao_hash['Rt'][0], 0, 0]
+mesh_size = 1e-1
+ellipse_center = [lao_hash['Re'][0], 0, 0]
 for ellipse_ratio in lao_hash['E']:
   ellipse_a = lao_hash['a']
   ellipse_b = ellipse_ratio * ellipse_a
@@ -25,7 +25,7 @@ for ellipse_ratio in lao_hash['E']:
   model.addPhysicalGroup(dim-1, [ellipse]) # add physical group to curve (physical groups needed for fenics)
 
   model.mesh.generate(dim)
-  # gmsh.fltk.run()
+  gmsh.fltk.run()
 
   file_name = "a_%.3f_ratio_%.3f_msh_%.1e" % (ellipse_a, ellipse_ratio, mesh_size)
   file_names.append(file_name)
