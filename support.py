@@ -10,7 +10,7 @@ def xml_files_folder():
   return 'Mesh/xml'
 
 def lao_hash():
-  Rt = [142.5, 142.5, 142.6, 142.3] # sm
+  Re = [142.5, 142.5, 142.6, 142.3] # sm
   # E =  [1.60, 1.59, 1.59, 1.60] # elongation
   E =  numpy.linspace(1.1, 2, 10)
   betta_p = [0.91, 0.91, 0.90, 0.92] # poloidal betta
@@ -18,7 +18,7 @@ def lao_hash():
   I = 345e3 # Amperes
   
   return {
-    'Rt': Rt,
+    'Re': Re,
     'E': E,
     'betta_p': betta_p,
     'a': a,

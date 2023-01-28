@@ -12,7 +12,7 @@ folder = sup.xml_files_folder()
 
 #%% Plasma data
 lao_hash = sup.lao_hash()
-Re = lao_hash['Rt'][0] # ellipse center which sometimes can be R0 in your writings
+Re = lao_hash['Re'][0] # ellipse center which sometimes can be R0 in your writings
 E = lao_hash['E'] # ellipse elongation
 I = lao_hash['I']
 ell_a = lao_hash['a']
