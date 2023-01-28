@@ -20,10 +20,12 @@ bp_problem = 0.9 # poloidal betta from lao1985
 q_problem = 1 # stability from lao1985
 psi_level = 0.1 # used to calc contours with known desired psi_level
 
+#%% Dict that will help me plot calculated data
 problem_data = fsup.form_dict()
 theory_data = fsup.form_dict_additions()
 plot_keys = fsup.addition_keys() # do later smth with it
 
+#%% Files
 filenames = ['a_37.000_ratio_1.100_msh_1.0e+00', 
              'a_37.000_ratio_1.200_msh_1.0e+00', 
              'a_37.000_ratio_1.300_msh_1.0e+00', 
@@ -36,6 +38,7 @@ filenames = ['a_37.000_ratio_1.100_msh_1.0e+00',
              'a_37.000_ratio_2.000_msh_1.0e+00'] # 1.7 is behaving strangely. maybe its integral from g
 # filenames = ['a_37.000_ratio_1.100_msh_1.0e+00']
 
+#%% Program body
 for i, filename in enumerate(filenames):
   fsup.print_colored("Iteration N0 %d out of %d for file:" % (i, len(filenames)), 'green', filename, attrs=['bold'])
   print("\n")
