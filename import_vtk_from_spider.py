@@ -1,4 +1,5 @@
 from fenics import *
+import fenics_support as fsup
 import matplotlib.pyplot as pyplot
 
 gmsh = UnitSquareMesh(8, 8)
@@ -18,5 +19,10 @@ L = f*v*dx
 u = Function(V)
 solve(a == L, u, bc)
 
-plot(u)
-pyplot.show()
+fsup.countour_plot_via_mesh(gmsh, u, levels=5, colorbar=True)
+
+gmsh2 = RectangleMesh(Point(0.1, 0.1), Point(0.7, 0.7), 10, 10)
+VV = FunctionSpace(gmsh2, 'P', 1)
+uu = project(u, VV)
+
+fsup.countour_plot_via_mesh(gmsh2, uu, levels=[1, 1.5, 2, 2.5, 3, 3.5, 4], colorbar=True)
