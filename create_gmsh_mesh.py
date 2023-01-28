@@ -35,4 +35,8 @@ for ellipse_ratio in lao_hash['E']:
   gmsh.finalize()
   print("\n")
 
-print(file_names)
+for file_name in file_names:
+  if file_name == file_name[-1]:
+    print(file_name)
+  else:
+    print(file_name + ',')
