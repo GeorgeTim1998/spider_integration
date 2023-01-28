@@ -33,5 +33,6 @@ for ellipse_ratio in lao_hash['E']:
   gmsh.write("%s/%s.msh" % (folder, file_name))
 
   gmsh.finalize()
+  print("\n")
 
 print(file_names)
