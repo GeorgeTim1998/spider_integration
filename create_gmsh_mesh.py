@@ -6,7 +6,7 @@ lao_hash = sup.lao_hash()
 
 file_names = []
 dim = 2
-mesh_size = 1e-1
+mesh_size = 1e-2
 ellipse_center = [lao_hash['Re'][0], 0, 0]
 for ellipse_ratio in lao_hash['E']:
   ellipse_a = lao_hash['a']
