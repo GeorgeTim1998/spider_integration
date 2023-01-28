@@ -9,6 +9,7 @@ fsup.print_colored("Launch program for linear p(\u03C8) and F\u00b2(\u03C8)", 'r
 print("\n")
 
 folder = sup.xml_files_folder()
+
 lao_hash = sup.lao_hash()
 Re = lao_hash['Rt'][0] # ellipse center which sometimes can be R0 in your writings
 E = lao_hash['E'] # ellipse elongation
