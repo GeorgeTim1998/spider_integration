@@ -10,6 +10,7 @@ print("\n")
 
 folder = sup.xml_files_folder()
 
+#%% Plasma data
 lao_hash = sup.lao_hash()
 Re = lao_hash['Rt'][0] # ellipse center which sometimes can be R0 in your writings
 E = lao_hash['E'] # ellipse elongation
@@ -146,10 +147,10 @@ for i, filename in enumerate(filenames):
   S2_theory = 2*bp_theory + li_theory - 1
   S3_theory = 1 - eps_K/2 - d*(1 - eps_K**2/2)
 
-#%% append data
+#%% Append data
   problem_data = fsup.append_problem_data(globals(), problem_data)
   theory_data = fsup.append_problem_data(globals(), theory_data)
-#%% post problem plot
+#%% Post problem plot
 fsup.print_colored('Save 2D plots...', 'green', attrs=['bold'])
 keys = list(problem_data.keys())
 for key in keys:
