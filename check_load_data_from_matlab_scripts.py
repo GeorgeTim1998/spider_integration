@@ -6,6 +6,7 @@ import datetime
 import time
 from fenics import *
 from scipy.interpolate import interp2d
+from fenics_support import countour_plot_via_mesh
 
 class ExpressionFromScipyFunction(UserExpression):
     def __init__(self, f, **kwargs):
@@ -22,8 +23,7 @@ max_point = Point(matlab_data.r.max(), matlab_data.z.max())
 gmsh = RectangleMesh(min_point, max_point, len(matlab_data.z) - 1, len(matlab_data.r) - 1)
 
 #%% create psi
-V   = FunctionSpace(gmsh, "Lagrange", 1)
-psi = Function(V)
+V   = FunctionSpace(gmsh, 'Lagrange', 1)
 
 r = matlab_data.r
 z = matlab_data.z
@@ -32,6 +32,5 @@ interpolant = interp2d(r, z, matlab_data.psi, kind='linear', copy=False, bounds_
 
 expression = ExpressionFromScipyFunction(interpolant, element=V.ufl_element())
 expression = interpolate(expression, V) 
-# psi.vector().set_local(values)
-plot(expression)
-matplt.show()
+
+countour_plot_via_mesh(gmsh, expression, levels=30, colorbar=True)
