@@ -152,6 +152,23 @@ def calculate_d_at_boundary(u, psi0):
   der_E = (E - E_psi_level)/(a - a_psi_level)
   return a * der_E / (2*E)
 
+def calculate_K_at_psi(u, psi0):
+  gmsh = u.function_space().mesh()
+  gmsh_coordinates = gmsh.coordinates().reshape((-1, 2)).T
+  triang = tri.Triangulation(*gmsh_coordinates, triangles=gmsh.cells())
+  u_array = u.compute_vertex_values(gmsh)
+
+  fig = matplt.tricontour(triang, u_array, [0, psi0], zorder=2)
+  
+  contour = fig.allsegs[-1][0].transpose() # last contour w/ psi0 basically
+  a_psi_level = 0.5 * (contour[0].max() - contour[0].min())
+  b_psi_level = 0.5 * (contour[1].max() - contour[1].min())
+  E_psi_level = b_psi_level/a_psi_level
+  
+  matplt.close()
+  
+  return E_psi_level
+
 def save_contour_plot(note, plot_title = ''):
   time_title = Time_name()
 
@@ -243,6 +260,23 @@ def calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds):
     S[Si] = 1 / Bpa**2 / omega * assemble( dot(Bp, Bp) * dot(qi, n) * 2*pi*r*ds )
     
   return S['S1'], S['S2'], S['S3']
+
+def retutn_q_1D(R0, a, u, Bt, Bp):
+  r_max = u.function_space().mesh().coordinates().transpose()[0].max()
+
+  r_array = numpy.linspace(R0*0.9, r_max*0.95, 10) # make sure that we are not outside domain
+  u_array = [u(r,0) for r in r_array]
+  
+  K = []  
+  for i, psi in enumerate(u_array):
+    K.append(calculate_K_at_psi(u, psi))
+  
+  q = []
+  for i in range(len(r_array)):
+    Bp_mod = sqrt(numpy.sum(Bp(r_array[i], 0)**2))
+    q.append(Bt(r_array[i], 0) / (K[i]*Bp_mod))
+  
+  return r_array, q    
 
 def solve_SLAE(alpha, S, Rt, R0):
   matrix = numpy.array(
