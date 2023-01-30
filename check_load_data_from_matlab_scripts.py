@@ -18,8 +18,7 @@ matlab_data = LoadDataFromMatlabScripts()
 min_point = f.Point(matlab_data.r.min(), matlab_data.z.min())
 max_point = f.Point(matlab_data.r.max(), matlab_data.z.max())
 mesh = f.RectangleMesh(min_point, max_point, len(matlab_data.z) - 1, len(matlab_data.r) - 1)
-# mesh = f.RectangleMesh(min_point, max_point, len(matlab_data.r) - 1, len(matlab_data.z) - 1)
-#
+
 #%% create psi
 V   = f.FunctionSpace(mesh, "Lagrange", 1)
 psi = f.Function(V)
