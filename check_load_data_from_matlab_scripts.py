@@ -7,11 +7,6 @@ import time
 import fenics as f
 from scipy.interpolate import interp2d
 
-def is_close(X, dof_X, step_r, step_z):
-  error_r = abs(X[0] - dof_X[0])
-  error_z = abs(X[1] - dof_X[1])
-  
-  return error_r <= step_r and error_z <= step_z
 matlab_data = LoadDataFromMatlabScripts()
 
 #%% create mesh
