@@ -75,7 +75,7 @@ for i, filename in enumerate(filenames):
   f = Constant(p_part) * r_2 + Constant(F_part)
   L = f * r*v*dx
     
-#%% Compute solution and p(psi), F(psi)
+#%% Compute solution and p(psi), F(psi), J(psi)
   u = Function(V)
   solve(a == L, u, bc)
 
