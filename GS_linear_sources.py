@@ -88,7 +88,8 @@ for i, filename in enumerate(filenames):
   print("\n")
   
   [p_psi, p0] = fsup.calculate_p_psi(bp_problem, psi0, u, Re)
-  [F_2_psi, F_20] = fsup.calculate_Fpow2_psi(E[i], psi0, q_problem, u, Re)
+  [F2_psi, F_20] = fsup.calculate_Fpow2_psi(E[i], psi0, q_problem, u, Re)
+  J_psi = fsup.calculate_J_psi()
 
 #%% Post solve calculus
   boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
@@ -100,7 +101,7 @@ for i, filename in enumerate(filenames):
   Bp = fsup.calculate_Bp(u, r, W)
   Bpa = 1/L * fsup.circulation(Bp, n, ds)
 
-  Bt = fsup.calculate_Bt(F_2_psi, r)
+  Bt = fsup.calculate_Bt(F2_psi, r)
   g_sol = fsup.calculate_g(p_psi, Bp, Bt)
   Rt = fsup.calculate_Rt(g_sol, r, dx, gmsh)
 
@@ -129,6 +130,10 @@ for i, filename in enumerate(filenames):
   fsup.print_colored('S2 =', 'blue', S2)
   fsup.print_colored('S3 =', 'blue', S3)
   print("\n")
+
+#%% Plot plasma profiles
+  fsup.plot_big_axis_profile(p_psi, yaxis='Pressure, Pa', grid=True, note='2D plot of p(psi) saved to PATH:')
+  fsup.plot_big_axis_profile(F2_psi, yaxis='Tor func, m*Tl', grid=True, note='2D plot of F2(psi) saved to PATH:')
   
 #%% Calc magnetic values
   [r_v, q_v] = fsup.retutn_q_1D(R0, ell_a, u, Bt, Bp)
@@ -155,6 +160,7 @@ for i, filename in enumerate(filenames):
 #%% Append data
   problem_data = fsup.append_problem_data(globals(), problem_data)
   theory_data = fsup.append_problem_data(globals(), theory_data)
+
 #%% Post problem plot
 fsup.print_colored('Save 2D plots...', 'green', attrs=['bold'])
 keys = list(problem_data.keys())

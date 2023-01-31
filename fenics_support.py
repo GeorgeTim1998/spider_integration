@@ -59,6 +59,9 @@ def calculate_Fpow2_psi_reverced(E, psi0, q, u, Re):
   
   return project(F_20 * (1-u/psi0), V), F_20
 
+def calculate_J_psi():
+  pass
+
 def calculate_Bt(F_2_psi, r):
   V = F_2_psi.function_space()
   
@@ -266,6 +269,27 @@ def calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds):
     S[Si] = 1 / Bpa**2 / omega * assemble( dot(Bp, Bp) * dot(qi, n) * 2*pi*r*ds )
     
   return S['S1'], S['S2'], S['S3']
+
+def plot_big_axis_profile(u, 
+                          xaxis='r, m', 
+                          yaxis='', 
+                          point_num=100, 
+                          note='',
+                          grid=False):
+  gmsh_coordinates = u.function_space().mesh().coordinates().transpose()
+  r_minmax = [gmsh_coordinates[0].min(), gmsh_coordinates[0].max()]
+  r_array = numpy.linspace(r_minmax[0]*1.05, r_minmax[1]*0.95, point_num)
+  
+  u_profile = [u(r, 0) for r in r_array]
+  
+  matplt.scatter(r_array, u_profile)
+  
+  matplt.xlim(*r_minmax)
+  matplt.xlabel(xaxis)
+  matplt.ylabel(yaxis)
+  matplt.grid(grid)
+  
+  save_contour_plot(note=note)
 
 def retutn_q_1D(R0, a, u, Bt, Bp):
   r_max = u.function_space().mesh().coordinates().transpose()[0].max()
