@@ -5,6 +5,10 @@ import fenics_support as fsup
 from math import pi
 import numpy as np
 
+from pathlib import Path
+my_dir = "Pics/%s" % fsup.Time_name()
+Path(my_dir).mkdir(parents=True, exist_ok=True)
+
 fsup.print_colored("Launch program for linear p(\u03C8) and F\u00b2(\u03C8)", 'red', "\n", ["bold"])
 print("\n")
 
@@ -82,7 +86,7 @@ for i, filename in enumerate(filenames):
   inverced_r_integral = fsup.inverced_r_integral(Re, ell_a, ell_b, r, dx, gmsh)
   [u, psi0] = fsup.measure_u(Re, ell_a, ell_b, I, bp_problem, inverced_r_integral, E[i], q_problem, u, V) # de de-measure solution
   
-  fsup.countour_plot_via_mesh(gmsh, u, levels = 20, colorbar=True, grid=True)
+  fsup.countour_plot_via_mesh(gmsh, u, levels = 20, colorbar=True, grid=True, PATH=my_dir)
   d = fsup.calculate_d_at_boundary(u, psi_level)
   fsup.print_colored("d", 'green', d)
   print("\n")
@@ -132,15 +136,15 @@ for i, filename in enumerate(filenames):
   print("\n")
 
 #%% Plot plasma profiles
-  fsup.plot_big_axis_profile(p_psi, yaxis='Pressure, Pa', grid=True, note='2D plot of p(psi) saved to PATH:')
-  fsup.plot_big_axis_profile(F2_psi, yaxis='Tor func, m*Tl', grid=True, note='2D plot of F2(psi) saved to PATH:')
-  fsup.plot_big_axis_profile(Bt, yaxis='Tor field, Tl', grid=True, note='2D plot of Bt(psi) saved to PATH:')
-  fsup.plot_big_axis_profile(J_psi, yaxis='Current Density, A/m**2', grid=True, note='2D plot of J(psi) saved to PATH:')
+  fsup.plot_big_axis_profile(p_psi, yaxis='Pressure, Pa', grid=True, note='2D plot of p(psi) saved to PATH:', PATH=my_dir)
+  fsup.plot_big_axis_profile(F2_psi, yaxis='Tor func, m*Tl', grid=True, note='2D plot of F2(psi) saved to PATH:', PATH=my_dir)
+  fsup.plot_big_axis_profile(Bt, yaxis='Tor field, Tl', grid=True, note='2D plot of Bt(psi) saved to PATH:', PATH=my_dir)
+  fsup.plot_big_axis_profile(J_psi, yaxis='Current Density, A/m**2', grid=True, note='2D plot of J(psi) saved to PATH:', PATH=my_dir)
   print("\n")
   
 #%% Calc magnetic values
   [r_v, q_v] = fsup.retutn_q_1D(R0, ell_a, u, Bt, Bp)
-  fsup.plot_1D(r_v, q_v, xlabel='Major radius', ylabel='q', note='q')
+  fsup.plot_1D(r_v, q_v, xlabel='Major radius', ylabel='q', note='q', PATH=my_dir)
 
   bp, li, mu_i = fsup.solve_SLAE(alpha, [S1, S2, S3], Rt, R0)
   fsup.print_colored('SLAE', 'blue', attrs=['bold'])
@@ -171,7 +175,10 @@ for key in keys:
   if key in list(plot_keys.keys()):
     fsup.plot_1D(E, problem_data[key],
                 xlabel='elongation', ylabel=key, note=key,
-                additions=theory_data[plot_keys[key]]) # maybe add special funcs for certain values
+                additions=theory_data[plot_keys[key]],
+                PATH=my_dir) # maybe add special funcs for certain values
   else:
     fsup.plot_1D(E, problem_data[key],
-                xlabel='elongation', ylabel=key, note=key) # maybe add special funcs for certain values
+                xlabel='elongation', ylabel=key, 
+                note=key,
+                PATH=my_dir) # maybe add special funcs for certain values

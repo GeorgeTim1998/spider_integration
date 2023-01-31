@@ -109,7 +109,8 @@ def countour_plot_via_mesh(gmsh, u, levels,
                            yticks_array = [],
                            grid = False,
                            colorbar = False,
-                           note='3D countour plot saved to PATH:'):
+                           note='3D countour plot saved to PATH:',
+                           PATH=''):
 
   u_min = u.vector()[:].min()
   u_max = u.vector()[:].max()
@@ -140,7 +141,7 @@ def countour_plot_via_mesh(gmsh, u, levels,
     if colorbar == True:
         matplt.colorbar(fig).set_label("\u03C8(r, z), Вб")
 
-    save_contour_plot(note, plot_title)
+    save_contour_plot(note, plot_title, PATH=PATH)
 
   return u_max
 
@@ -183,10 +184,13 @@ def calculate_K_at_psi(u, psi0):
   
   return E_psi_level
 
-def save_contour_plot(note, plot_title = ''):
+def save_contour_plot(note, plot_title = '', PATH=''):
   time_title = Time_name()
 
-  path_my_file = '%s/%s' % (PICS_FOLDER, time_title)
+  if PATH == '':
+    path_my_file = '%s/%s' % (PICS_FOLDER, time_title)
+  else:
+    path_my_file = '%s/%s' % (PATH, time_title)
   file_path = "%s.png" % path_my_file
   
   matplt.title(plot_title)
@@ -280,7 +284,8 @@ def plot_big_axis_profile(u,
                           yaxis='', 
                           point_num=100, 
                           note='',
-                          grid=False):
+                          grid=False,
+                          PATH=''):
   gmsh_coordinates = u.function_space().mesh().coordinates().transpose()
   r_minmax = [gmsh_coordinates[0].min(), gmsh_coordinates[0].max()]
   r_array = numpy.linspace(r_minmax[0]*1.05, r_minmax[1]*0.95, point_num)
@@ -294,7 +299,7 @@ def plot_big_axis_profile(u,
   matplt.ylabel(yaxis)
   matplt.grid(grid)
   
-  save_contour_plot(note=note)
+  save_contour_plot(note=note, PATH=PATH)
 
 def retutn_q_1D(R0, a, u, Bt, Bp):
   r_max = u.function_space().mesh().coordinates().transpose()[0].max()
@@ -369,6 +374,8 @@ def form_dict():
   problem_dict['eps_K'] = []
   problem_dict['Rt'] = []
   
+  problem_dict['d'] = []
+  
   problem_dict['S1'] = []
   problem_dict['S2'] = []
   problem_dict['S3'] = []
@@ -413,7 +420,7 @@ def addition_keys():
   
   return addition
 
-def plot_1D(x, y, xlabel='', ylabel='', note='', additions=[]):
+def plot_1D(x, y, xlabel='', ylabel='', note='', additions=[], PATH=''):
 
   matplt.scatter(x, y)
   matplt.legend([note], loc='best')
@@ -429,7 +436,7 @@ def plot_1D(x, y, xlabel='', ylabel='', note='', additions=[]):
   if ylabel != '':
     matplt.ylabel(ylabel)
 
-  save_contour_plot(note="2D plot of %s saved to PATH:" % note)
+  save_contour_plot(note="2D plot of %s saved to PATH:" % note, PATH=PATH)
 
 def acceptable_value(plasma_vals):
   answer = True
