@@ -59,8 +59,13 @@ def calculate_Fpow2_psi_reverced(E, psi0, q, u, Re):
   
   return project(F_20 * (1-u/psi0), V), F_20
 
-def calculate_J_psi():
-  pass
+def calculate_J_psi(p0, psi0, F2_0, r, V, dx):
+  J_psi = p0/psi0*r + 1/(2*M0*r)*F2_0/psi0
+  J_psi = project(J_psi, V)
+  
+  I = assemble(J_psi*dx)
+  
+  return J_psi, I
 
 def calculate_Bt(F_2_psi, r):
   V = F_2_psi.function_space()

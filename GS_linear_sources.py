@@ -88,8 +88,8 @@ for i, filename in enumerate(filenames):
   print("\n")
   
   [p_psi, p0] = fsup.calculate_p_psi(bp_problem, psi0, u, Re)
-  [F2_psi, F_20] = fsup.calculate_Fpow2_psi(E[i], psi0, q_problem, u, Re)
-  J_psi = fsup.calculate_J_psi()
+  [F2_psi, F2_0] = fsup.calculate_Fpow2_psi(E[i], psi0, q_problem, u, Re)
+  [J_psi, I] = fsup.calculate_J_psi(p0, psi0, F2_0, r, V, dx)
 
 #%% Post solve calculus
   boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
@@ -134,6 +134,9 @@ for i, filename in enumerate(filenames):
 #%% Plot plasma profiles
   fsup.plot_big_axis_profile(p_psi, yaxis='Pressure, Pa', grid=True, note='2D plot of p(psi) saved to PATH:')
   fsup.plot_big_axis_profile(F2_psi, yaxis='Tor func, m*Tl', grid=True, note='2D plot of F2(psi) saved to PATH:')
+  fsup.plot_big_axis_profile(Bt, yaxis='Tor field, Tl', grid=True, note='2D plot of Bt(psi) saved to PATH:')
+  fsup.plot_big_axis_profile(J_psi, yaxis='Current Density, A/m**2', grid=True, note='2D plot of J(psi) saved to PATH:')
+  print("\n")
   
 #%% Calc magnetic values
   [r_v, q_v] = fsup.retutn_q_1D(R0, ell_a, u, Bt, Bp)
