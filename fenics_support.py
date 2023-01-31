@@ -53,6 +53,12 @@ def calculate_Fpow2_psi(E, psi0, q, u, Re):
   
   return project(F_20 * u/psi0, V), F_20
 
+def calculate_Fpow2_psi_reverced(E, psi0, q, u, Re):
+  V = u.function_space()
+  F_20 = 4*pi**2 * E**2 * psi0**2 * q**2 / Re**2
+  
+  return project(F_20 * (1-u/psi0), V), F_20
+
 def calculate_Bt(F_2_psi, r):
   V = F_2_psi.function_space()
   
@@ -136,7 +142,7 @@ def calculate_d_at_boundary(u, psi0):
   triang = tri.Triangulation(*gmsh_coordinates, triangles=gmsh.cells())
   u_array = u.compute_vertex_values(gmsh)
 
-  fig = matplt.tricontour(triang, u_array, [0, psi0], zorder=2)
+  fig = matplt.tricontour(triang, u_array, sorted([0, psi0]), zorder=2)
   
   contour = fig.allsegs[-1][0].transpose() # last contour w/ psi0 basically
   a_psi_level = 0.5 * (contour[0].max() - contour[0].min())
@@ -158,7 +164,7 @@ def calculate_K_at_psi(u, psi0):
   triang = tri.Triangulation(*gmsh_coordinates, triangles=gmsh.cells())
   u_array = u.compute_vertex_values(gmsh)
 
-  fig = matplt.tricontour(triang, u_array, [0, psi0], zorder=2)
+  fig = matplt.tricontour(triang, u_array, sorted([0, psi0]), zorder=2)
   
   contour = fig.allsegs[-1][0].transpose() # last contour w/ psi0 basically
   a_psi_level = 0.5 * (contour[0].max() - contour[0].min())
@@ -264,7 +270,7 @@ def calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds):
 def retutn_q_1D(R0, a, u, Bt, Bp):
   r_max = u.function_space().mesh().coordinates().transpose()[0].max()
 
-  r_array = numpy.linspace(R0*0.9, r_max*0.95, 10) # make sure that we are not outside domain
+  r_array = numpy.linspace(R0*1.1, r_max*0.95, 10) # make sure that we are not outside domain
   u_array = [u(r,0) for r in r_array]
   
   K = []  
