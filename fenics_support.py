@@ -47,11 +47,19 @@ def calculate_p_psi(bp, psi0, u, Re):
   
   return project(p0 * u/psi0, V), p0
 
-def calculate_Fpow2_psi(E, psi0, q, u, Re):
+def calculate_F2_psi(E, psi0, q, u, Re):
   V = u.function_space()
   F_20 = 4*pi**2 * E**2 * psi0**2 * q**2 / Re**2
   
   return project(F_20 * u/psi0, V), F_20
+
+def calculate_F2_psi_add(E, psi0, q, u, Re):
+  # F2 is aproximated as F20(1 + pso/psi0)
+  V = u.function_space()
+  F_20 = 4*pi**2 * E**2 * psi0**2 * q**2 / Re**2
+  one = interpolate(Constant(1), V)
+  
+  return project(F_20 * (one + u/psi0), V), F_20
 
 def calculate_Fpow2_psi_reverced(E, psi0, q, u, Re):
   V = u.function_space()
@@ -71,7 +79,6 @@ def calculate_Bt(F_2_psi, r):
   V = F_2_psi.function_space()
   
   return project(sqrt(F_2_psi)/r, V)
-  
 
 def calculate_g(p_psi, Bp, Bt, Bt0 = 0):
   V = p_psi.function_space()
