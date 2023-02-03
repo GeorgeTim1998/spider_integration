@@ -92,7 +92,7 @@ for i, filename in enumerate(filenames):
   print("\n")
   
   [p_psi, p0] = fsup.calculate_p_psi(bp_problem, psi0, u, Re)
-  [F2_psi, F2_0] = fsup.calculate_F2_psi(E[i], psi0, q_problem, u, Re)
+  [F2_psi, F2_0] = fsup.calculate_F2_as_small_add(E[i], psi0, q_problem, u, Re)
   [J_psi, I] = fsup.calculate_J_psi(p0, psi0, F2_0, r, V, dx)
 
 #%% Post solve calculus
@@ -106,7 +106,8 @@ for i, filename in enumerate(filenames):
   Bpa = 1/L * fsup.circulation(Bp, n, ds)
 
   Bt = fsup.calculate_Bt(F2_psi, r)
-  g_sol = fsup.calculate_g(p_psi, Bp, Bt)
+  Bt0 = fsup.calculate_Bt0(F2_0, r, V)
+  g_sol = fsup.calculate_g(p_psi, Bp, Bt, Bt0=Bt0)
   Rt = fsup.calculate_Rt(g_sol, r, dx, gmsh)
 
   [er, ez] = fsup.calculate_orts(W)
@@ -152,7 +153,7 @@ for i, filename in enumerate(filenames):
 
   bp_theory = fsup.calculate_bp_theory(Bpa, omega, p_psi, dx, gmsh, r)
   li_theory = fsup.calculate_li_theory(Bpa, omega, Bp, dx, gmsh, r)
-  mu_i_theory = fsup.calculate_mu_i_theory(Bpa, omega, Bt, dx, gmsh, r)
+  mu_i_theory = fsup.calculate_mu_i_theory(Bpa, omega, Bt, dx, gmsh, r, Bt0=Bt0)
   
   fsup.print_colored('Theory', 'blue', attrs=['bold'])
   fsup.print_colored('bp, li, mui', 'blue', [bp_theory, li_theory, mu_i_theory])

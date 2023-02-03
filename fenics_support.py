@@ -53,8 +53,8 @@ def calculate_F2_psi(E, psi0, q, u, Re):
   
   return project(F_20 * u/psi0, V), F_20
 
-def calculate_F2_psi_add(E, psi0, q, u, Re):
-  # F2 is aproximated as F20(1 + pso/psi0)
+def calculate_F2_as_small_add(E, psi0, q, u, Re):
+  # F2 is aproximated as F20(1 + psi/psi0)
   V = u.function_space()
   F_20 = 4*pi**2 * E**2 * psi0**2 * q**2 / Re**2
   one = interpolate(Constant(1), V)
@@ -80,11 +80,17 @@ def calculate_Bt(F_2_psi, r):
   
   return project(sqrt(F_2_psi)/r, V)
 
+def calculate_Bt0(F2_0, r, V):
+  
+  return project(sqrt(F2_0)/r, V)
+
 def calculate_g(p_psi, Bp, Bt, Bt0 = 0):
   V = p_psi.function_space()
   
   if Bt0 == 0:
     return project(2*M0 * p_psi + dot(Bp, Bp) - dot(Bt, Bt), V)
+  else:
+    return project(2*M0 * p_psi + dot(Bp, Bp) + dot(Bt0, Bt0) - dot(Bt, Bt), V)
 
 def calculate_Rt(g, r, dx, gmsh):
   upper = assemble(g * dx(gmsh)) 
@@ -361,6 +367,8 @@ def calculate_mu_i_theory(Bpa, omega, Bt, dx, gmsh, r, Bt0 = 0):
   # this gives simelar results that SLAE does
   if Bt0 == 0:
     return -1/Bpa**2/omega * assemble(dot(Bt, Bt) * 2*pi*r*dx(gmsh))
+  else:
+    return 1/Bpa**2/omega * assemble((dot(Bt0, Bt0) - dot(Bt, Bt)) * 2*pi*r*dx(gmsh))
 
 def append_problem_data(vars, problem_data):
   keys = list(problem_data.keys())
