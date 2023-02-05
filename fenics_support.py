@@ -336,13 +336,13 @@ def plot_big_axis_profile(u,
   save_contour_plot(note=note, PATH=PATH)
 
 def return_q_1D(R0, a, u, Bt, Bp):
-  aspect_ratio = a/R0
   r_max = u.function_space().mesh().coordinates().transpose()[0].max()
 
   r_array = numpy.linspace(R0*1.1, r_max*0.95, 10) # make sure that we are not outside domain
 
   q = []
   for i in range(len(r_array)):
+    aspect_ratio = r_array[i]/R0
     Bp_mod = sqrt(numpy.sum(Bp(r_array[i], 0)**2))
     q.append(Bt(r_array[i], 0)*aspect_ratio / Bp_mod)
   
