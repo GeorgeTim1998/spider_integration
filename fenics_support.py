@@ -47,6 +47,11 @@ def calculate_p_psi(bp, psi0, u, Re):
   
   return project(p0 * u/psi0, V), p0
 
+def calculate_p_psi_final(psi0, u, p0):
+  V = u.function_space()
+  
+  return project(p0 * u/psi0, V)
+
 def calculate_F2_psi(E, psi0, q, u, Re):
   V = u.function_space()
   F_20 = 4*pi**2 * E**2 * psi0**2 * q**2 / Re**2
@@ -58,8 +63,14 @@ def calculate_F2_as_small_add(E, psi0, q, u, Re, Fpl_vs_Fvac_ratio=1):
   V = u.function_space()
   F_20 = 4*pi**2 * E**2 * psi0**2 * q**2 / Re**2
   one = interpolate(Constant(1), V)
+
+def calculate_F2_as_small_add_final(F2_0, psi0, u, Fpl_vs_Fvac_ratio=1):
+  # F2 is aproximated as F20(1 + alph*psi/psi0)
+  V = u.function_space()
   
-  return project(F_20 * (one + Fpl_vs_Fvac_ratio*u/psi0), V), F_20
+  one = interpolate(Constant(1), V)
+  
+  return project(F2_0 * (one + Fpl_vs_Fvac_ratio*u/psi0), V)
 
 def calculate_Fpow2_psi_reverced(E, psi0, q, u, Re):
   V = u.function_space()
@@ -68,6 +79,14 @@ def calculate_Fpow2_psi_reverced(E, psi0, q, u, Re):
   return project(F_20 * (1-u/psi0), V), F_20
 
 def calculate_J_psi(p0, psi0, F2_0, r, V, dx, Fpl_vs_Fvac_ratio=1):
+  J_psi = p0/psi0*r + Fpl_vs_Fvac_ratio/(2*M0*r)*F2_0/psi0
+  J_psi = project(J_psi, V)
+  
+  I = assemble(J_psi*dx)
+  
+  return J_psi, I
+
+def calculate_J_psi_final(p0, psi0, F2_0, r, V, dx, Fpl_vs_Fvac_ratio=1):
   J_psi = p0/psi0*r + Fpl_vs_Fvac_ratio/(2*M0*r)*F2_0/psi0
   J_psi = project(J_psi, V)
   
