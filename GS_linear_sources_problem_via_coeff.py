@@ -93,7 +93,7 @@ for i, filename in enumerate(filenames):
   print("\n")
   
   p_psi = fsup.calculate_p_psi_final(psi0, u, p0)
-  F2_psi = fsup.calculate_F2_as_small_add_final(F2_0, psi0, u, Fpl_vs_Fvac_ratio)
+  F2_psi = fsup.calculate_F2_pow_1(F2_0, psi0, u, Fpl_vs_Fvac_ratio)
   [J_psi, I] = fsup.calculate_J_psi_final(p0, psi0, F2_0, r, V, dx, Fpl_vs_Fvac_ratio)
 
 #%% Post solve calculus
