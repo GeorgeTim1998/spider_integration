@@ -6,7 +6,7 @@ lao_hash = sup.lao_hash()
 
 file_names = []
 dim = 2
-mesh_size = 1e-2
+mesh_size = 0.3e-2
 ellipse_center = [lao_hash['Re'][0], 0, 0]
 # E_array = lao_hash['E']
 E_array = [1.0, 1.1]
@@ -16,13 +16,14 @@ for ellipse_ratio in E_array:
   ellipse_b = ellipse_ratio * ellipse_a
 
   gmsh.initialize()
-  gmsh.option.setNumber('Mesh.MinimumCircleNodes', 400) # you can set general options via strings in set number. see https://gmsh.info/doc/texinfo/gmsh.pdf
+  gmsh.option.setNumber('Mesh.MeshSizeMax', mesh_size) # you can set general options via strings in set number. see https://gmsh.info/doc/texinfo/gmsh.pdf
+  # gmsh.option.setNumber('Mesh.MinimumCircleNodes', 400) # you can set general options via strings in set number. see https://gmsh.info/doc/texinfo/gmsh.pdf
 
   model = gmsh.model()
   ellipse = model.occ.addEllipse(*ellipse_center, ellipse_b, ellipse_a, zAxis=[0, 0, 1], xAxis=[0, 1, 0])
   loop = model.occ.addCurveLoop([ellipse]) # say that curve is closed/looped
   surface = model.occ.addPlaneSurface([loop]) # say that curve delimits surface
-  point = model.occ.addPoint(*ellipse_center, meshSize=mesh_size*3)
+  point = model.occ.addPoint(*ellipse_center, meshSize=mesh_size*3) # use to make mesh dencer toward point. Complements Mesh.MinimumCircleNodes option
   model.occ.synchronize()
 
   model.mesh.embed(0, [point], 2, surface) # embed point 5 (dim 0) in surface 6 (dim 2)
