@@ -24,9 +24,6 @@ if diff != []:
   
   print('Converted:')
   for file_name in diff:
-    if file_name == diff[-1]:
-      print(file_name)
-    else:
-      print(file_name + ',')
+    print(file_name)
 else:
   print('Nothing to convert')
