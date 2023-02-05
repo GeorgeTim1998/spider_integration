@@ -144,17 +144,20 @@ def countour_plot_via_mesh(gmsh, u, levels,
     matplt.ylabel("z, м")
     
     if xticks_array != []:
-        matplt.xticks(numpy.array(xticks_array))
+      matplt.xticks(numpy.array(xticks_array))
     if yticks_array != []:
-        matplt.xticks(numpy.array(yticks_array))
+      matplt.xticks(numpy.array(yticks_array))
 
     if grid == True:
-        matplt.grid(True)
+      matplt.grid(True)
     
     if colorbar == True:
-        matplt.colorbar(fig).set_label("\u03C8(r, z), Вб")
+      matplt.colorbar(fig).set_label("\u03C8(r, z), Вб")
+    
+    if plot_title != '':
+      matplt.title(plot_title)
 
-    save_contour_plot(note, plot_title, PATH=PATH)
+    save_contour_plot(note, PATH=PATH)
 
   return u_max
 
@@ -197,7 +200,7 @@ def calculate_K_at_psi(u, psi0):
   
   return E_psi_level
 
-def save_contour_plot(note, plot_title = '', PATH=''):
+def save_contour_plot(note, PATH=''):
   time_title = Time_name()
 
   if PATH == '':
@@ -206,7 +209,6 @@ def save_contour_plot(note, plot_title = '', PATH=''):
     path_my_file = '%s/%s' % (PATH, time_title)
   file_path = "%s.png" % path_my_file
   
-  matplt.title(plot_title)
   matplt.savefig(file_path, dpi=DPI, bbox_inches="tight")
   matplt.close()
 

@@ -87,7 +87,7 @@ for i, filename in enumerate(filenames):
   inverced_r_integral = fsup.inverced_r_integral(Re, ell_a, ell_b, r, dx, gmsh)
   [u, psi0] = fsup.measure_u(Re, ell_a, ell_b, I, bp_problem, inverced_r_integral, E[i], q_problem, u, V, Fpl_vs_Fvac_ratio) # de de-measure solution
   
-  fsup.countour_plot_via_mesh(gmsh, u, levels = 20, colorbar=True, grid=True, PATH=my_dir)
+  fsup.countour_plot_via_mesh(gmsh, u, levels = 20, colorbar=True, grid=True, PATH=my_dir, plot_title="E = %.1f" % E[i])
   d = fsup.calculate_d_at_boundary(u, psi_level)
   fsup.print_colored("d", 'green', d)
   print("\n")
