@@ -145,7 +145,7 @@ for i, filename in enumerate(filenames):
   print("\n")
   
 #%% Calc magnetic values
-  [r_v, q_v] = fsup.retutn_q_1D(R0, ell_a, u, Bt, Bp)
+  [r_v, q_v] = fsup.return_q_1D(R0, ell_a, u, Bt, Bp)
   fsup.plot_1D(r_v, q_v, xlabel='Major radius', ylabel='q', note='q', PATH=my_dir)
 
   bp, li, mu_i = fsup.solve_SLAE(alpha, [S1, S2, S3], Rt, R0)

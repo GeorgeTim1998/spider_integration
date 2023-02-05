@@ -335,7 +335,7 @@ def plot_big_axis_profile(u,
   
   save_contour_plot(note=note, PATH=PATH)
 
-def retutn_q_1D(R0, a, u, Bt, Bp):
+def return_q_1D(R0, a, u, Bt, Bp):
   aspect_ratio = a/R0
   r_max = u.function_space().mesh().coordinates().transpose()[0].max()
 
