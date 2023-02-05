@@ -16,8 +16,7 @@ for ellipse_ratio in E_array:
   ellipse_b = ellipse_ratio * ellipse_a
 
   gmsh.initialize()
-  # gmsh.option.setNumber('Mesh.MeshSizeMax', mesh_size) # you can set general options via strings in set number. see https://gmsh.info/doc/texinfo/gmsh.pdf
-  gmsh.option.setNumber('Mesh.MeshSizeFactor', 0.03) # you can set general options via strings in set number. see https://gmsh.info/doc/texinfo/gmsh.pdf
+  gmsh.option.setNumber('Mesh.MinimumCircleNodes', 200) # you can set general options via strings in set number. see https://gmsh.info/doc/texinfo/gmsh.pdf
 
   model = gmsh.model()
   ellipse = model.occ.addEllipse(*ellipse_center, ellipse_b, ellipse_a, zAxis=[0, 0, 1], xAxis=[0, 1, 0])
@@ -32,7 +31,7 @@ for ellipse_ratio in E_array:
   model.addPhysicalGroup(dim-1, [ellipse]) # add physical group to curve (physical groups needed for fenics)
   
   model.mesh.generate(dim)
-  gmsh.fltk.run()
+  # gmsh.fltk.run()
 
   file_name = "a_%.3f_ratio_%.3f_msh_%.1e" % (ellipse_a, ellipse_ratio, mesh_size)
   file_names.append(file_name)
