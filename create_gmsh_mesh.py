@@ -39,7 +39,7 @@ for ellipse_ratio in E_array:
   print("\n")
 
 for file_name in file_names:
-  if file_name == file_name[-1]:
+  if file_name == file_names[-1]:
     print(file_name)
   else:
     print(file_name + ',')
