@@ -16,16 +16,21 @@ folder = sup.xml_files_folder()
 
 #%% Plasma data
 lao_hash = sup.lao_hash()
-Re = lao_hash['Re'][0] # ellipse center which sometimes can be R0 in your writings
+Re = lao_hash['Re'] # ellipse center which sometimes can be R0 in your writings
 E = lao_hash['E'] # ellipse elongation
 I = lao_hash['I']
 ell_a = lao_hash['a']
-M0 = 1.25e-6
 
-bp_problem = 0.9 # poloidal betta from lao1985
-q_problem = 1 # stability from lao1985
-psi_level = 1e-3 # used to calc contours with known desired psi_level
-Fpl_vs_Fvac_ratio = 1e-3
+M0 = 1.25e-6
+Bt0_mean = lao_hash['Bt0_mean']
+p0 = lao_hash['p0'] 
+psi0 = lao_hash['psi0']
+F2_0 = lao_hash['F2_0']
+
+psi_level = lao_hash['psi_level'] # used to calc contours with desired level
+Fpl_vs_Fvac_ratio = lao_hash['Fpl_vs_Fvac_ratio']
+
+sup.create_readmi(lao_hash, my_dir)
 
 #%% Dict that will help me plot calculated data
 problem_data = fsup.form_dict()
@@ -74,34 +79,22 @@ for i, filename in enumerate(filenames):
   ell_b = ell_a * E[i]
   [r2, r, z] = fsup.operator_weights(V)
   
-  # p_part = fsup.linear_pressure(bp_problem, Re)
-  # F_part = fsup.linear_tor_function(q_problem, E[i], Re)
-  
-  Bt0_pr = 2
-  
-  p0_pr = 6400
-  psi0 = 0.24
-  F2_0_pr = Re**2 * Bt0_pr**2
-  
   a = dot(grad(u)/r, grad(r2*v))*dx
-  f = Constant(M0 * p0_pr/psi0)*r2 + Fpl_vs_Fvac_ratio*Constant(0.5 * F2_0_pr/psi0)
+  f = Constant(M0 * p0/psi0)*r2 + Fpl_vs_Fvac_ratio*Constant(0.5 * F2_0/psi0)
   L = f * r*v*dx
     
 #%% Compute solution and p(psi), F(psi), J(psi)
   u = Function(V)
   solve(a == L, u, bc)
 
-  # inverced_r_integral = fsup.inverced_r_integral(Re, ell_a, ell_b, r, dx, gmsh)
-  # [u, psi0] = fsup.measure_u(Re, ell_a, ell_b, I, bp_problem, inverced_r_integral, E[i], q_problem, u, V, Fpl_vs_Fvac_ratio) # de de-measure solution
-  
   fsup.countour_plot_via_mesh(gmsh, u, levels = 20, colorbar=True, grid=True, PATH=my_dir, plot_title="E = %.1f" % E[i])
   d = fsup.calculate_d_at_boundary(u, psi_level)
   fsup.print_colored("d", 'green', d)
   print("\n")
   
-  p_psi = fsup.calculate_p_psi_final(psi0, u, p0_pr)
-  F2_psi = fsup.calculate_F2_as_small_add_final(F2_0_pr, psi0, u, Fpl_vs_Fvac_ratio)
-  [J_psi, I] = fsup.calculate_J_psi_final(p0_pr, psi0, F2_0_pr, r, V, dx, Fpl_vs_Fvac_ratio)
+  p_psi = fsup.calculate_p_psi_final(psi0, u, p0)
+  F2_psi = fsup.calculate_F2_as_small_add_final(F2_0, psi0, u, Fpl_vs_Fvac_ratio)
+  [J_psi, I] = fsup.calculate_J_psi_final(p0, psi0, F2_0, r, V, dx, Fpl_vs_Fvac_ratio)
 
 #%% Post solve calculus
   boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
@@ -114,7 +107,7 @@ for i, filename in enumerate(filenames):
   Bpa = 1/L * fsup.circulation(Bp, n, ds)
 
   Bt = fsup.calculate_Bt(F2_psi, r)
-  Bt0 = fsup.calculate_Bt0(F2_0_pr, r, V)
+  Bt0 = fsup.calculate_Bt0(F2_0, r, V)
   g_sol = fsup.calculate_g(p_psi, Bp, Bt, Bt0=Bt0)
   Rt = fsup.calculate_Rt(g_sol, r, dx, gmsh)
 
