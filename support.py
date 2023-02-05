@@ -43,12 +43,14 @@ def lao_hash():
     'Fpl_vs_Fvac_ratio': Fpl_vs_Fvac_ratio 
   }
 
-def create_readmi(lao_hash, folder):
+def create_readmi(lao_hash, folder, p_pow=1, F_pow=1):
   file = open("%s/readme.txt" % folder, "w")
   keys = list(lao_hash.keys())
   for key in keys:
     file.write("%s = %s\n" % (key, lao_hash[key]))
-    
+  
+  file.write("p_pow = %s" % p_pow)
+  file.write("F_pow = %s" % F_pow)
   file.close()
   
 def drop_files_ext(files):
