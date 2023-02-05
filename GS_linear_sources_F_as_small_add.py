@@ -32,8 +32,8 @@ theory_data = fsup.form_dict_additions()
 plot_keys = fsup.addition_keys() # do later smth with it
 
 #%% Files
-filenames = ['a_0.370_ratio_1.000_msh_5.0e-03',
-             'a_0.370_ratio_1.100_msh_5.0e-03',
+filenames = ['a_0.370_ratio_1.000_msh_3.0e-03',
+             'a_0.370_ratio_1.100_msh_3.0e-03',
              'a_0.370_ratio_1.200_msh_1.0e-02',
              'a_0.370_ratio_1.300_msh_1.0e-02',
              'a_0.370_ratio_1.400_msh_1.0e-02',
