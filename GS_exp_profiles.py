@@ -31,13 +31,23 @@ F2_0 = lao_hash['F2_0']
 psi_level = 1e-2 # used to calc contours with desired level
 Fpl_vs_Fvac_ratio = lao_hash['Fpl_vs_Fvac_ratio']
 
+psi_guess = 1
 al_pr = 0.4
 kappa = 1e-1 
 divider = 1 - mt.exp(al_pr) + al_pr
 btor = 4e-2
 bpol = 0.9
 
-sup.create_readmi(lao_hash, my_dir)
+exp_hash={
+  'psi_guess': psi_guess,
+  'al_pr': al_pr,
+  'kappa': kappa,
+  'divider': divider,
+  'btor': btor,
+  'bpol': bpol
+}
+
+sup.create_readmi({**lao_hash, **exp_hash}, my_dir)
 
 #%% Dict that will help me plot calculated data
 problem_data = fsup.form_dict()
@@ -84,7 +94,7 @@ for i, filename in enumerate(filenames):
   [r2, r, z] = fsup.operator_weights(V)
   
   # u = Function(V)
-  u = project(Expression("1 - pow(x[0]-Re, 2)/pow(ell_a, 2) - pow(x[1], 2)/pow(ell_b, 2)", degree=2, Re=Re, ell_a=ell_a, ell_b=ell_b), V)
+  u = project(Expression("psi_guess*(1 - pow(x[0]-Re, 2)/pow(ell_a, 2) - pow(x[1], 2)/pow(ell_b, 2))", degree=2, psi_guess=psi_guess, Re=Re, ell_a=ell_a, ell_b=ell_b), V)
   v = TestFunction(V)
   
   f = Expression("2*pow(pi,2) * al_pr * bpol/pow(Re,4) * ( pow(x[0],2) + kappa/btor * pow(Re,2) ) / divider", degree=2, al_pr=al_pr, bpol=bpol, Re=Re, kappa=kappa, btor=btor, divider=divider)
@@ -95,99 +105,99 @@ for i, filename in enumerate(filenames):
 
   fsup.countour_plot_via_mesh(gmsh, u, levels = 20, colorbar=True, grid=True, PATH=my_dir, plot_title="E = %.1f" % E[i])
   exit()
-  d = fsup.calculate_d_at_boundary(u, psi_level)
-  fsup.print_colored("d", 'green', d)
-  print("\n")
+#   d = fsup.calculate_d_at_boundary(u, psi_level)
+#   fsup.print_colored("d", 'green', d)
+#   print("\n")
   
-  p_psi = fsup.calculate_p_psi_final(psi0, u, p0)
-  F2_psi = fsup.calculate_F2_pow_1(F2_0, psi0, u, Fpl_vs_Fvac_ratio)
-  [J_psi, I] = fsup.calculate_J_psi_final(p0, psi0, F2_0, r, V, dx, Fpl_vs_Fvac_ratio)
+#   p_psi = fsup.calculate_p_psi_final(psi0, u, p0)
+#   F2_psi = fsup.calculate_F2_pow_1(F2_0, psi0, u, Fpl_vs_Fvac_ratio)
+#   [J_psi, I] = fsup.calculate_J_psi_final(p0, psi0, F2_0, r, V, dx, Fpl_vs_Fvac_ratio)
 
-#%% Post solve calculus
-  boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
-  ds = Measure('ds', domain=gmsh, subdomain_data=boundaries)
-  n = FacetNormal(gmsh) # normal to plasma boundary
+# #%% Post solve calculus
+#   boundaries = MeshFunction('size_t', gmsh, gmsh.topology().dim() - 1) # get boundaries (and all marked lines???) from mesh
+#   ds = Measure('ds', domain=gmsh, subdomain_data=boundaries)
+#   n = FacetNormal(gmsh) # normal to plasma boundary
 
-  L = fsup.boundary_length(ds)
-  W = fsup.form_vector_space(u)
-  Bp = fsup.calculate_Bp(u, r, W)
-  Bpa = 1/L * fsup.circulation(Bp, n, ds)
+#   L = fsup.boundary_length(ds)
+#   W = fsup.form_vector_space(u)
+#   Bp = fsup.calculate_Bp(u, r, W)
+#   Bpa = 1/L * fsup.circulation(Bp, n, ds)
 
-  Bt = fsup.calculate_Bt(F2_psi, r)
-  Bt0 = fsup.calculate_Bt0(F2_0, r, V)
-  g_sol = fsup.calculate_g(p_psi, Bp, Bt, Bt0=Bt0)
-  Rt = fsup.calculate_Rt(g_sol, r, dx, gmsh)
+#   Bt = fsup.calculate_Bt(F2_psi, r)
+#   Bt0 = fsup.calculate_Bt0(F2_0, r, V)
+#   g_sol = fsup.calculate_g(p_psi, Bp, Bt, Bt0=Bt0)
+#   Rt = fsup.calculate_Rt(g_sol, r, dx, gmsh)
 
-  [er, ez] = fsup.calculate_orts(W)
+#   [er, ez] = fsup.calculate_orts(W)
 
-  omega = fsup.calculate_omega(r, gmsh)
-  S_ = fsup.calculate_plasma_cross_surface(gmsh)
-  Spl = fsup.calculate_plasma_surface(r, ds)
-  alpha = fsup.calculate_alpha(Bp, ez, gmsh, dx)
-  alpha_LB = 2 * E[i]**2 / (E[i]**2 + 1)
-  eps_K = (E[i]**2 - 1) / (E[i]**2 + 1)
-  R0 = fsup.return_R0(u, V)
+#   omega = fsup.calculate_omega(r, gmsh)
+#   S_ = fsup.calculate_plasma_cross_surface(gmsh)
+#   Spl = fsup.calculate_plasma_surface(r, ds)
+#   alpha = fsup.calculate_alpha(Bp, ez, gmsh, dx)
+#   alpha_LB = 2 * E[i]**2 / (E[i]**2 + 1)
+#   eps_K = (E[i]**2 - 1) / (E[i]**2 + 1)
+#   R0 = fsup.return_R0(u, V)
 
-  fsup.print_colored("\u03A9 =", 'blue', omega)
-  fsup.print_colored('Spl =', 'blue', Spl)
-  fsup.print_colored("S\u27C2 =", 'blue', S_)
-  fsup.print_colored('L =', 'blue', L)
-  fsup.print_colored("\u03B1 =", 'blue', alpha)
-  fsup.print_colored("\u03B1_LB =", 'blue', alpha_LB)
-  print("\n")
+#   fsup.print_colored("\u03A9 =", 'blue', omega)
+#   fsup.print_colored('Spl =', 'blue', Spl)
+#   fsup.print_colored("S\u27C2 =", 'blue', S_)
+#   fsup.print_colored('L =', 'blue', L)
+#   fsup.print_colored("\u03B1 =", 'blue', alpha)
+#   fsup.print_colored("\u03B1_LB =", 'blue', alpha_LB)
+#   print("\n")
   
-  q = fsup.return_q(r, z, R0, V, W)
-  S1, S2, S3 = fsup.calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds)
+#   q = fsup.return_q(r, z, R0, V, W)
+#   S1, S2, S3 = fsup.calculate_S_integrals(Bpa, omega, Bp, q, n, r, ds)
   
-  fsup.print_colored('S1 =', 'blue', S1)
-  fsup.print_colored('S2 =', 'blue', S2)
-  fsup.print_colored('S3 =', 'blue', S3)
-  print("\n")
+#   fsup.print_colored('S1 =', 'blue', S1)
+#   fsup.print_colored('S2 =', 'blue', S2)
+#   fsup.print_colored('S3 =', 'blue', S3)
+#   print("\n")
 
-#%% Plot plasma profiles
-  fsup.plot_big_axis_profile(p_psi, yaxis='Pressure, Pa', grid=True, note='2D plot of p(psi) saved to PATH:', PATH=my_dir)
-  fsup.plot_big_axis_profile(F2_psi, yaxis='Tor func, m*Tl', grid=True, note='2D plot of F2(psi) saved to PATH:', PATH=my_dir)
-  fsup.plot_big_axis_profile(Bt, yaxis='Tor field, Tl', grid=True, note='2D plot of Bt(psi) saved to PATH:', PATH=my_dir)
-  fsup.plot_big_axis_profile(J_psi, yaxis='Current Density, A/m**2', grid=True, note='2D plot of J(psi) saved to PATH:', PATH=my_dir)
-  print("\n")
+# #%% Plot plasma profiles
+#   fsup.plot_big_axis_profile(p_psi, yaxis='Pressure, Pa', grid=True, note='2D plot of p(psi) saved to PATH:', PATH=my_dir)
+#   fsup.plot_big_axis_profile(F2_psi, yaxis='Tor func, m*Tl', grid=True, note='2D plot of F2(psi) saved to PATH:', PATH=my_dir)
+#   fsup.plot_big_axis_profile(Bt, yaxis='Tor field, Tl', grid=True, note='2D plot of Bt(psi) saved to PATH:', PATH=my_dir)
+#   fsup.plot_big_axis_profile(J_psi, yaxis='Current Density, A/m**2', grid=True, note='2D plot of J(psi) saved to PATH:', PATH=my_dir)
+#   print("\n")
   
-#%% Calc magnetic values
-  [r_v, q_v] = fsup.return_q_1D(R0, ell_a, u, Bt, Bp)
-  fsup.plot_1D(r_v, q_v, xlabel='Major radius', ylabel='q', note='q', PATH=my_dir)
+# #%% Calc magnetic values
+#   [r_v, q_v] = fsup.return_q_1D(R0, ell_a, u, Bt, Bp)
+#   fsup.plot_1D(r_v, q_v, xlabel='Major radius', ylabel='q', note='q', PATH=my_dir)
 
-  bp, li, mu_i = fsup.solve_SLAE(alpha, [S1, S2, S3], Rt, R0)
-  fsup.print_colored('SLAE', 'blue', attrs=['bold'])
-  fsup.print_colored('bp, li, mui', 'blue', [bp, li, mu_i])
+#   bp, li, mu_i = fsup.solve_SLAE(alpha, [S1, S2, S3], Rt, R0)
+#   fsup.print_colored('SLAE', 'blue', attrs=['bold'])
+#   fsup.print_colored('bp, li, mui', 'blue', [bp, li, mu_i])
 
-  bp_theory = fsup.calculate_bp_theory(Bpa, omega, p_psi, dx, gmsh, r)
-  li_theory = fsup.calculate_li_theory(Bpa, omega, Bp, dx, gmsh, r)
-  mu_i_theory = fsup.calculate_mu_i_theory(Bpa, omega, Bt, dx, gmsh, r, Bt0=Bt0)
+#   bp_theory = fsup.calculate_bp_theory(Bpa, omega, p_psi, dx, gmsh, r)
+#   li_theory = fsup.calculate_li_theory(Bpa, omega, Bp, dx, gmsh, r)
+#   mu_i_theory = fsup.calculate_mu_i_theory(Bpa, omega, Bt, dx, gmsh, r, Bt0=Bt0)
   
-  fsup.print_colored('Theory', 'blue', attrs=['bold'])
-  fsup.print_colored('bp, li, mui', 'blue', [bp_theory, li_theory, mu_i_theory])
-  fsup.print_colored('-'*50, 'yellow', attrs=['bold'])
-  print("\n")
+#   fsup.print_colored('Theory', 'blue', attrs=['bold'])
+#   fsup.print_colored('bp, li, mui', 'blue', [bp_theory, li_theory, mu_i_theory])
+#   fsup.print_colored('-'*50, 'yellow', attrs=['bold'])
+#   print("\n")
   
-#%% Calculate S1-S3 based on known bp, li, mu_i  
-  S1_theory = 2
-  S2_theory = 2*bp_theory + li_theory - 1
-  S3_theory = 1 - eps_K/2 - d*(1 - eps_K**2/2)
+# #%% Calculate S1-S3 based on known bp, li, mu_i  
+#   S1_theory = 2
+#   S2_theory = 2*bp_theory + li_theory - 1
+#   S3_theory = 1 - eps_K/2 - d*(1 - eps_K**2/2)
 
-#%% Append data
-  problem_data = fsup.append_problem_data(globals(), problem_data)
-  theory_data = fsup.append_problem_data(globals(), theory_data)
+# #%% Append data
+#   problem_data = fsup.append_problem_data(globals(), problem_data)
+#   theory_data = fsup.append_problem_data(globals(), theory_data)
 
-#%% Post problem plot
-fsup.print_colored('Save 2D plots...', 'green', attrs=['bold'])
-keys = list(problem_data.keys())
-for key in keys:
-  if key in list(plot_keys.keys()):
-    fsup.plot_1D(E, problem_data[key],
-                xlabel='elongation', ylabel=key, note=key,
-                additions=theory_data[plot_keys[key]],
-                PATH=my_dir) # maybe add special funcs for certain values
-  else:
-    fsup.plot_1D(E, problem_data[key],
-                xlabel='elongation', ylabel=key, 
-                note=key,
-                PATH=my_dir) # maybe add special funcs for certain values
+# #%% Post problem plot
+# fsup.print_colored('Save 2D plots...', 'green', attrs=['bold'])
+# keys = list(problem_data.keys())
+# for key in keys:
+#   if key in list(plot_keys.keys()):
+#     fsup.plot_1D(E, problem_data[key],
+#                 xlabel='elongation', ylabel=key, note=key,
+#                 additions=theory_data[plot_keys[key]],
+#                 PATH=my_dir) # maybe add special funcs for certain values
+#   else:
+#     fsup.plot_1D(E, problem_data[key],
+#                 xlabel='elongation', ylabel=key, 
+#                 note=key,
+#                 PATH=my_dir) # maybe add special funcs for certain values
