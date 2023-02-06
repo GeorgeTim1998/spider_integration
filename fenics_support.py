@@ -52,6 +52,11 @@ def calculate_p_psi_final(psi0, u, p0):
   
   return project(p0 * u/psi0, V)
 
+def calculate_p_psi_pow_2(psi0, u, p0):
+  V = u.function_space()
+  
+  return project(p0 * u*u/psi0**2, V)
+
 def calculate_F2_psi(E, psi0, q, u, Re):
   V = u.function_space()
   F_20 = 4*pi**2 * E**2 * psi0**2 * q**2 / Re**2
@@ -64,7 +69,7 @@ def calculate_F2_as_small_add(E, psi0, q, u, Re, Fpl_vs_Fvac_ratio=1):
   F_20 = 4*pi**2 * E**2 * psi0**2 * q**2 / Re**2
   one = interpolate(Constant(1), V)
 
-def calculate_F2_as_small_add_final(F2_0, psi0, u, Fpl_vs_Fvac_ratio=1):
+def calculate_F2_pow_1(F2_0, psi0, u, Fpl_vs_Fvac_ratio=1):
   # F2 is aproximated as F20(1 + alph*psi/psi0)
   V = u.function_space()
   
@@ -88,6 +93,14 @@ def calculate_J_psi(p0, psi0, F2_0, r, V, dx, Fpl_vs_Fvac_ratio=1):
 
 def calculate_J_psi_final(p0, psi0, F2_0, r, V, dx, Fpl_vs_Fvac_ratio=1):
   J_psi = p0/psi0*r + Fpl_vs_Fvac_ratio/(2*M0*r)*F2_0/psi0
+  J_psi = project(J_psi, V)
+  
+  I = assemble(J_psi*dx)
+  
+  return J_psi, I
+
+def calculate_J_psi_p_pow_2_F_pow_1(p0, psi0, F2_0, r, V, dx, u, Fpl_vs_Fvac_ratio=1):
+  J_psi = p0 * 2*u/psi0**2 * r + Fpl_vs_Fvac_ratio/(2*M0*r)*F2_0/psi0
   J_psi = project(J_psi, V)
   
   I = assemble(J_psi*dx)
@@ -148,7 +161,7 @@ def countour_plot_via_mesh(gmsh, u, levels,
   u_max = u.vector()[:].max()
   
   if u_min == u_max:
-    print("Trivial solution. u = %s" % u_max)
+    print_colored("Trivial solution. u = %s" % u_max, 'red')
   else:
     gmsh_coordinates = gmsh.coordinates().reshape((-1, 2)).T
     triang = tri.Triangulation(*gmsh_coordinates, triangles=gmsh.cells())

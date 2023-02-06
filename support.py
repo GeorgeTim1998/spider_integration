@@ -27,7 +27,6 @@ def lao_hash():
   
   psi0 = Re**2 * Bp
   F2_0 = Re**2 * Bt0_mean**2
-  psi_level = 1e-3 # used to calc contours with known desired psi_level
   Fpl_vs_Fvac_ratio = 1e-3
   
   return {
@@ -39,7 +38,6 @@ def lao_hash():
     'p0': p0,
     'psi0': psi0,
     'F2_0': F2_0,
-    'psi_level': psi_level,
     'Fpl_vs_Fvac_ratio': Fpl_vs_Fvac_ratio 
   }
 
@@ -49,7 +47,7 @@ def create_readmi(lao_hash, folder, p_pow=1, F_pow=1):
   for key in keys:
     file.write("%s = %s\n" % (key, lao_hash[key]))
   
-  file.write("p_pow = %s" % p_pow)
+  file.write("p_pow = %s\n" % p_pow)
   file.write("F_pow = %s" % F_pow)
   file.close()
   
