@@ -85,15 +85,11 @@ for i, filename in enumerate(filenames):
   
   # u = Function(V)
   u = project(Expression("1 - pow(x[0]-Re, 2)/pow(ell_a, 2) - pow(x[1], 2)/pow(ell_b, 2)", degree=2, Re=Re, ell_a=ell_a, ell_b=ell_b), V)
-  fsup.countour_plot_via_mesh(gmsh, u, levels=10, PATH=my_dir, colorbar=True)
   v = TestFunction(V)
   
   f = Expression("2*pow(pi,2) * al_pr * bpol/pow(Re,4) * ( pow(x[0],2) + kappa/btor * pow(Re,2) ) / divider", degree=2, al_pr=al_pr, bpol=bpol, Re=Re, kappa=kappa, btor=btor, divider=divider)
   F = inner(grad(u)/r, grad(r2*v))*dx + f*(exp(al_pr*u) - 1) * r*v*dx
   
-  # f = Expression("x[0]*sin(x[1])", degree=2)
-  # F = inner((1 + u**2)*grad(u), grad(v))*dx - f*v*dx
-
 #%% Compute solution and p(psi), F(psi), J(psi)
   solve(F == 0, u, bc)
 
