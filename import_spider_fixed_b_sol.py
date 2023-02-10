@@ -70,7 +70,9 @@ ro = ro.reshape(psi_size, spacial_size)
 I = np.ones((psi_size, spacial_size))
 r_mesh = ro*(rb - rc) + I*rc
 z_mesh = ro*(zb - zc) + I*zc
-sqrt_psi_norm = (I.transpose() * sqrt_psi_norm).transpose()
+
+psi = psi_max * (1 - sqrt_psi_norm**2)
+sqrt_psi_norm = (I.transpose() * psi).transpose()
 
 figure = pyplot.contour(r_mesh, z_mesh, sqrt_psi_norm)
 pyplot.colorbar(figure).set_label("\u03C8(r, z), Вб")
