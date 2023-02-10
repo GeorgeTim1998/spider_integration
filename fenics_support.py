@@ -155,7 +155,9 @@ def countour_plot_via_mesh(gmsh, u, levels,
                            grid = False,
                            colorbar = False,
                            note='3D countour plot saved to PATH:',
-                           PATH=''):
+                           PATH='',
+                           xlim=[],
+                           ylim=[]):
 
   u_min = u.vector()[:].min()
   u_max = u.vector()[:].max()
@@ -170,8 +172,16 @@ def countour_plot_via_mesh(gmsh, u, levels,
     fig = matplt.tricontour(triang, u_array, levels, zorder=2)
     matplt.gca().set_aspect("equal")
     
-    matplt.xlim(gmsh_coordinates[0].min(), gmsh_coordinates[0].max())
-    matplt.ylim(gmsh_coordinates[1].min(), gmsh_coordinates[1].max())
+    if xlim == []:
+      matplt.xlim(gmsh_coordinates[0].min(), gmsh_coordinates[0].max())
+    else:
+      matplt.xlim(*xlim)
+      
+    if ylim == []:
+      matplt.ylim(gmsh_coordinates[1].min(), gmsh_coordinates[1].max())
+    else:
+      matplt.ylim(*ylim)
+
     matplt.xlabel("r, м")
     matplt.ylabel("z, м")
     
