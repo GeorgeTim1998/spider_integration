@@ -90,9 +90,11 @@ I = np.ones((psi_size, spacial_size))
 r_mesh = ro*(rb - rc) + I*rc
 z_mesh = ro*(zb - zc) + I*zc
 
-sqrt_psi_norm = (I.transpose() * psi).transpose()
+psi_mesh = (I.transpose() * psi).transpose()
+p_mesh = (I.transpose() * ppsi).transpose()
+f_mesh = (I.transpose() * fpsi).transpose()
 
-figure = pyplot.contour(r_mesh, z_mesh, sqrt_psi_norm)
+figure = pyplot.contour(r_mesh, z_mesh, psi_mesh)
 pyplot.colorbar(figure).set_label("\u03C8(r, z), Вб")
 pyplot.gca().set_aspect("equal")
 pyplot.xlim(0.8, 2.4)
