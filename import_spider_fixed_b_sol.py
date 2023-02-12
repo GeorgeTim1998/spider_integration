@@ -1,4 +1,5 @@
 import numpy as np
+from math import pi
 import support as sup
 import matplotlib.pyplot as pyplot
 
@@ -24,6 +25,19 @@ def return_and_delete_range(data, data_range):
   
   return return_array, data
 
+def restore_ppsi(psi, dpdpsi, pmin=0):
+  psi = np.flip(psi)
+  dpdpsi = np.flip(dpdpsi)
+
+  ppsi = np.zeros(len(psi))
+  
+  ppsi[0] = pmin
+  for i in range(1, len(psi)):
+    ppsi[i] = dpdpsi[i] * (psi[i]-psi[i-1]) + ppsi[i-1]
+    
+  return np.flip(ppsi)
+  
+#%% Get data from file
 with open(path_to_file, 'r') as file:
   psi_size, spacial_size, size, psi_max = first_line(file)
   psi_min, end_entry = second_line(file)
@@ -66,12 +80,16 @@ fvac, data = return_and_delete_range(data, 1)
 
 ro = ro.reshape(psi_size, spacial_size)
 
-# for i, row in enumerate(ro)
+#%% Restore data needed fo fenics
+psi = psi_max * (1 - sqrt_psi_norm**2) # This is magnetic flux/2pi. In spider flux is used/ Multiply by 2pi
+
+ppsi = restore_ppsi(2*pi*psi, dpdpsi)
+fpsi = restore_ppsi(2*pi*psi, dfdpsi, fvac)
+
 I = np.ones((psi_size, spacial_size))
 r_mesh = ro*(rb - rc) + I*rc
 z_mesh = ro*(zb - zc) + I*zc
 
-psi = psi_max * (1 - sqrt_psi_norm**2)
 sqrt_psi_norm = (I.transpose() * psi).transpose()
 
 figure = pyplot.contour(r_mesh, z_mesh, sqrt_psi_norm)
