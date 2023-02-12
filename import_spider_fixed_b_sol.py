@@ -25,17 +25,17 @@ def return_and_delete_range(data, data_range):
   
   return return_array, data
 
-def restore_ppsi(psi, dpdpsi, pmin=0):
+def restore_funcpsi(psi, dfuncdpsi, funcb=0):
   psi = np.flip(psi)
-  dpdpsi = np.flip(dpdpsi)
+  dfuncdpsi = np.flip(dfuncdpsi)
 
-  ppsi = np.zeros(len(psi))
+  funcpsi = np.zeros(len(psi))
   
-  ppsi[0] = pmin
+  funcpsi[0] = funcb
   for i in range(1, len(psi)):
-    ppsi[i] = dpdpsi[i] * (psi[i]-psi[i-1]) + ppsi[i-1]
+    funcpsi[i] = dfuncdpsi[i] * (psi[i]-psi[i-1]) + funcpsi[i-1]
     
-  return np.flip(ppsi)
+  return np.flip(funcpsi)
   
 #%% Get data from file
 with open(path_to_file, 'r') as file:
@@ -83,8 +83,8 @@ ro = ro.reshape(psi_size, spacial_size)
 #%% Restore data needed fo fenics
 psi = psi_max * (1 - sqrt_psi_norm**2) # This is magnetic flux/2pi. In spider flux is used/ Multiply by 2pi
 
-ppsi = restore_ppsi(2*pi*psi, dpdpsi)
-fpsi = restore_ppsi(2*pi*psi, dfdpsi, fvac)
+ppsi = restore_funcpsi(2*pi*psi, dpdpsi)
+fpsi = restore_funcpsi(2*pi*psi, dfdpsi, fvac)
 
 I = np.ones((psi_size, spacial_size))
 r_mesh = ro*(rb - rc) + I*rc
