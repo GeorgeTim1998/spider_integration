@@ -93,6 +93,8 @@ z_mesh = ro*(zb - zc) + I*zc
 psi_mesh = (I.transpose() * psi).transpose()
 p_mesh = (I.transpose() * ppsi).transpose()
 f_mesh = (I.transpose() * fpsi).transpose()
+dfdpsi_mesh = (I.transpose() * dfdpsi).transpose()
+dpdpsi_mesh = (I.transpose() * dpdpsi).transpose()
 
 figure = pyplot.contour(r_mesh, z_mesh, psi_mesh)
 pyplot.colorbar(figure).set_label("\u03C8(r, z), Вб")
