@@ -1,17 +1,16 @@
 import numpy as np
-from math import pi, sqrt
+from helpers import eqdsk_equlx_helper as eq
+from math import pi, sqrt, floor
 import matplotlib.pyplot as pyplot
 
-ACASE48 = 'KIAM'
-SPIDER = 'SPIDER'
-IDUM = 3
-MESHR = 128
-MESHZ = 257
+number_format = "%16.9E" 
+formating = "%s\n" % (number_format * 5)
 
-folder = 'Files'
-filename = 'eqdsk_equilx'
-# with open("%s/%s" % (folder, filename), 'w') as file:
-#   file.write("%8s%8s%36d%4d%4d" % (ACASE48, SPIDER, IDUM, MESHR, MESHZ))
+ACASE48, SPIDER, IDUM, MESHR, MESHZ = 'KIAM', 'SPIDER', 3, 128, 257
+RDIM, ZDIM, RCENTR, RLEFT, ZMID = 2.5, 4, 1.48, 0.5, 0
+RMAXIS, ZMAXIS, UM, UP, BCENTR =  0.162692725E+01, 0, 0.602393949E+00, 0.157520013E+00, 0.200000000E+01
+CURRENT, RX1, ZX1, RX2, ZX2 = 0.15E+07, 0, 0, 0, 0
+ZMAXIS, UXN, UX1, UX2, XDUM = 0, 0, 0, 0, 0
 
 fpol = np.array([0.323515213E+01, 0.322502855E+01, 0.321626699E+01, 0.320842266E+01, 0.320102936E+01,
 0.319397791E+01, 0.318720758E+01, 0.318067832E+01, 0.317435701E+01, 0.316822879E+01,
@@ -142,6 +141,21 @@ for i in my_steps:
 
 my_pres = my_pres*2*pi # for some reason pres needs 2pi multiplicator to be actual pressure
 
+
+folder = 'Files'
+filename = 'eqdsk_equilx'
+with open("%s/%s" % (folder, filename), 'w') as file:
+  file.write("%8s%8s%36d%4d%4d\n" % (ACASE48, SPIDER, IDUM, MESHR, MESHZ))
+  file.write(formating % (RDIM, ZDIM, RCENTR, RLEFT, ZMID))
+  file.write(formating % (RMAXIS, ZMAXIS, UM, UP, BCENTR))
+  file.write(formating % (CURRENT, RX1, ZX1, RX2, ZX2))
+  file.write(formating % (ZMAXIS, UXN, UX1, UX2, XDUM))
+  
+  eq.write_np_array_to_file(file, fpol, number_format)
+  eq.write_np_array_to_file(file, pres, number_format)
+    
+
+exit()
 psi = np.linspace(0, 1, len(fpol))
 
 ax1= pyplot.subplot(231)
