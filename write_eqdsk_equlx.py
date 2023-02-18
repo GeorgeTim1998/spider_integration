@@ -34,13 +34,8 @@ with open("%s/%s" % (folder, filename), 'w') as file:
   file.write(formating % (CURRENT, RX1, ZX1, RX2, ZX2))
   file.write(formating % (ZMAXIS, UXN, UX1, UX2, XDUM))
   
-  # for array in [fpol, pres, ffprim, pprime, u, q]:
-  eq.write_np_array_to_file(file, fpol, number_format)
-  eq.write_np_array_to_file(file, pres, number_format)
-  eq.write_np_array_to_file(file, ffprim, number_format)
-  eq.write_np_array_to_file(file, pprime, number_format)
-  eq.write_np_array_to_file(file, u, number_format)
-  eq.write_np_array_to_file(file, q, number_format)
+  for array in [fpol, pres, ffprim, pprime, u, q]:
+    eq.write_np_array_to_file(file, array, number_format)
   
   file.write("%5d%5d\n" % (NXB, NBLM))
   
