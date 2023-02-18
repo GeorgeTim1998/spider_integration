@@ -93,27 +93,16 @@ for i, filename in enumerate(filenames):
   ell_b = ell_a * E[i]
   [r2, r, z] = fsup.operator_weights(V)
   
-  u_k = project(Expression("psi_guess*(1 - pow(x[0]-Re, 2)/pow(ell_a, 2) - pow(x[1], 2)/pow(ell_b, 2))", degree=2, psi_guess=psi_guess, Re=Re, ell_a=ell_a, ell_b=ell_b), V)
-  u = TrialFunction(V)
+  # u_k = project(Expression("psi_guess*(1 - pow(x[0]-Re, 2)/pow(ell_a, 2) - pow(x[1], 2)/pow(ell_b, 2))", degree=2, psi_guess=psi_guess, Re=Re, ell_a=ell_a, ell_b=ell_b), V)
+  u = Function(V)
   v = TestFunction(V)
   
   f = Expression("2*pow(pi,2) * al_pr * bpol/pow(Re,4) * ( pow(x[0],2) + kappa/btor * pow(Re,2) ) / divider", degree=2, al_pr=al_pr, bpol=bpol, Re=Re, kappa=kappa, btor=btor, divider=divider)
   fsup.print_colored("f = %f*(r**2 + %f)" % (2*pi**2 * al_pr * bpol/Re**4 / divider, kappa/btor * Re**2), color='green')
-  a = inner(grad(u)/r, grad(r2*v))*dx
-  L = f*(1 - exp(al_pr*u_k)) * r*v*dx
+  a = inner(grad(u)/r, grad(r2*v))*dx + f*(1 - exp(al_pr*u)) * r*v*dx
   
 #%% Compute solution and p(psi), F(psi), J(psi)
-  u = Function(V)     # new unknown function
-  eps = 1.0           # error measure ||u-u_k||
-  tol = 1.0E-7        # tolerance
-  iter = 0            # iteration counter
-  maxiter = 25        # max no of iterations allowed
-  while eps > tol and iter < maxiter:
-    iter += 1
-    solve(a == L, u, bc)
-    eps = errornorm(u_k, u, 'L2')
-    fsup.print_colored("Info: iter = %d: norm = %g" % (iter, eps), color='yellow')
-    u_k.assign(u)   # update for next iteration
+  solve(a == 0, u, bc)
 
   fsup.countour_plot_via_mesh(gmsh, u, levels = 20, colorbar=True, grid=True, plot_title="E = %.1f" % E[i])
   exit()
