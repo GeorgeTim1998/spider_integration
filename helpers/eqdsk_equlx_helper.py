@@ -35,7 +35,7 @@ def restore_pres_n_fpol(um, up, meshr, pprime, ffprim, bcentr, rcentr):
 
   return pres, fpol  
 
-def plot_pres_fpol_n_ders(pres, fpol, pprime, ffprim):
+def plot_pres_fpol_n_ders(pres, fpol, pprime, ffprim, show=False):
   psi = np.linspace(0, 1, len(fpol))
 
   pyplot.subplot(221)
@@ -62,7 +62,8 @@ def plot_pres_fpol_n_ders(pres, fpol, pprime, ffprim):
   pyplot.xlabel('psi')
   pyplot.grid(True)
 
-  pyplot.show()
+  if show:
+    pyplot.show()
 
 
 def default_plasma_boundary():
