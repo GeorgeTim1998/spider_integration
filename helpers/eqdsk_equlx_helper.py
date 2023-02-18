@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as pyplot
 import math as mt
 from math import pi
 
@@ -33,6 +34,36 @@ def restore_pres_n_fpol(um, up, meshr, pprime, ffprim, bcentr, rcentr):
     fpol[i]=mt.sqrt(fpol[i+1]**2 + 2*fprim_c * 2*pi*dpsi)
 
   return pres, fpol  
+
+def plot_pres_fpol_n_ders(pres, fpol, pprime, ffprim):
+  psi = np.linspace(0, 1, len(fpol))
+
+  pyplot.subplot(221)
+  pyplot.scatter(psi, pres)
+  pyplot.ylabel('pres')
+  pyplot.xlabel('psi')
+  pyplot.grid(True)
+
+  pyplot.subplot(223)
+  pyplot.scatter(psi, -pprime)
+  pyplot.ylabel('pprim')
+  pyplot.xlabel('psi')
+  pyplot.grid(True)
+
+  pyplot.subplot(222)
+  pyplot.scatter(psi, fpol)
+  pyplot.ylabel('fpol')
+  pyplot.xlabel('psi')
+  pyplot.grid(True)
+
+  pyplot.subplot(224)
+  pyplot.scatter(psi, -ffprim)
+  pyplot.ylabel('ffprim')
+  pyplot.xlabel('psi')
+  pyplot.grid(True)
+
+  pyplot.show()
+
 
 def default_plasma_boundary():
   boundary = np.array([0.227005788E+01, -0.130657255E-02, 0.226620195E+01, 0.444602325E-01, 0.225887967E+01,

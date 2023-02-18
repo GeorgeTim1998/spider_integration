@@ -41,30 +41,4 @@ with open("%s/%s" % (folder, filename), 'w') as file:
   eq.write_np_array_to_file(file, boundary, number_format)
   eq.write_np_array_to_file(file, boundary, number_format)
 
-psi = np.linspace(0, 1, len(fpol))
-
-pyplot.subplot(221)
-pyplot.scatter(psi, pres)
-pyplot.ylabel('pres')
-pyplot.xlabel('psi')
-pyplot.grid(True)
-
-pyplot.subplot(223)
-pyplot.scatter(psi, -pprime)
-pyplot.ylabel('pprim')
-pyplot.xlabel('psi')
-pyplot.grid(True)
-
-pyplot.subplot(222)
-pyplot.scatter(psi, fpol)
-pyplot.ylabel('fpol')
-pyplot.xlabel('psi')
-pyplot.grid(True)
-
-pyplot.subplot(224)
-pyplot.scatter(psi, -ffprim)
-pyplot.ylabel('ffprim')
-pyplot.xlabel('psi')
-pyplot.grid(True)
-
-pyplot.show()
+eq.plot_pres_fpol_n_ders(pres, fpol, pprime, ffprim)
