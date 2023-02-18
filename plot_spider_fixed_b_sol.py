@@ -4,7 +4,7 @@ import support as sup
 import matplotlib.pyplot as pyplot
 
 path = '/media/george/part/Spider'
-working_folder = 'WK_T15MD_fb_del'
+working_folder = 'WK_PRIME_restore_q'
 pic_path = "Pics/%s.png" % working_folder
 wr_file = 'spik.wr'
 
