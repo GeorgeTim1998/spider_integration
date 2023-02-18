@@ -140,7 +140,7 @@ for i in my_steps:
   my_pres[i]=(my_pres[i+1] + pprim_c*dpsi)
   my_fpol[i]=sqrt(my_fpol[i+1]**2 + 2*fprim_c*dpsi)
 
-my_pres = my_pres*2*pi
+my_pres = my_pres*2*pi # for some reason pres needs 2pi multiplicator to be actual pressure
 
 psi = np.linspace(0, 1, len(fpol))
 
