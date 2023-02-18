@@ -68,6 +68,8 @@ pprime = np.array([0.335012952E+06, 0.243038167E+06, 0.158384855E+06, 0.14524520
 
 pres, fpol = eq.restore_pres_n_fpol(UM, UP, MESHR, pprime, ffprim, BCENTR, RCENTR)
 
+u = np.zeros(MESHR * MESHZ)
+
 folder = 'Files'
 filename = 'eqdsk_equilx'
 with open("%s/%s" % (folder, filename), 'w') as file:
@@ -81,6 +83,8 @@ with open("%s/%s" % (folder, filename), 'w') as file:
   eq.write_np_array_to_file(file, pres, number_format)
   eq.write_np_array_to_file(file, pprime, number_format)
   eq.write_np_array_to_file(file, ffprim, number_format)
+  eq.write_np_array_to_file(file, u, number_format)
+  
     
 
 exit()
