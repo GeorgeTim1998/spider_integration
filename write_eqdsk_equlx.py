@@ -22,6 +22,8 @@ q = np.zeros(len(pprime))
 
 NXB,NBLM = 89, 89
 
+boundary = eq.default_plasma_boundary()
+
 folder = 'Files'
 filename = 'eqdsk_equilx'
 with open("%s/%s" % (folder, filename), 'w') as file:
@@ -34,7 +36,10 @@ with open("%s/%s" % (folder, filename), 'w') as file:
   for array in [fpol, pres, pprime, ffprim, u, q]:
     eq.write_np_array_to_file(file, array, number_format)
   
-  file.write("%5d%5d" % (NXB, NBLM))
+  file.write("%5d%5d\n" % (NXB, NBLM))
+  
+  eq.write_np_array_to_file(file, boundary, number_format)
+  eq.write_np_array_to_file(file, boundary, number_format)
 
 exit()
 psi = np.linspace(0, 1, len(fpol))
