@@ -1,4 +1,5 @@
 import numpy as np
+from math import pi, sqrt
 import matplotlib.pyplot as pyplot
 
 ACASE48 = 'KIAM'
@@ -93,7 +94,7 @@ ffprim = np.array([0.999417939E+01, 0.867587335E+01, 0.743508148E+01, 0.69520721
 -0.250018929E+00, -0.256210321E+00, -0.262269054E+00, -0.268844714E+00, -0.276835486E+00,
 -0.285875810E+00, -0.297368729E+00, -0.309533860E+00])
 
-pprim = np.array([0.335012952E+06, 0.243038167E+06, 0.158384855E+06, 0.145245202E+06, 0.141143698E+06,
+pprime = np.array([0.335012952E+06, 0.243038167E+06, 0.158384855E+06, 0.145245202E+06, 0.141143698E+06,
 0.139608090E+06, 0.138323506E+06, 0.137958905E+06, 0.137633363E+06, 0.137612867E+06,
 0.137643056E+06, 0.137846315E+06, 0.138071389E+06, 0.138413402E+06, 0.138794793E+06,
 0.139198297E+06, 0.139647210E+06, 0.140118480E+06, 0.140604390E+06, 0.141114657E+06,
@@ -120,17 +121,26 @@ pprim = np.array([0.335012952E+06, 0.243038167E+06, 0.158384855E+06, 0.145245202
 0.220014998E+06, 0.218083899E+06, 0.215712952E+06, 0.213132640E+06, 0.210123945E+06,
 0.206875823E+06, 0.203154809E+06, 0.199302180E+06])
 
+um = 0.602393949E+00
+up = 0.157520013E+00
+
+um = -um / (2*pi)
+up = -up / (2*pi)
+dpsi = (um - up)/(MESHR-1)
+
+my_pres = pres
+my_fpol = fpol
+
+for i in range(MESHR-1, 1):
+  pprim_c = 0.5 * (pprime[i+1] + pprime[i])
+  fprim_c = 0.5 * (ffprim[i+1] + ffprim[i])
+  
+  my_pres[i]=my_pres[i+1] + pprim_c*dpsi
+  my_fpol[i]=sqrt(my_fpol[i+1]**2 + 2*fprim_c*dpsi)
+  
+
+
 psi = np.linspace(0, 1, len(fpol))
-psi_diff = np.diff(psi)
-
-pres_diff = np.diff(pres)
-pres_der = -pres_diff/psi_diff
-
-fpol_diff = np.diff(fpol)
-fpol_der = -fpol_diff/psi_diff
-
-# pprim = np.flip(pprim)
-# ffprim = np.flip(ffprim)
 
 ax1= pyplot.subplot(231)
 pyplot.scatter(psi, pres)
@@ -139,13 +149,13 @@ pyplot.xlabel('psi')
 pyplot.grid(True)
 
 ax = pyplot.subplot(232)
-pyplot.scatter(psi, pprim)
+pyplot.scatter(psi, pprime)
 pyplot.ylabel('pprim')
 pyplot.xlabel('psi')
 pyplot.grid(True)
 
 ax = pyplot.subplot(233)
-pyplot.scatter(psi[0:-1], pres_der)
+pyplot.scatter(psi, my_pres)
 pyplot.ylabel('pres_der')
 pyplot.xlabel('psi')
 pyplot.grid(True)
@@ -156,7 +166,6 @@ pyplot.ylabel('fpol')
 pyplot.xlabel('psi')
 pyplot.grid(True)
 
-
 ax = pyplot.subplot(235)
 pyplot.scatter(psi, ffprim)
 pyplot.ylabel('ffprim')
@@ -164,12 +173,40 @@ pyplot.xlabel('psi')
 pyplot.grid(True)
 
 ax = pyplot.subplot(236)
-pyplot.scatter(psi[0:-1], fpol_der)
+pyplot.scatter(psi, my_fpol)
 pyplot.ylabel('fpol_der')
 pyplot.xlabel('psi')
 pyplot.grid(True)
 
 pyplot.show()
+
+# ax = pyplot.subplot(236)
+# pyplot.scatter(psi[0:-1], ffprim[0:-1]/fpol_der)
+# pyplot.ylabel('fpol multuplicator')
+# pyplot.xlabel('psi')
+# pyplot.grid(True)
+
+# ax = pyplot.subplot(236)
+# pyplot.scatter(psi[0:-1], pprim[0:-1]/pres_der)
+# pyplot.ylabel('pres multuplicator')
+# pyplot.xlabel('psi')
+# pyplot.grid(True)
+
+# pyplot.figure()
+# pyplot.scatter(psi[0:-2], pprime[0: -2]/pres_der[1: :])
+# pyplot.ylabel('pres multuplicator')
+# pyplot.xlabel('psi')
+# pyplot.grid(True)
+# pyplot.savefig("Pics/pres_multuplicator_right.png", dpi=240)
+
+# pyplot.figure()
+# pyplot.scatter(psi[0:-1], (2*fpol[0:-1]*fpol_der)/ffprim[0:-1])
+# pyplot.ylabel('fpol multuplicator')
+# pyplot.xlabel('psi')
+# pyplot.grid(True)
+# pyplot.savefig("Pics/fpol_multuplicator.png", dpi=240)
+# pyplot.show()
+
 print(1)
 # ffprim
 # ffprim
