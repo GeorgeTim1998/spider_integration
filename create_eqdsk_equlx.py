@@ -2,6 +2,7 @@ import numpy as np
 from helpers import eqdsk_equlx_helper as eq
 from math import pi, sqrt, floor
 import matplotlib.pyplot as pyplot
+import create_gmsh_mesh_from_points as gmsh
 
 number_format = "%16.9E" 
 formating = "%s\n" % (number_format * 5)
@@ -42,3 +43,5 @@ with open("%s/%s" % (folder, filename), 'w') as file:
   eq.write_np_array_to_file(file, boundary, number_format)
 
 eq.plot_pres_fpol_n_ders(pres, fpol, pprime, ffprim)
+
+gmsh.create_gmsh_mesh_from_points(boundary)
