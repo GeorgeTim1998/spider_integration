@@ -10,7 +10,7 @@ ACASE48, SPIDER, IDUM, MESHR, MESHZ = 'KIAM', 'SPIDER', 3, 128, 257
 RDIM, ZDIM, RCENTR, RLEFT, ZMID = 2.5, 4, 1.48, 0.5, 0
 RMAXIS, ZMAXIS, UM, UP, BCENTR =  0.162692725E+01, 0, 0.602393949E+00, 0.157520013E+00, 0.200000000E+01
 CURRENT, RX1, ZX1, RX2, ZX2 = 0.15E+07, 0, 0, 0, 0
-ZMAXIS, UXN, UX1, UX2, XDUM = 0, 0, 0, 0, 0
+ZMAXIS, UXN, UX1, UX2, XDUM = -0.135423817E-02, 0, 0, 0, 0
 
 pprime = eq.default_pprime()
 ffprim = eq.default_ffprim()
@@ -18,7 +18,8 @@ ffprim = eq.default_ffprim()
 pres, fpol = eq.restore_pres_n_fpol(UM, UP, MESHR, pprime, ffprim, BCENTR, RCENTR)
 
 u = np.zeros(MESHR * MESHZ)
-q = np.zeros(len(pprime))
+# q = np.zeros(len(pprime))
+q = eq.default_q()
 
 NXB,NBLM = 89, 89
 
@@ -33,8 +34,13 @@ with open("%s/%s" % (folder, filename), 'w') as file:
   file.write(formating % (CURRENT, RX1, ZX1, RX2, ZX2))
   file.write(formating % (ZMAXIS, UXN, UX1, UX2, XDUM))
   
-  for array in [fpol, pres, pprime, ffprim, u, q]:
-    eq.write_np_array_to_file(file, array, number_format)
+  # for array in [fpol, pres, ffprim, pprime, u, q]:
+  eq.write_np_array_to_file(file, fpol, number_format)
+  eq.write_np_array_to_file(file, pres, number_format)
+  eq.write_np_array_to_file(file, ffprim, number_format)
+  eq.write_np_array_to_file(file, pprime, number_format)
+  eq.write_np_array_to_file(file, u, number_format)
+  eq.write_np_array_to_file(file, q, number_format)
   
   file.write("%5d%5d\n" % (NXB, NBLM))
   
