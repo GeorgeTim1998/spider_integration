@@ -128,17 +128,19 @@ um = -um / (2*pi)
 up = -up / (2*pi)
 dpsi = (um - up)/(MESHR-1)
 
-my_pres = pres
-my_fpol = fpol
+my_pres = np.zeros(len(pres))
+my_fpol = np.zeros(len(pres))
+my_fpol[-1] = fpol[-1]
 
-for i in range(MESHR-1, 1):
-  pprim_c = 0.5 * (pprime[i+1] + pprime[i])
-  fprim_c = 0.5 * (ffprim[i+1] + ffprim[i])
+my_steps = np.flip(np.array(range(0, MESHR-1)))
+for i in my_steps:
+  pprim_c = -0.5 * (pprime[i+1] + pprime[i])
+  fprim_c = -0.5 * (ffprim[i+1] + ffprim[i])
   
-  my_pres[i]=my_pres[i+1] + pprim_c*dpsi
+  my_pres[i]=(my_pres[i+1] + pprim_c*dpsi)
   my_fpol[i]=sqrt(my_fpol[i+1]**2 + 2*fprim_c*dpsi)
-  
 
+my_pres = my_pres*2*pi
 
 psi = np.linspace(0, 1, len(fpol))
 
@@ -156,7 +158,7 @@ pyplot.grid(True)
 
 ax = pyplot.subplot(233)
 pyplot.scatter(psi, my_pres)
-pyplot.ylabel('pres_der')
+pyplot.ylabel('my_pres')
 pyplot.xlabel('psi')
 pyplot.grid(True)
 
@@ -174,42 +176,24 @@ pyplot.grid(True)
 
 ax = pyplot.subplot(236)
 pyplot.scatter(psi, my_fpol)
-pyplot.ylabel('fpol_der')
+pyplot.ylabel('my_fpol')
 pyplot.xlabel('psi')
 pyplot.grid(True)
 
 pyplot.show()
 
-# ax = pyplot.subplot(236)
-# pyplot.scatter(psi[0:-1], ffprim[0:-1]/fpol_der)
-# pyplot.ylabel('fpol multuplicator')
-# pyplot.xlabel('psi')
-# pyplot.grid(True)
+pyplot.figure()
+pyplot.scatter(psi, pres/my_pres)
+pyplot.ylabel('pres multuplicator')
+pyplot.xlabel('psi')
+pyplot.grid(True)
+pyplot.savefig("Pics/pres_vs_my_pres.png", dpi=240)
 
-# ax = pyplot.subplot(236)
-# pyplot.scatter(psi[0:-1], pprim[0:-1]/pres_der)
-# pyplot.ylabel('pres multuplicator')
-# pyplot.xlabel('psi')
-# pyplot.grid(True)
-
-# pyplot.figure()
-# pyplot.scatter(psi[0:-2], pprime[0: -2]/pres_der[1: :])
-# pyplot.ylabel('pres multuplicator')
-# pyplot.xlabel('psi')
-# pyplot.grid(True)
-# pyplot.savefig("Pics/pres_multuplicator_right.png", dpi=240)
-
-# pyplot.figure()
-# pyplot.scatter(psi[0:-1], (2*fpol[0:-1]*fpol_der)/ffprim[0:-1])
-# pyplot.ylabel('fpol multuplicator')
-# pyplot.xlabel('psi')
-# pyplot.grid(True)
-# pyplot.savefig("Pics/fpol_multuplicator.png", dpi=240)
-# pyplot.show()
+pyplot.figure()
+pyplot.scatter(psi, fpol/my_fpol)
+pyplot.ylabel('pres multuplicator')
+pyplot.xlabel('psi')
+pyplot.grid(True)
+pyplot.savefig("Pics/fpol_vs_my_fpol.png", dpi=240)
 
 print(1)
-# ffprim
-# ffprim
-# pres
-# pprim
-# from  write_eqdsk_equlx import *
