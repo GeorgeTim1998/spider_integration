@@ -4,7 +4,8 @@ import support as sup
 import matplotlib.pyplot as pyplot
 
 path = '/media/george/part/Spider'
-working_folder = 'WK_T15MD_fixed_boundary'
+working_folder = 'WK_T15MD_fb_del'
+pic_path = "Pics/%s.png" % working_folder
 wr_file = 'spik.wr'
 
 path_to_file = "%s/%s/%s" % (path, working_folder, wr_file)
@@ -97,7 +98,7 @@ dfdpsi_mesh = (I.transpose() * dfdpsi).transpose()
 dpdpsi_mesh = (I.transpose() * dpdpsi).transpose()
 q_mesh = (I.transpose() * q).transpose()
 
-figure = pyplot.contour(r_mesh, z_mesh, psi_mesh, 500)
+figure = pyplot.contour(r_mesh, z_mesh, psi_mesh, 10)
 pyplot.colorbar(figure).set_label("\u03C8(r, z), Вб")
 pyplot.gca().set_aspect("equal")
 pyplot.grid(True)
@@ -105,8 +106,8 @@ pyplot.xlim(0.8, 2.4)
 pyplot.ylim(-1, 1)
 pyplot.xlabel("r, м")
 pyplot.ylabel("z, м")
-# pyplot.savefig('Pics/1.png', dpi=240, bbox_inches="tight")
+pyplot.savefig(pic_path, dpi=240, bbox_inches="tight")
 print(1)
 # pyplot.scatter(r_start_array, z_start_array)
 # pyplot.scatter(r_end_array, z_end_array)
-pyplot.show()
+# pyplot.show()
