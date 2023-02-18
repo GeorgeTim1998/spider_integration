@@ -18,8 +18,7 @@ ffprim = eq.default_ffprim()
 pres, fpol = eq.restore_pres_n_fpol(UM, UP, MESHR, pprime, ffprim, BCENTR, RCENTR)
 
 u = np.zeros(MESHR * MESHZ)
-# q = np.zeros(len(pprime))
-q = eq.default_q()
+q = np.zeros(len(pprime))
 
 NXB,NBLM = 89, 89
 
