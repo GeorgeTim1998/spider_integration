@@ -20,6 +20,8 @@ pres, fpol = eq.restore_pres_n_fpol(UM, UP, MESHR, pprime, ffprim, BCENTR, RCENT
 u = np.zeros(MESHR * MESHZ)
 q = np.zeros(len(pprime))
 
+NXB,NBLM = 89, 89
+
 folder = 'Files'
 filename = 'eqdsk_equilx'
 with open("%s/%s" % (folder, filename), 'w') as file:
@@ -29,13 +31,10 @@ with open("%s/%s" % (folder, filename), 'w') as file:
   file.write(formating % (CURRENT, RX1, ZX1, RX2, ZX2))
   file.write(formating % (ZMAXIS, UXN, UX1, UX2, XDUM))
   
-  eq.write_np_array_to_file(file, fpol, number_format)
-  eq.write_np_array_to_file(file, pres, number_format)
-  eq.write_np_array_to_file(file, pprime, number_format)
-  eq.write_np_array_to_file(file, ffprim, number_format)
-  eq.write_np_array_to_file(file, u, number_format)
+  for array in [fpol, pres, pprime, ffprim, u, q]:
+    eq.write_np_array_to_file(file, array, number_format)
   
-    
+  file.write("%5d%5d" % (NXB, NBLM))
 
 exit()
 psi = np.linspace(0, 1, len(fpol))
