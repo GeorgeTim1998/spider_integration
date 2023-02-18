@@ -43,25 +43,25 @@ with open("%s/%s" % (folder, filename), 'w') as file:
 
 psi = np.linspace(0, 1, len(fpol))
 
-ax1= pyplot.subplot(221)
+pyplot.subplot(221)
 pyplot.scatter(psi, pres)
 pyplot.ylabel('pres')
 pyplot.xlabel('psi')
 pyplot.grid(True)
 
-ax = pyplot.subplot(223)
+pyplot.subplot(223)
 pyplot.scatter(psi, -pprime)
 pyplot.ylabel('pprim')
 pyplot.xlabel('psi')
 pyplot.grid(True)
 
-ax = pyplot.subplot(222)
+pyplot.subplot(222)
 pyplot.scatter(psi, fpol)
 pyplot.ylabel('fpol')
 pyplot.xlabel('psi')
 pyplot.grid(True)
 
-ax = pyplot.subplot(224)
+pyplot.subplot(224)
 pyplot.scatter(psi, -ffprim)
 pyplot.ylabel('ffprim')
 pyplot.xlabel('psi')
