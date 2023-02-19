@@ -131,6 +131,9 @@ V = FunctionSpace(gmsh, 'Lagrange', 1)
 
 expression = ExpressionFromScipyFunction(interp, element=V.ufl_element())
 expression = interpolate(expression, V) 
-plot(expression)
-pyplot.show()
-# countour_plot_via_mesh(gmsh, expression, levels=50, colorbar=True)
+
+nan_indexes = np.argwhere(np.isnan(expression.vector()[:])).flatten()
+for index in nan_indexes:
+  expression.vector().vec().setValueLocal(index, 0)
+
+countour_plot_via_mesh(gmsh, expression, levels=50, colorbar=True)
