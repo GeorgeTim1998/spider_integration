@@ -7,7 +7,7 @@ DIM = 2
 MESH_SIZE = 5e-1
 LC = 0.5e-1
 
-def create_gmsh_mesh_from_points(boundary):
+def create_gmsh_mesh_from_points(boundary, ell_a=0, ell_b=0, msh_size=0):
   boundary = np.reshape(boundary, (-1, 2))
 
   gmsh.initialize()
@@ -32,3 +32,7 @@ def create_gmsh_mesh_from_points(boundary):
   
   model.mesh.generate(DIM)
   gmsh.fltk.run()
+  
+  file_name = "a_%.3f_ratio_%.3f_msh_%.1e" % (ell_a, ell_b, msh_size)
+  gmsh.option.setNumber('Mesh.MshFileVersion', 2.2) # setting ascii 2 version so fenics understands whats up
+  gmsh.write("%s/%s.msh" % (FOLDER, 'test'))
