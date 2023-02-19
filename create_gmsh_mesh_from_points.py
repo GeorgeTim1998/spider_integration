@@ -4,14 +4,15 @@ import numpy as np
 
 FOLDER = sup.msh_files_folder()
 DIM = 2
-MESH_SIZE = 1e-1
+MESH_SIZE = 5e-1
 LC = 0.5e-1
 
 def create_gmsh_mesh_from_points(boundary):
   boundary = np.reshape(boundary, (-1, 2))
 
   gmsh.initialize()
-  gmsh.option.setNumber('Mesh.MeshSizeMax', MESH_SIZE) # you can set general options via strings in set number. see https://gmsh.info/doc/texinfo/gmsh.pdf
+  # gmsh.option.setNumber('Mesh.MeshSizeMax', MESH_SIZE) # you can set general options via strings in set number. see https://gmsh.info/doc/texinfo/gmsh.pdf
+  # gmsh.option.setNumber('Mesh.Algorithm', 3) # you can set general options via strings in set number. see https://gmsh.info/doc/texinfo/gmsh.pdf
   model = gmsh.model()
   
   point_tags = []
