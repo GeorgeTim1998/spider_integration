@@ -4,7 +4,7 @@ import support as sup
 import matplotlib.pyplot as pyplot
 from fenics import *
 from scipy.interpolate import interp2d, LinearNDInterpolator
-from fenics_support import countour_plot_via_mesh
+from fenics_support import countour_plot_via_mesh, assign_zeros_to_nan_in_expression
 
 path = '/media/george/part/Spider'
 working_folder = 'WK_PRIME_restore_q'
@@ -117,6 +117,7 @@ pyplot.ylim(-1, 1)
 pyplot.xlabel("r, м")
 pyplot.ylabel("z, м")
 pyplot.savefig(pic_path, dpi=240, bbox_inches="tight")
+pyplot.close()
 print("\n", 1)
 
 #%% Import Spider solution to fenics
@@ -131,9 +132,6 @@ V = FunctionSpace(gmsh, 'Lagrange', 1)
 
 expression = ExpressionFromScipyFunction(interp, element=V.ufl_element())
 expression = interpolate(expression, V) 
+expression = assign_zeros_to_nan_in_expression(expression)
 
-nan_indexes = np.argwhere(np.isnan(expression.vector()[:])).flatten()
-for index in nan_indexes:
-  expression.vector().vec().setValueLocal(index, 0)
-
-countour_plot_via_mesh(gmsh, expression, levels=50, colorbar=True)
+countour_plot_via_mesh(gmsh, expression, levels=10, colorbar=True, grid=True)
