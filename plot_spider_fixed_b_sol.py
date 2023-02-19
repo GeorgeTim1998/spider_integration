@@ -2,6 +2,9 @@ import numpy as np
 from math import pi
 import support as sup
 import matplotlib.pyplot as pyplot
+from fenics import *
+from scipy.interpolate import interp2d, LinearNDInterpolator
+from fenics_support import countour_plot_via_mesh
 
 path = '/media/george/part/Spider'
 working_folder = 'WK_PRIME_restore_q'
@@ -10,6 +13,13 @@ wr_file = 'spik.wr'
 
 path_to_file = "%s/%s/%s" % (path, working_folder, wr_file)
 
+class ExpressionFromScipyFunction(UserExpression):
+    def __init__(self, f, **kwargs):
+        self._f = f
+        UserExpression.__init__(self, **kwargs)
+    def eval(self, values, x):
+        values[:] = self._f(*x)
+        
 def first_line(file):
   psi_size, spacial_size, size, psi_max = next(file).split()
   
@@ -81,7 +91,7 @@ fvac, data = return_and_delete_range(data, 1)
 
 ro = ro.reshape(psi_size, spacial_size)
 
-#%% Restore data needed fo fenics
+#%% Plot data needed from Spider
 psi = psi_max * (1 - sqrt_psi_norm**2) # This is magnetic flux/2pi. In spider flux is used/ Multiply by 2pi
 
 ppsi = restore_funcpsi(2*pi*psi, dpdpsi)
@@ -107,7 +117,20 @@ pyplot.ylim(-1, 1)
 pyplot.xlabel("r, м")
 pyplot.ylabel("z, м")
 pyplot.savefig(pic_path, dpi=240, bbox_inches="tight")
-print(1)
-# pyplot.scatter(r_start_array, z_start_array)
-# pyplot.scatter(r_end_array, z_end_array)
-# pyplot.show()
+print("\n", 1)
+
+#%% Import Spider solution to fenics
+folder = sup.xml_files_folder()
+filename = 'test'
+
+# interpolant = interp2d(r_mesh.flatten(), z_mesh.flatten(), psi_mesh.flatten(), kind='linear', copy=False, bounds_error=True)
+interp = LinearNDInterpolator(list(zip(r_mesh.flatten(), z_mesh.flatten())), psi_mesh.flatten())
+xml_file = "%s/%s.xml" % (folder, filename)
+gmsh = Mesh(xml_file)
+V = FunctionSpace(gmsh, 'Lagrange', 1)
+
+expression = ExpressionFromScipyFunction(interp, element=V.ufl_element())
+expression = interpolate(expression, V) 
+plot(expression)
+pyplot.show()
+# countour_plot_via_mesh(gmsh, expression, levels=50, colorbar=True)
