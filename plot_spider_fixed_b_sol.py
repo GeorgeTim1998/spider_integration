@@ -10,7 +10,7 @@ from helpers import eqdsk_equlx_helper as eq
 #%% Prescript things
 path = '/media/george/part/Spider'
 working_folder = 'WK_PRIME_restore_q'
-pic_path = "Pics/%s.png" % working_folder
+pic_path = "Pics/%s" % working_folder
 wr_file = 'spik.wr'
 
 path_to_file = "%s/%s/%s" % (path, working_folder, wr_file)
@@ -76,16 +76,16 @@ dfdpsi_mesh = (I.transpose() * dfdpsi).transpose()
 dpdpsi_mesh = (I.transpose() * dpdpsi).transpose()
 q_mesh = (I.transpose() * q).transpose()
 
-figure = pyplot.contour(r_mesh, z_mesh, psi_mesh, 10)
-pyplot.colorbar(figure).set_label("\u03C8(r, z), Вб")
-pyplot.gca().set_aspect("equal")
-pyplot.grid(True)
-pyplot.xlim(0.8, 2.4)
-pyplot.ylim(-1, 1)
-pyplot.xlabel("r, м")
-pyplot.ylabel("z, м")
-pyplot.savefig(pic_path, dpi=240, bbox_inches="tight")
-pyplot.close()
+# figure = pyplot.contour(r_mesh, z_mesh, psi_mesh, 10)
+# pyplot.colorbar(figure).set_label("\u03C8(r, z), Вб")
+# pyplot.gca().set_aspect("equal")
+# pyplot.grid(True)
+# pyplot.xlim(0.8, 2.4)
+# pyplot.ylim(-1, 1)
+# pyplot.xlabel("r, м")
+# pyplot.ylabel("z, м")
+# pyplot.savefig(pic_path, dpi=240, bbox_inches="tight")
+# pyplot.close()
 print("\n", 1)
 
 #%% try to find what to do...
@@ -96,10 +96,10 @@ multiplicator_p = pprim[0]/dpdpsi_mesh[0,0]
 multiplicator_f = ffprim[0]/f_mesh[0,0]*dpdpsi_mesh[0,0]
 
 
-# plot_1D(r_mesh[:, 0], p_mesh[:, 0], xlabel='coord', ylabel='p_mesh')
-# plot_1D(r_mesh[:, 0], multiplicator_p*dpdpsi_mesh[:, 0], xlabel='coord', ylabel='dpdpsi')
-# plot_1D(r_mesh[:, 0], f_mesh[:, 0], xlabel='coord', ylabel='f_mesh')
-# plot_1D(r_mesh[:, 0], 0.25*multiplicator_f*f_mesh[:, 0]*dfdpsi_mesh[:, 0], xlabel='coord', ylabel='dfdpsi')
+plot_1D(r_mesh[:, 0], p_mesh[:, 0], xlabel='coord', ylabel='p_mesh', PATH=pic_path)
+plot_1D(r_mesh[:, 0], multiplicator_p*dpdpsi_mesh[:, 0], xlabel='coord', ylabel='dpdpsi', PATH=pic_path)
+plot_1D(r_mesh[:, 0], f_mesh[:, 0], xlabel='coord', ylabel='f_mesh', PATH=pic_path)
+plot_1D(r_mesh[:, 0], 0.25*multiplicator_f*f_mesh[:, 0]*dfdpsi_mesh[:, 0], xlabel='coord', ylabel='dfdpsi', PATH=pic_path)
 
 
 #%% Import Spider solution to fenics
@@ -111,4 +111,6 @@ gmsh = Mesh(xml_file)
 V = FunctionSpace(gmsh, 'Lagrange', 1)
 
 psi = interpolate_spider_data_on_function_space(r_mesh, z_mesh, psi_mesh, V)
-countour_plot_via_mesh(gmsh, psi, levels=50, colorbar=True, grid=True, xlim=[0.8, 2.4], ylim=[-1, 1])
+ppsi = interpolate_spider_data_on_function_space(r_mesh, z_mesh, p_mesh, V)
+countour_plot_via_mesh(gmsh, psi, levels=50, colorbar=True, grid=True, xlim=[0.8, 2.4], ylim=[-1, 1], PATH=pic_path)
+countour_plot_via_mesh(gmsh, ppsi, levels=50, colorbar=True, grid=True, xlim=[0.8, 2.4], ylim=[-1, 1], PATH=pic_path)
