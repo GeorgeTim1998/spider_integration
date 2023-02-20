@@ -504,9 +504,9 @@ def acceptable_value(plasma_vals):
 def print_colored(color_srt, color='white', white_str='', attrs=[]):
   print(colored(color_srt, color, attrs=attrs), white_str)
   
-def assign_zeros_to_nan_in_expression(expression):
+def assign_const_to_nan_in_expression(expression, const=0):
   nan_indexes = numpy.argwhere(numpy.isnan(expression.vector()[:])).flatten()
   for index in nan_indexes:
-    expression.vector().vec().setValueLocal(index, 0)
+    expression.vector().vec().setValueLocal(index, const)
     
   return expression
