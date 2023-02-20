@@ -130,8 +130,8 @@ xml_file = "%s/%s.xml" % (folder, filename)
 gmsh = Mesh(xml_file)
 V = FunctionSpace(gmsh, 'Lagrange', 1)
 
-expression = ExpressionFromScipyFunction(interp, element=V.ufl_element())
-expression = interpolate(expression, V) 
-expression = assign_zeros_to_nan_in_expression(expression)
+psi = ExpressionFromScipyFunction(interp, element=V.ufl_element())
+psi = interpolate(psi, V) 
+psi = assign_zeros_to_nan_in_expression(psi)
 
-countour_plot_via_mesh(gmsh, expression, levels=50, colorbar=True, grid=True, xlim=[0.8, 2.4], ylim=[-1, 1])
+countour_plot_via_mesh(gmsh, psi, levels=50, colorbar=True, grid=True, xlim=[0.8, 2.4], ylim=[-1, 1])
