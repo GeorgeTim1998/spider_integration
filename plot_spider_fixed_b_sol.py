@@ -95,12 +95,10 @@ ffprim = eq.default_ffprim()
 multiplicator_p = pprim[0]/dpdpsi_mesh[0,0]
 multiplicator_f = ffprim[0]/f_mesh[0,0]*dpdpsi_mesh[0,0]
 
-
 plot_1D(r_mesh[:, 0], p_mesh[:, 0], xlabel='coord', ylabel='p_mesh', PATH=pic_path)
 plot_1D(r_mesh[:, 0], multiplicator_p*dpdpsi_mesh[:, 0], xlabel='coord', ylabel='dpdpsi', PATH=pic_path)
 plot_1D(r_mesh[:, 0], f_mesh[:, 0], xlabel='coord', ylabel='f_mesh', PATH=pic_path)
 plot_1D(r_mesh[:, 0], 0.25*multiplicator_f*f_mesh[:, 0]*dfdpsi_mesh[:, 0], xlabel='coord', ylabel='dfdpsi', PATH=pic_path)
-
 
 #%% Import Spider solution to fenics
 filename = 'test'
