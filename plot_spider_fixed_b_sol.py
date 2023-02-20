@@ -55,6 +55,7 @@ ro, data = sup.return_and_delete_range(data, psi_size*spacial_size)
 
 q, data = sup.return_and_delete_range(data, psi_size)
 fvac, data = sup.return_and_delete_range(data, 1)
+fvac = fvac[0]
 
 ro = ro.reshape(psi_size, spacial_size)
 
