@@ -14,38 +14,12 @@ wr_file = 'spik.wr'
 
 path_to_file = "%s/%s/%s" % (path, working_folder, wr_file)
 
-def first_line(file):
-  psi_size, spacial_size, size, psi_max = next(file).split()
-  
-  return int(psi_size), int(spacial_size), int(size), float(psi_max)
 
-def second_line(file):
-  psi_min, end_entry = next(file).split()
-  
-  return float(psi_min), int(end_entry)
-
-def return_and_delete_range(data, data_range):
-  return_array = data[0:data_range]
-  data = np.delete(data, np.s_[0:data_range])
-  
-  return return_array, data
-
-def restore_funcpsi(psi, dfuncdpsi, funcb=0):
-  psi = np.flip(psi)
-  dfuncdpsi = np.flip(dfuncdpsi)
-
-  funcpsi = np.zeros(len(psi))
-  
-  funcpsi[0] = funcb
-  for i in range(1, len(psi)):
-    funcpsi[i] = dfuncdpsi[i] * (psi[i]-psi[i-1]) + funcpsi[i-1]
-    
-  return np.flip(funcpsi)
   
 #%% Get data from file
 with open(path_to_file, 'r') as file:
-  psi_size, spacial_size, size, psi_max = first_line(file)
-  psi_min, end_entry = second_line(file)
+  psi_size, spacial_size, size, psi_max = sup.first_line(file)
+  psi_min, end_entry = sup.second_line(file)
 
   sqrt_psi_norm = np.zeros(psi_size)
   dpdpsi = np.zeros(psi_size)
@@ -68,28 +42,28 @@ with open(path_to_file, 'r') as file:
 
 data = np.array(data).reshape(np.size(data))
 
-sqrt_psi_norm, data = return_and_delete_range(data, psi_size)
+sqrt_psi_norm, data = sup.return_and_delete_range(data, psi_size)
 
-dpdpsi, data = return_and_delete_range(data, psi_size) 
-dfdpsi, data = return_and_delete_range(data, psi_size) 
+dpdpsi, data = sup.return_and_delete_range(data, psi_size) 
+dfdpsi, data = sup.return_and_delete_range(data, psi_size) 
 
-rc, data = return_and_delete_range(data, spacial_size) 
-zc, data = return_and_delete_range(data, spacial_size) 
-rb, data = return_and_delete_range(data, spacial_size) 
-zb, data = return_and_delete_range(data, spacial_size) 
+rc, data = sup.return_and_delete_range(data, spacial_size) 
+zc, data = sup.return_and_delete_range(data, spacial_size) 
+rb, data = sup.return_and_delete_range(data, spacial_size) 
+zb, data = sup.return_and_delete_range(data, spacial_size) 
 
-ro, data = return_and_delete_range(data, psi_size*spacial_size) 
+ro, data = sup.return_and_delete_range(data, psi_size*spacial_size) 
 
-q, data = return_and_delete_range(data, psi_size)
-fvac, data = return_and_delete_range(data, 1)
+q, data = sup.return_and_delete_range(data, psi_size)
+fvac, data = sup.return_and_delete_range(data, 1)
 
 ro = ro.reshape(psi_size, spacial_size)
 
 #%% Plot data needed from Spider
 psi = psi_max * (1 - sqrt_psi_norm**2) # This is magnetic flux/2pi. In spider flux is used/ Multiply by 2pi
 
-ppsi = restore_funcpsi(2*pi*psi, dpdpsi)
-fpsi = restore_funcpsi(2*pi*psi, dfdpsi, fvac)
+ppsi = sup.restore_funcpsi(2*pi*psi, dpdpsi)
+fpsi = sup.restore_funcpsi(2*pi*psi, dfdpsi, fvac)
 
 I = np.ones((psi_size, spacial_size))
 r_mesh = ro*(rb - rc) + I*rc

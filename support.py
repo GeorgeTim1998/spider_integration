@@ -79,3 +79,31 @@ def mesh_size(filename):
 
 def print_colored(color_srt, color='white', str=''):
   print(colored(color_srt, color), str)
+  
+def first_line(file):
+  psi_size, spacial_size, size, psi_max = next(file).split()
+  
+  return int(psi_size), int(spacial_size), int(size), float(psi_max)
+
+def second_line(file):
+  psi_min, end_entry = next(file).split()
+  
+  return float(psi_min), int(end_entry)
+
+def return_and_delete_range(data, data_range):
+  return_array = data[0:data_range]
+  data = numpy.delete(data, numpy.s_[0:data_range])
+  
+  return return_array, data
+
+def restore_funcpsi(psi, dfuncdpsi, funcb=0):
+  psi = numpy.flip(psi)
+  dfuncdpsi = numpy.flip(dfuncdpsi)
+
+  funcpsi = numpy.zeros(len(psi))
+  
+  funcpsi[0] = funcb
+  for i in range(1, len(psi)):
+    funcpsi[i] = dfuncdpsi[i] * (psi[i]-psi[i-1]) + funcpsi[i-1]
+    
+  return numpy.flip(funcpsi)
