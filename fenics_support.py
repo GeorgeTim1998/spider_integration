@@ -7,6 +7,7 @@ import matplotlib.pyplot as matplt
 import sympy
 from termcolor import colored, cprint
 from scipy.interpolate import LinearNDInterpolator
+from helpers import expression_from_scipy_function as scipy_func
 
 DPI = 240
 PICS_FOLDER = 'Pics'
@@ -505,24 +506,17 @@ def acceptable_value(plasma_vals):
 def print_colored(color_srt, color='white', white_str='', attrs=[]):
   print(colored(color_srt, color, attrs=attrs), white_str)
   
-def assign_const_to_nan_in_expression(expression, const=0):
+def assign_const_to_nan_in_expression(expression, boundary_val=0):
   nan_indexes = numpy.argwhere(numpy.isnan(expression.vector()[:])).flatten()
   for index in nan_indexes:
-    expression.vector().vec().setValueLocal(index, const)
+    expression.vector().vec().setValueLocal(index, boundary_val)
     
   return expression
 
-def interpolate_spider_data_on_function_space(r_mesh, z_mesh, psi_mesh, V):
-  class ExpressionFromScipyFunction(UserExpression):
-    def __init__(self, f, **kwargs):
-        self._f = f
-        UserExpression.__init__(self, **kwargs)
-    def eval(self, values, x):
-        values[:] = self._f(*x)
-        
+def interpolate_spider_data_on_function_space(r_mesh, z_mesh, psi_mesh, V, boundary_val=0):
   interp = LinearNDInterpolator(list(zip(r_mesh.flatten(), z_mesh.flatten())), psi_mesh.flatten())
-  psi = ExpressionFromScipyFunction(interp, element=V.ufl_element())
+  psi = scipy_func.ExpressionFromScipyFunction(interp, element=V.ufl_element())
   psi = interpolate(psi, V) 
-  psi = assign_const_to_nan_in_expression(psi)
+  psi = assign_const_to_nan_in_expression(psi, boundary_val)
   
   return psi

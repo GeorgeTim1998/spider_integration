@@ -129,14 +129,12 @@ multiplicator_f = ffprim[0]/f_mesh[0,0]*dpdpsi_mesh[0,0]
 
 
 #%% Import Spider solution to fenics
-folder = sup.xml_files_folder()
 filename = 'test'
-
+folder = sup.xml_files_folder()
 xml_file = "%s/%s.xml" % (folder, filename)
 
 gmsh = Mesh(xml_file)
 V = FunctionSpace(gmsh, 'Lagrange', 1)
 
 psi = interpolate_spider_data_on_function_space(r_mesh, z_mesh, psi_mesh, V)
-
 countour_plot_via_mesh(gmsh, psi, levels=50, colorbar=True, grid=True, xlim=[0.8, 2.4], ylim=[-1, 1])
