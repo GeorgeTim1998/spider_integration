@@ -33,4 +33,4 @@ interpolant = interp2d(r, z, matlab_data.psi, kind='linear', copy=False, bounds_
 expression = ExpressionFromScipyFunction(interpolant, element=V.ufl_element())
 expression = interpolate(expression, V) 
 
-countour_plot_via_mesh(gmsh, expression, levels=50, colorbar=True, xlim=[0.8, 2.4], ylim=[-1, 1])
+countour_plot_via_mesh(gmsh, expression, levels=np.linspace(0.15, 0.68, 10), colorbar=True, xlim=[0.8, 2.4], ylim=[-1, 1], grid=True)
