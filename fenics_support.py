@@ -6,6 +6,7 @@ import matplotlib.tri as tri
 import matplotlib.pyplot as matplt
 import sympy
 from termcolor import colored, cprint
+from scipy.interpolate import LinearNDInterpolator
 
 DPI = 240
 PICS_FOLDER = 'Pics'
@@ -510,3 +511,18 @@ def assign_const_to_nan_in_expression(expression, const=0):
     expression.vector().vec().setValueLocal(index, const)
     
   return expression
+
+def interpolate_spider_data_on_function_space(r_mesh, z_mesh, psi_mesh, V):
+  class ExpressionFromScipyFunction(UserExpression):
+    def __init__(self, f, **kwargs):
+        self._f = f
+        UserExpression.__init__(self, **kwargs)
+    def eval(self, values, x):
+        values[:] = self._f(*x)
+        
+  interp = LinearNDInterpolator(list(zip(r_mesh.flatten(), z_mesh.flatten())), psi_mesh.flatten())
+  psi = ExpressionFromScipyFunction(interp, element=V.ufl_element())
+  psi = interpolate(psi, V) 
+  psi = assign_const_to_nan_in_expression(psi)
+  
+  return psi

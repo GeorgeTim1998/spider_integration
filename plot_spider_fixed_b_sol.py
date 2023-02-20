@@ -4,7 +4,8 @@ import support as sup
 import matplotlib.pyplot as pyplot
 from fenics import *
 from scipy.interpolate import interp2d, LinearNDInterpolator
-from fenics_support import countour_plot_via_mesh, assign_zeros_to_nan_in_expression
+from fenics_support import countour_plot_via_mesh, assign_const_to_nan_in_expression, plot_1D, interpolate_spider_data_on_function_space
+from helpers import eqdsk_equlx_helper as eq
 
 path = '/media/george/part/Spider'
 working_folder = 'WK_PRIME_restore_q'
@@ -13,13 +14,6 @@ wr_file = 'spik.wr'
 
 path_to_file = "%s/%s/%s" % (path, working_folder, wr_file)
 
-class ExpressionFromScipyFunction(UserExpression):
-    def __init__(self, f, **kwargs):
-        self._f = f
-        UserExpression.__init__(self, **kwargs)
-    def eval(self, values, x):
-        values[:] = self._f(*x)
-        
 def first_line(file):
   psi_size, spacial_size, size, psi_max = next(file).split()
   
@@ -108,7 +102,7 @@ dfdpsi_mesh = (I.transpose() * dfdpsi).transpose()
 dpdpsi_mesh = (I.transpose() * dpdpsi).transpose()
 q_mesh = (I.transpose() * q).transpose()
 
-figure = pyplot.contour(r_mesh, z_mesh, psi_mesh, 50)
+figure = pyplot.contour(r_mesh, z_mesh, psi_mesh, 10)
 pyplot.colorbar(figure).set_label("\u03C8(r, z), Вб")
 pyplot.gca().set_aspect("equal")
 pyplot.grid(True)
@@ -120,18 +114,29 @@ pyplot.savefig(pic_path, dpi=240, bbox_inches="tight")
 pyplot.close()
 print("\n", 1)
 
+#%% try to find what to do...
+pprim = eq.default_pprime()
+ffprim = eq.default_ffprim()
+
+multiplicator_p = pprim[0]/dpdpsi_mesh[0,0]
+multiplicator_f = ffprim[0]/f_mesh[0,0]*dpdpsi_mesh[0,0]
+
+
+# plot_1D(r_mesh[:, 0], p_mesh[:, 0], xlabel='coord', ylabel='p_mesh')
+# plot_1D(r_mesh[:, 0], multiplicator_p*dpdpsi_mesh[:, 0], xlabel='coord', ylabel='dpdpsi')
+# plot_1D(r_mesh[:, 0], f_mesh[:, 0], xlabel='coord', ylabel='f_mesh')
+# plot_1D(r_mesh[:, 0], 0.25*multiplicator_f*f_mesh[:, 0]*dfdpsi_mesh[:, 0], xlabel='coord', ylabel='dfdpsi')
+
+
 #%% Import Spider solution to fenics
 folder = sup.xml_files_folder()
 filename = 'test'
 
-# interpolant = interp2d(r_mesh.flatten(), z_mesh.flatten(), psi_mesh.flatten(), kind='linear', copy=False, bounds_error=True)
-interp = LinearNDInterpolator(list(zip(r_mesh.flatten(), z_mesh.flatten())), psi_mesh.flatten())
 xml_file = "%s/%s.xml" % (folder, filename)
+
 gmsh = Mesh(xml_file)
 V = FunctionSpace(gmsh, 'Lagrange', 1)
 
-psi = ExpressionFromScipyFunction(interp, element=V.ufl_element())
-psi = interpolate(psi, V) 
-psi = assign_zeros_to_nan_in_expression(psi)
+psi = interpolate_spider_data_on_function_space(r_mesh, z_mesh, psi_mesh, V)
 
 countour_plot_via_mesh(gmsh, psi, levels=50, colorbar=True, grid=True, xlim=[0.8, 2.4], ylim=[-1, 1])
