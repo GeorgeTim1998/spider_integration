@@ -7,6 +7,7 @@ from scipy.interpolate import interp2d, LinearNDInterpolator
 from fenics_support import countour_plot_via_mesh, assign_const_to_nan_in_expression, plot_1D, interpolate_spider_data_on_function_space
 from helpers import eqdsk_equlx_helper as eq
 
+#%% Prescript things
 path = '/media/george/part/Spider'
 working_folder = 'WK_PRIME_restore_q'
 pic_path = "Pics/%s.png" % working_folder
@@ -14,8 +15,6 @@ wr_file = 'spik.wr'
 
 path_to_file = "%s/%s/%s" % (path, working_folder, wr_file)
 
-
-  
 #%% Get data from file
 with open(path_to_file, 'r') as file:
   psi_size, spacial_size, size, psi_max = sup.first_line(file)
