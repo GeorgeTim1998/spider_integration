@@ -3,6 +3,7 @@ import math
 import numpy
 import regex
 from termcolor import colored, cprint
+from math import pi, sqrt
 
 M0 = 1.25e-6
 
@@ -28,6 +29,7 @@ def lao_hash():
   psi0 = Re**2 * Bp
   F2_0 = Re**2 * Bt0_mean**2
   Fpl_vs_Fvac_ratio = 1e-3
+  psi_level = 1e-3
   
   return {
     'Re': Re,
@@ -37,6 +39,7 @@ def lao_hash():
     'Bt0_mean': Bt0_mean,
     'p0': p0,
     'psi0': psi0,
+    'psi_level': psi_level,
     'F2_0': F2_0,
     'Fpl_vs_Fvac_ratio': Fpl_vs_Fvac_ratio 
   }
@@ -107,3 +110,23 @@ def restore_funcpsi(psi, dfuncdpsi, funcb=0):
     funcpsi[i] = dfuncdpsi[i] * (psi[i]-psi[i-1]) + funcpsi[i-1]
     
   return numpy.flip(funcpsi)
+
+def restore_pres_n_fpol(um, up, meshr, pprime, ffprim, fvac):
+  um = -um
+  up = -up
+  dpsi = (um - up)/(meshr-1)
+
+  pres = numpy.zeros(len(pprime))
+  fpol = numpy.zeros(len(pprime))
+  fpol[-1] = fvac
+
+  my_steps = numpy.flip(numpy.array(range(0, meshr-1)))
+  for i in my_steps:
+    pprim_c = -0.5 * (pprime[i+1] + pprime[i])
+    fprim_c = -0.5 * (ffprim[i+1] + ffprim[i])
+    
+    pres[i]=(pres[i+1] + pprim_c * 2*pi*dpsi) # for some reason pres needs 2pi multiplicator to be actual pressure
+    fpol[i]=(fpol[i+1] + fprim_c * 2*pi*dpsi) # for some reason pres needs 2pi multiplicator to be actual pressure
+    # fpol[i]=sqrt(fpol[i+1]**2 + 2*fprim_c * 2*pi*dpsi)
+
+  return pres, fpol
