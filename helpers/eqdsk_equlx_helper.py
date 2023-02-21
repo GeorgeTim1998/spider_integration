@@ -103,9 +103,18 @@ def default_plasma_boundary():
                        -0.269594636E+00, 0.223234646E+01, -0.227350811E+00, 0.224754733E+01, -0.183721714E+00,
                        0.225902173E+01, -0.138947106E+00, 0.226657890E+01, -0.933650092E-01, 0.227023490E+01,
                        -0.473618198E-01, 0.227005788E+01, -0.130657255E-02])
+
+def ellipse_boundary(Re, ell_a, E, segments):
+  ell_b = E * ell_a
+  t = np.linspace(0, 2*pi, segments)
+
+  r = Re + ell_a*np.cos(t)
+  z = ell_b*np.sin(t)
   
-  # boundary = np.resize(boundary, (len(boundary), 2))
-  return boundary
+  r[-1] = r[0] # loop it
+  z[-1] = z[0]
+  
+  return np.array([r, z]).transpose().flatten()
 
 def default_ffprim():
   ffprim = np.array([0.999417939E+01, 0.867587335E+01, 0.743508148E+01, 0.695207210E+01, 0.657569454E+01,

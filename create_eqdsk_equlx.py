@@ -11,6 +11,8 @@ formating = "%s\n" % (number_format * 5)
 
 #%% Used for comparing with Spider
 Re = lao_hash()['Re'] # ellipse center which sometimes can be R0 in your writings
+ell_a = lao_hash()['a']
+E = 1
 p0 = 10000
 psi0 = 0.5 # на это я обезразмеривал
 psi_max = 0.002613455467247852 # это максимальная psi/ Поток на 1 рад  
@@ -34,9 +36,9 @@ q = np.zeros(len(pprime))
 
 NXB,NBLM = 89, 89
 
-boundary = eq.default_plasma_boundary()
+boundary = eq.ellipse_boundary(Re, ell_a, E, NXB)
 
-folder = 'Files'
+folder = 'Files/fenics_vs_spider'
 filename = 'eqdsk_equilx'
 with open("%s/%s" % (folder, filename), 'w') as file:
   file.write("%8s%8s%36d%4d%4d\n" % (ACASE48, SPIDER, IDUM, MESHR, MESHZ))
