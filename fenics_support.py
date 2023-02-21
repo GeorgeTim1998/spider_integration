@@ -68,8 +68,10 @@ def calculate_F2_psi(E, psi0, q, u, Re):
 def calculate_F2_as_small_add(E, psi0, q, u, Re, Fpl_vs_Fvac_ratio=1):
   # F2 is aproximated as F20(1 + alph*psi/psi0)
   V = u.function_space()
-  F_20 = 4*pi**2 * E**2 * psi0**2 * q**2 / Re**2
+  F2_0 = 4*pi**2 * E**2 * psi0**2 * q**2 / Re**2
   one = interpolate(Constant(1), V)
+  
+  return project(F2_0 * (one + Fpl_vs_Fvac_ratio*u/psi0), V), F2_0
 
 def calculate_F2_pow_1(F2_0, psi0, u, Fpl_vs_Fvac_ratio=1):
   # F2 is aproximated as F20(1 + alph*psi/psi0)
@@ -184,8 +186,8 @@ def countour_plot_via_mesh(gmsh, u, levels,
     else:
       matplt.ylim(*ylim)
 
-    matplt.xlabel("r, м")
-    matplt.ylabel("z, м")
+    matplt.xlabel("r, см")
+    matplt.ylabel("z, см")
     
     if xticks_array != []:
       matplt.xticks(numpy.array(xticks_array))
