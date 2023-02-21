@@ -72,7 +72,7 @@ for i, filename in enumerate(filenames):
   p0 = 10000
   psi0 = 0.5
   F2_0 = 0.25
-  Fpl_vs_Fvac_ratio = 1
+  Fpl_vs_Fvac_ratio = 0.1
   
   a = dot(grad(u)/r, grad(r2*v))*dx
   f = Constant(M0 * p0/psi0) * r2 + Constant(0.5 * Fpl_vs_Fvac_ratio * F2_0/psi0)
@@ -81,6 +81,9 @@ for i, filename in enumerate(filenames):
 #%% Compute solution and p(psi), F(psi), J(psi)
   u = Function(V)
   solve(a == L, u, bc)
+  
+  ppsi = project(p0 * u/psi0, V)
+  F2psi = project(F2_0*(1 + Fpl_vs_Fvac_ratio*u/psi0), V)
   
   fsup.countour_plot_via_mesh(gmsh, u, levels = 20, colorbar=True, grid=True, PATH=my_dir, plot_title="E = %.1f" % E[i])
   print("\n")
