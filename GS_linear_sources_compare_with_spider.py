@@ -75,7 +75,7 @@ for i, filename in enumerate(filenames):
   Fpl_vs_Fvac_ratio = 1
   
   a = dot(grad(u)/r, grad(r2*v))*dx
-  f = Constant(M0 * p0/psi0) * r2 + Constant(0.5 * F2_0/psi0) * Fpl_vs_Fvac_ratio
+  f = Constant(M0 * p0/psi0) * r2 + Constant(0.5 * Fpl_vs_Fvac_ratio * F2_0/psi0)
   L = f * r*v*dx
     
 #%% Compute solution and p(psi), F(psi), J(psi)
