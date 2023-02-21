@@ -21,11 +21,7 @@ E = lao_hash['E'] # ellipse elongation
 I = lao_hash['I']
 ell_a = lao_hash['a']
 
-bp_problem = 0.9 # poloidal betta from lao1985
-q_problem = 1 # stability from lao1985
-psi_level = 1e-3 # used to calc contours with known desired psi_level
-Fpl_vs_Fvac_ratio = 1e-1
-
+M0 = 1.25e-6
 #%% Dict that will help me plot calculated data
 problem_data = fsup.form_dict()
 theory_data = fsup.form_dict_additions()
@@ -73,25 +69,19 @@ for i, filename in enumerate(filenames):
   ell_b = ell_a * E[i]
   [r2, r, z] = fsup.operator_weights(V)
   
-  p_part = fsup.linear_pressure(bp_problem, Re)
-  F_part = fsup.linear_tor_function(q_problem, E[i], Re)
+  p0 = 10000
+  psi0 = 0.5
+  F2_0 = 0.25
+  Fpl_vs_Fvac_ratio = 1
   
   a = dot(grad(u)/r, grad(r2*v))*dx
-  f = Constant(p_part) * r2 + Constant(F_part) * Fpl_vs_Fvac_ratio
+  f = Constant(M0 * p0/psi0) * r2 + Constant(0.5 * F2_0/psi0) * Fpl_vs_Fvac_ratio
   L = f * r*v*dx
     
 #%% Compute solution and p(psi), F(psi), J(psi)
   u = Function(V)
   solve(a == L, u, bc)
-
-  inverced_r_integral = fsup.inverced_r_integral(Re, ell_a, ell_b, r, dx, gmsh)
-  [u, psi0] = fsup.measure_u(Re, ell_a, ell_b, I, bp_problem, inverced_r_integral, E[i], q_problem, u, V, Fpl_vs_Fvac_ratio) # de de-measure solution
   
   fsup.countour_plot_via_mesh(gmsh, u, levels = 20, colorbar=True, grid=True, PATH=my_dir, plot_title="E = %.1f" % E[i])
-  d = fsup.calculate_d_at_boundary(u, psi_level)
-  fsup.print_colored("d", 'green', d)
   print("\n")
   
-  [p_psi, p0] = fsup.calculate_p_psi(bp_problem, psi0, u, Re)
-  [F2_psi, F2_0] = fsup.calculate_F2_as_small_add(E[i], psi0, q_problem, u, Re, Fpl_vs_Fvac_ratio)
-  [J_psi, I] = fsup.calculate_J_psi(p0, psi0, F2_0, r, V, dx, Fpl_vs_Fvac_ratio)
