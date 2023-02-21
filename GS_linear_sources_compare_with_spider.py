@@ -85,6 +85,9 @@ for i, filename in enumerate(filenames):
   ppsi = project(p0 * u/psi0, V)
   F2psi = project(F2_0*(1 + Fpl_vs_Fvac_ratio*u/psi0), V)
   
+  print(ppsi.vector()[:].max())
+  print(F2psi.vector()[:].max())
+  
   fsup.countour_plot_via_mesh(gmsh, u, levels = 20, colorbar=True, grid=True, PATH=my_dir, plot_title="E = %.1f" % E[i])
   print("\n")
   
