@@ -6,7 +6,7 @@ from math import pi
 import numpy as np
 
 from pathlib import Path
-my_dir = "Pics/%s" % fsup.Time_name()
+my_dir = "Pics/Compare_with_Spider"
 Path(my_dir).mkdir(parents=True, exist_ok=True)
 
 fsup.print_colored("Launch program for linear p(\u03C8) and F\u00b2(\u03C8)", 'red', "\n", ["bold"])
