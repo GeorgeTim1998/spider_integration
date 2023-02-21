@@ -1,20 +1,31 @@
+# All that is needed here is probably dp/dpsi and df/dpsi
 import numpy as np
 from helpers import eqdsk_equlx_helper as eq
 from math import pi, sqrt, floor
 import matplotlib.pyplot as pyplot
 import create_gmsh_mesh_from_points as gmsh
+from support import lao_hash
 
 number_format = "%16.9E" 
 formating = "%s\n" % (number_format * 5)
 
+#%% Used for comparing with Spider
+Re = lao_hash()['Re'] # ellipse center which sometimes can be R0 in your writings
+p0 = 10000
+psi0 = 0.5 # на это я обезразмеривал
+psi_max = 0.002613455467247852 # это максимальная psi/ Поток на 1 рад  
+F2_0 = 0.25
+Fpl_vs_Fvac_ratio = 0.1
+
+#%%
 ACASE48, SPIDER, IDUM, MESHR, MESHZ = 'KIAM', 'SPIDER', 3, 128, 257
-RDIM, ZDIM, RCENTR, RLEFT, ZMID = 2.5, 4, 1.48, 0.5, 0
-RMAXIS, ZMAXIS, UM, UP, BCENTR =  0, 0, 0.602393949E+00, 0.157520013E+00, 0.200000000E+01
+RDIM, ZDIM, RCENTR, RLEFT, ZMID = 2.5, 4, Re, 0.5, 0
+RMAXIS, ZMAXIS, UM, UP, BCENTR =  0, 0, (psi_max)*2*pi, 0, F2_0**0.5 / Re
 CURRENT, RX1, ZX1, RX2, ZX2 = 0.15E+07, 0, 0, 0, 0
 ZMAXIS, UXN, UX1, UX2, XDUM = 0, 0, 0, 0, 0
 
-pprime = eq.default_pprime()
-ffprim = eq.default_ffprim()
+pprime = eq.pprime_linear_profile(p0, (psi0)*2*pi, MESHR)
+ffprim = eq.ffprim_linear_profile(F2_0, (psi0)*2*pi, MESHR)
 
 pres, fpol = eq.restore_pres_n_fpol(UM, UP, MESHR, pprime, ffprim, BCENTR, RCENTR)
 

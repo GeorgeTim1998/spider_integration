@@ -196,3 +196,13 @@ def default_q():
                 0.412523907E+01, 0.432519099E+01, 0.455284455E+01])
   
   return q
+
+def pprime_linear_profile(p0, psi0, length):
+  pprime = p0/psi0 * np.ones(length)
+  
+  return pprime
+
+def ffprim_linear_profile(F2_0, psi0, length):
+  ffprim = 0.5*F2_0/psi0 * np.ones(length)
+  
+  return ffprim
