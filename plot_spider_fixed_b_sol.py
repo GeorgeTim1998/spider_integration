@@ -9,7 +9,7 @@ from helpers import eqdsk_equlx_helper as eq
 
 #%% Prescript things
 path = '/media/george/part/Spider'
-working_folder = 'WK_PRIME_restore_q'
+working_folder = 'WK_linear_profs_vs_fenics'
 pic_path = "Pics/%s" % working_folder
 wr_file = 'spik.wr'
 
@@ -62,8 +62,10 @@ ro = ro.reshape(psi_size, spacial_size)
 #%% Plot data needed from Spider
 psi = psi_max * (1 - sqrt_psi_norm**2) # This is magnetic flux/2pi. In spider flux is used/ Multiply by 2pi
 
-ppsi = sup.restore_funcpsi(2*pi*psi, dpdpsi)
-fpsi = sup.restore_funcpsi(2*pi*psi, dfdpsi, fvac)
+# ppsi = sup.restore_funcpsi(2*pi*psi, dpdpsi)
+# fpsi = sup.restore_funcpsi(2*pi*psi, dfdpsi, fvac)
+
+ppsi, fpsi = sup.restore_pres_n_fpol(psi.max(), 0, len(psi), dpdpsi, dfdpsi, fvac)
 
 I = np.ones((psi_size, spacial_size))
 r_mesh = ro*(rb - rc) + I*rc
@@ -76,30 +78,48 @@ dfdpsi_mesh = (I.transpose() * dfdpsi).transpose()
 dpdpsi_mesh = (I.transpose() * dpdpsi).transpose()
 q_mesh = (I.transpose() * q).transpose()
 
+sup.countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh, 10, grid=True, colorbar=True, note='Spider', PATH=pic_path)
 # figure = pyplot.contour(r_mesh, z_mesh, psi_mesh, 10)
 # pyplot.colorbar(figure).set_label("\u03C8(r, z), Вб")
 # pyplot.gca().set_aspect("equal")
 # pyplot.grid(True)
-# pyplot.xlim(0.8, 2.4)
-# pyplot.ylim(-1, 1)
 # pyplot.xlabel("r, м")
 # pyplot.ylabel("z, м")
 # pyplot.savefig(pic_path, dpi=240, bbox_inches="tight")
 # pyplot.close()
-print("\n", 1)
-
+# print("\n", 1)
+exit()
 #%% try to find what to do...
 pprim = eq.default_pprime()
 ffprim = eq.default_ffprim()
 
 multiplicator_p = pprim[0]/dpdpsi_mesh[0,0]
-multiplicator_f = ffprim[0]/f_mesh[0,0]*dpdpsi_mesh[0,0]
+multiplicator_f = ffprim[0]/(f_mesh[0,0]*dfdpsi_mesh[0,0])
+
+
+f_b = 2.96
+f_max = 3.2351521302396
+
+pres_max = 79843.91254350766
+
+psimax = 0.602393949
+psimin = 0.157520013
+
+multiplicator_p/pres_max*2*pi
+multiplicator_p/(pres_max/(psi.max()))
+multiplicator_p/(pres_max/(psi.max()**0.5))
+pres_max/(psimax - psimin)*pi
+
+multiplicator_f/(f_max**2/psi.max())
+pprim.max()
+ffprim.max()
 
 plot_1D(r_mesh[:, 0], p_mesh[:, 0], xlabel='coord', ylabel='p_mesh', PATH=pic_path)
 plot_1D(r_mesh[:, 0], multiplicator_p*dpdpsi_mesh[:, 0], xlabel='coord', ylabel='dpdpsi', PATH=pic_path)
 plot_1D(r_mesh[:, 0], f_mesh[:, 0], xlabel='coord', ylabel='f_mesh', PATH=pic_path)
-plot_1D(r_mesh[:, 0], 0.25*multiplicator_f*f_mesh[:, 0]*dfdpsi_mesh[:, 0], xlabel='coord', ylabel='dfdpsi', PATH=pic_path)
+plot_1D(r_mesh[:, 0], multiplicator_f*f_mesh[:, 0]*dfdpsi_mesh[:, 0], xlabel='coord', ylabel='f*dfdpsi', PATH=pic_path)
 
+exit()
 #%% Import Spider solution to fenics
 filename = 'test'
 folder = sup.xml_files_folder()

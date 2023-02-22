@@ -1,9 +1,15 @@
 import os
+import time
+from matplotlib import pyplot
 import math
 import numpy
 import regex
 from termcolor import colored, cprint
 from math import pi, sqrt
+import datetime
+
+PICS_FOLDER = 'Pics'
+DPI = 240
 
 M0 = 1.25e-6
 
@@ -130,3 +136,45 @@ def restore_pres_n_fpol(um, up, meshr, pprime, ffprim, fvac):
     # fpol[i]=sqrt(fpol[i+1]**2 + 2*fprim_c * 2*pi*dpsi)
 
   return pres, fpol
+
+def Time_name():
+  ttime = datetime.datetime.now().strftime("%d%m%Y_%H%M%S")
+  time_title = str(ttime)  # get current time to make figure name unique
+  return time_title
+
+def save_contour_plot(note, PATH=''):
+  time_title = Time_name()
+
+  if PATH == '':
+    path_my_file = '%s/%s' % (PICS_FOLDER, time_title)
+  else:
+    path_my_file = '%s/%s' % (PATH, time_title)
+  file_path = "%s.png" % path_my_file
+  
+  pyplot.savefig(file_path, dpi=DPI, bbox_inches="tight")
+  pyplot.close()
+
+  print(note, file_path)
+  time.sleep(1)
+  
+def countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh, 
+                          levels,
+                          grid = False,
+                          colorbar = False,
+                          note='3D countour plot saved to PATH:',
+                          PATH='',
+                          xlim=[],
+                          ylim=[]):
+
+  figure = pyplot.contour(r_mesh, z_mesh, psi_mesh, levels)
+  pyplot.gca().set_aspect("equal")
+  
+  if colorbar:
+    pyplot.colorbar(figure).set_label("\u03C8(r, z), Вб")
+  
+  if grid:
+    pyplot.grid(True)
+  
+  pyplot.xlabel("r, м")
+  pyplot.ylabel("z, м")
+  save_contour_plot(note, PATH=PATH)
