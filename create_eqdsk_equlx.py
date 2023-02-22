@@ -14,8 +14,8 @@ Re = lao_hash()['Re'] # ellipse center which sometimes can be R0 in your writing
 ell_a = lao_hash()['a']
 E = 1
 p0 = 10000
-psi0 = 0.5 # на это я обезразмеривал
-psi_max = 0.002613455467247852 # это максимальная psi/ Поток на 1 рад  
+psi0 = 0.5 # на это я обезразмеривал.  Поток на 1 рад
+psi_max = 0.002613455467247852 # это максимальная psi. Поток на 1 рад  
 F2_0 = 0.25
 Fpl_vs_Fvac_ratio = 0.1
 
