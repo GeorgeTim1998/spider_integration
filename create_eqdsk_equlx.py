@@ -21,8 +21,8 @@ Fpl_vs_Fvac_ratio = 0.1
 
 #%%
 ACASE48, SPIDER, IDUM, MESHR, MESHZ = 'KIAM', 'SPIDER', 3, 128, 257
-RDIM, ZDIM, RCENTR, RLEFT, ZMID = 2.5, 4, Re, 0.5, 0
-RMAXIS, ZMAXIS, UM, UP, BCENTR =  0, 0, (psi_max)*2*pi, 0, F2_0**0.5 / Re
+RDIM, ZDIM, RCENTR, RLEFT, ZMID = 0, 0, Re, 0, 0
+RMAXIS, ZMAXIS, UM, UP, BCENTR =  Re, 0, (psi_max)*2*pi, 0, F2_0**0.5 / Re
 CURRENT, RX1, ZX1, RX2, ZX2 = 0.15E+07, 0, 0, 0, 0
 ZMAXIS, UXN, UX1, UX2, XDUM = 0, 0, 0, 0, 0
 
@@ -37,7 +37,12 @@ q = np.zeros(len(pprime))
 NXB,NBLM = 89, 89
 
 boundary = eq.ellipse_boundary(Re, ell_a, E, NXB)
+#%% plot boundary
+# pyplot.scatter(boundary.reshape((-1, 2))[:, 0], boundary.reshape((-1, 2))[:, 1])
+# pyplot.gca().set_aspect("equal")
+# pyplot.show()
 
+#%% 
 folder = 'Files/fenics_vs_spider'
 filename = 'eqdsk_equilx'
 with open("%s/%s" % (folder, filename), 'w') as file:
