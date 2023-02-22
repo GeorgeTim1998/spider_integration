@@ -7,7 +7,7 @@ DIM = 2
 MESH_SIZE = 5e-1
 LC = 0.5e-1
 
-def create_gmsh_mesh_from_points(boundary, ell_a=0, ell_b=0, msh_size=0):
+def create_gmsh_mesh_from_points(boundary, ell_a=0, ell_b=0, msh_size=0, show=False):
   boundary = np.reshape(boundary, (-1, 2))
 
   gmsh.initialize()
@@ -31,7 +31,8 @@ def create_gmsh_mesh_from_points(boundary, ell_a=0, ell_b=0, msh_size=0):
   model.addPhysicalGroup(DIM-1, [curve]) # add physical group to curve (physical groups needed for fenics)
   
   model.mesh.generate(DIM)
-  gmsh.fltk.run()
+  if show:
+    gmsh.fltk.run()
   
   file_name = "a_%.3f_ratio_%.3f_msh_%.1e" % (ell_a, ell_b, msh_size)
   gmsh.option.setNumber('Mesh.MshFileVersion', 2.2) # setting ascii 2 version so fenics understands whats up
