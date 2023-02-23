@@ -62,10 +62,13 @@ ro = ro.reshape(psi_size, spacial_size)
 #%% Plot data needed from Spider
 psi = psi_max * (1 - sqrt_psi_norm**2) # This is magnetic flux/2pi. In spider flux is used/ Multiply by 2pi?
 
-# ppsi = sup.restore_funcpsi(2*pi*psi, dpdpsi)
-# fpsi = sup.restore_funcpsi(2*pi*psi, dfdpsi, fvac)
+dpdpsi = sup.restore_dpdpsi(dpdpsi)
+dfdpsi = sup.restore_dfdpsi(dfdpsi)
 
-ppsi, fpsi = sup.restore_pres_n_fpol(psi.max(), 0, len(psi), dpdpsi, dfdpsi, fvac)
+ppsi = sup.restore_funcpsi(psi, dpdpsi)
+fpsi = sup.restore_funcpsi(psi, dfdpsi, fvac)
+
+# ppsi, fpsi = sup.restore_pres_n_fpol(psi.max(), 0, len(psi), dpdpsi, dfdpsi, fvac)
 
 I = np.ones((psi_size, spacial_size))
 r_mesh = ro*(rb - rc) + I*rc
@@ -88,36 +91,12 @@ sup.countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh, 20, grid=True, colorbar=True
 # pyplot.savefig(pic_path, dpi=240, bbox_inches="tight")
 # pyplot.close()
 # print("\n", 1)
-exit()
+# exit()
 #%% try to find what to do...
-pprim = eq.default_pprime()
-ffprim = eq.default_ffprim()
 
-multiplicator_p = pprim[0]/dpdpsi_mesh[0,0]
-multiplicator_f = ffprim[0]/(f_mesh[0,0]*dfdpsi_mesh[0,0])
-
-
-f_b = 2.96
-f_max = 3.2351521302396
-
-pres_max = 79843.91254350766
-
-psimax = 0.602393949
-psimin = 0.157520013
-
-multiplicator_p/pres_max*2*pi
-multiplicator_p/(pres_max/(psi.max()))
-multiplicator_p/(pres_max/(psi.max()**0.5))
-pres_max/(psimax - psimin)*pi
-
-multiplicator_f/(f_max**2/psi.max())
-pprim.max()
-ffprim.max()
-
-plot_1D(r_mesh[:, 0], p_mesh[:, 0], xlabel='coord', ylabel='p_mesh', PATH=pic_path)
-plot_1D(r_mesh[:, 0], multiplicator_p*dpdpsi_mesh[:, 0], xlabel='coord', ylabel='dpdpsi', PATH=pic_path)
-plot_1D(r_mesh[:, 0], f_mesh[:, 0], xlabel='coord', ylabel='f_mesh', PATH=pic_path)
-plot_1D(r_mesh[:, 0], multiplicator_f*f_mesh[:, 0]*dfdpsi_mesh[:, 0], xlabel='coord', ylabel='f*dfdpsi', PATH=pic_path)
+plot_1D(r_mesh[:, 0], dpdpsi, xlabel='coord', ylabel='dpdpsi', PATH=pic_path)
+plot_1D(r_mesh[:, 0], ppsi, xlabel='coord', ylabel='pressure', PATH=pic_path)
+plot_1D(r_mesh[:, 0], dfdpsi, xlabel='coord', ylabel='ffprime', PATH=pic_path)
 
 exit()
 #%% Import Spider solution to fenics
