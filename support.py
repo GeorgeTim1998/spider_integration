@@ -117,6 +117,16 @@ def restore_funcpsi(psi, dfuncdpsi, funcb=0):
     
   return numpy.flip(funcpsi)
 
+def restore_dpdpsi(dpdpsi):
+  pscale = 2 * 2*pi * 1e-7 # it is M0
+  return dpdpsi / pscale
+
+def restore_dfdpsi(dfdpsi):
+  # fscale = 2*pi * (1e-2/5)**0.5 # it is supposed to be 2pi
+  # fscale = 2*pi
+  fscale = 2*pi
+  return dfdpsi / fscale
+
 def restore_pres_n_fpol(um, up, meshr, pprime, ffprim, fvac):
   um = -um
   up = -up

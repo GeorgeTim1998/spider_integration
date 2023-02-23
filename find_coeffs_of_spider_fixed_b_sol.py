@@ -94,9 +94,10 @@ sup.countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh, 20, grid=True, colorbar=True
 # exit()
 #%% try to find what to do...
 
-plot_1D(r_mesh[:, 0], dpdpsi, xlabel='coord', ylabel='dpdpsi', PATH=pic_path)
-plot_1D(r_mesh[:, 0], ppsi, xlabel='coord', ylabel='pressure', PATH=pic_path)
-plot_1D(r_mesh[:, 0], dfdpsi, xlabel='coord', ylabel='ffprime', PATH=pic_path)
+# plot_1D(r_mesh[:, 0], dpdpsi, xlabel='coord', ylabel='dpdpsi', PATH=pic_path)
+# plot_1D(r_mesh[:, 0], ppsi, xlabel='coord', ylabel='pressure', PATH=pic_path)
+# plot_1D(r_mesh[:, 0], fpsi*dfdpsi, xlabel='coord', ylabel='ffprime', PATH=pic_path)
+plot_1D(r_mesh[:, 0], fpsi, xlabel='coord', ylabel='fpol', PATH=pic_path)
 
 exit()
 #%% Import Spider solution to fenics
