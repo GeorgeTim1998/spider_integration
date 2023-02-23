@@ -163,6 +163,7 @@ def countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh,
                           colorbar = False,
                           note='3D countour plot saved to PATH:',
                           PATH='',
+                          plot_title='',
                           xlim=[],
                           ylim=[]):
 
@@ -174,6 +175,9 @@ def countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh,
   
   if grid:
     pyplot.grid(True)
+    
+  if plot_title != '':
+    pyplot.title(plot_title)
   
   pyplot.xlabel("r, м")
   pyplot.ylabel("z, м")
