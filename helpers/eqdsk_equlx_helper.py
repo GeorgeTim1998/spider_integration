@@ -116,6 +116,12 @@ def ellipse_boundary(Re, ell_a, E, segments):
   
   return np.array([r, z]).transpose().flatten()
 
+def default_UM():
+  return 0.602393949E+00 
+
+def default_UP():
+  return 0.157520013E+00
+
 def default_ffprim():
   ffprim = np.array([0.999417939E+01, 0.867587335E+01, 0.743508148E+01, 0.695207210E+01, 0.657569454E+01,
                      0.629749948E+01, 0.603575254E+01, 0.583357886E+01, 0.563452217E+01, 0.546150704E+01,
