@@ -165,7 +165,7 @@ def save_contour_plot(note, PATH=''):
   pyplot.savefig(file_path, dpi=DPI, bbox_inches="tight")
   pyplot.close()
 
-  print(note, file_path)
+  print_colored(note, color='green', white_str=file_path)
   time.sleep(1)
   
 def countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh, 
@@ -193,3 +193,6 @@ def countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh,
   pyplot.xlabel("r, cм")
   pyplot.ylabel("z, cм")
   save_contour_plot(note, PATH=PATH)
+
+def print_colored(color_srt, color='white', white_str='', attrs=[]):
+  print(colored(color_srt, color, attrs=attrs), white_str)
