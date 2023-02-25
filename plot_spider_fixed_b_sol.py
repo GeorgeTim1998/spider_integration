@@ -60,7 +60,10 @@ fvac = fvac[0]
 ro = ro.reshape(psi_size, spacial_size)
 
 #%% Plot data needed from Spider
-psi = psi_max * (1 - sqrt_psi_norm**2) # This is magnetic flux/2pi. In spider flux is used/ Multiply by 2pi
+psi = psi_max * (1 - sqrt_psi_norm**2) # This is magnetic flux/2pi. In spider flux is used/ Multiply by 2pi?
+
+dpdpsi = sup.restore_dpdpsi(dpdpsi)
+dfdpsi = sup.restore_dfdpsi(dfdpsi)
 
 # ppsi = sup.restore_funcpsi(2*pi*psi, dpdpsi)
 # fpsi = sup.restore_funcpsi(2*pi*psi, dfdpsi, fvac)
@@ -78,16 +81,7 @@ dfdpsi_mesh = (I.transpose() * dfdpsi).transpose()
 dpdpsi_mesh = (I.transpose() * dpdpsi).transpose()
 q_mesh = (I.transpose() * q).transpose()
 
-sup.countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh, 10, grid=True, colorbar=True, note='Spider', PATH=pic_path)
-# figure = pyplot.contour(r_mesh, z_mesh, psi_mesh, 10)
-# pyplot.colorbar(figure).set_label("\u03C8(r, z), Вб")
-# pyplot.gca().set_aspect("equal")
-# pyplot.grid(True)
-# pyplot.xlabel("r, м")
-# pyplot.ylabel("z, м")
-# pyplot.savefig(pic_path, dpi=240, bbox_inches="tight")
-# pyplot.close()
-# print("\n", 1)
+sup.countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh, 20, grid=True, colorbar=True, note='Spider', PATH=pic_path, plot_title='Spider')
 exit()
 #%% try to find what to do...
 pprim = eq.default_pprime()
