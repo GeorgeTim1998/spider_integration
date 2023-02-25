@@ -6,7 +6,7 @@ from math import pi
 import numpy as np
 
 from pathlib import Path
-my_dir = "Pics/Compare_with_Spider"
+my_dir = "Pics/WK_linear_profs_vs_fenics"
 Path(my_dir).mkdir(parents=True, exist_ok=True)
 
 fsup.print_colored("Launch program for linear p(\u03C8) and F\u00b2(\u03C8)", 'red', "\n", ["bold"])
@@ -74,8 +74,10 @@ for i, filename in enumerate(filenames):
   F2_0 = 0.25
   Fpl_vs_Fvac_ratio = 0.1
   
+  mult = 1
+
   a = dot(grad(u)/r, grad(r2*v))*dx
-  f = Constant(M0 * p0/psi0) * r2 + Constant(0.5 * Fpl_vs_Fvac_ratio * F2_0/psi0)
+  f = 4*pi**2*(Constant(M0 * p0/psi0) * r2 + mult*Constant(0.5 * Fpl_vs_Fvac_ratio * F2_0/psi0))
   L = f * r*v*dx
     
 #%% Compute solution and p(psi), F(psi), J(psi)
@@ -90,6 +92,6 @@ for i, filename in enumerate(filenames):
   print("F2 max =", F2psi.vector()[:].max())
   print("F2 min = ", F2psi.vector()[:].min())
   
-  fsup.countour_plot_via_mesh(gmsh, u, levels = 20, colorbar=True, grid=True, PATH=my_dir, plot_title="E = %.1f" % E[i])
+  fsup.countour_plot_via_mesh(gmsh, u, levels=50, colorbar=True, grid=True, PATH=my_dir, plot_title="Fenics. %s" % mult)
   print("\n")
   
