@@ -190,6 +190,6 @@ def countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh,
   if plot_title != '':
     pyplot.title(plot_title)
   
-  pyplot.xlabel("r, м")
-  pyplot.ylabel("z, м")
+  pyplot.xlabel("r, cм")
+  pyplot.ylabel("z, cм")
   save_contour_plot(note, PATH=PATH)
