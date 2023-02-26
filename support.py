@@ -141,8 +141,8 @@ def restore_pres_n_fpol(um, up, meshr, pprime, ffprim, fvac):
     pprim_c = -0.5 * (pprime[i+1] + pprime[i])
     fprim_c = -0.5 * (ffprim[i+1] + ffprim[i])
     
-    pres[i]=(pres[i+1] + pprim_c * 2*pi*dpsi) # for some reason pres needs 2pi multiplicator to be actual pressure
-    fpol[i]=(fpol[i+1] + fprim_c * 2*pi*dpsi) # for some reason pres needs 2pi multiplicator to be actual pressure
+    pres[i]=(pres[i+1] + pprim_c * dpsi) # for some reason pres needs 2pi multiplicator to be actual pressure
+    fpol[i]=(fpol[i+1] + fprim_c * dpsi) # for some reason pres needs 2pi multiplicator to be actual pressure
     # fpol[i]=sqrt(fpol[i+1]**2 + 2*fprim_c * 2*pi*dpsi)
 
   return pres, fpol
