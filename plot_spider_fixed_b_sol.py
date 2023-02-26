@@ -9,7 +9,7 @@ from helpers import eqdsk_equlx_helper as eq
 
 #%% Prescript things
 path = '/media/george/part/Spider'
-working_folder = 'WK_linear_profs_vs_fenics'
+working_folder = 'WK_linear_profs_no2pi_vs_fenics_slimmest'
 pic_path = "Pics/%s" % working_folder
 wr_file = 'spik.wr'
 
@@ -81,7 +81,8 @@ dfdpsi_mesh = (I.transpose() * dfdpsi).transpose()
 dpdpsi_mesh = (I.transpose() * dpdpsi).transpose()
 q_mesh = (I.transpose() * q).transpose()
 
-sup.countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh, 20, grid=True, colorbar=True, note='Spider', PATH=pic_path, plot_title='Spider')
+sup.print_colored("PSI MAX = ", color='green', white_str=psi_mesh.max())
+sup.countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh, levels=50, grid=True, colorbar=True, note='Spider', PATH=pic_path, plot_title='Spider')
 exit()
 #%% try to find what to do...
 pprim = eq.default_pprime()
