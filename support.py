@@ -123,7 +123,6 @@ def restore_dpdpsi(dpdpsi):
   return dpdpsi / pscale
 
 def restore_dfdpsi(dfdpsi):
-  # fscale = 2*pi * (1e-2/5)**0.5 # it is supposed to be 2pi
   # maybe in eqdsk_equlx pressure derivative is not by full flux but by flux/2pi
   fscale = 1
   return dfdpsi / fscale
