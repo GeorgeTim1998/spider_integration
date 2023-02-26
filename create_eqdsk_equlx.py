@@ -4,7 +4,7 @@ from helpers import eqdsk_equlx_helper as eq
 from math import pi, sqrt, floor
 import matplotlib.pyplot as pyplot
 import create_gmsh_mesh_from_points as gmsh
-from support import lao_hash
+from support import lao_hash, print_colored
 
 number_format = "%16.9E" 
 formating = "%s\n" % (number_format * 5)
@@ -17,13 +17,12 @@ p0 = 10000
 psi0 = 0.5 # на это я обезразмеривал.  Поток на 1 рад
 psi_max = 0.002613455467247852 # это максимальная psi. Поток на 1 рад  
 F2_0 = 0.25
-Fpl_vs_Fvac_ratio = 0.1
 
 #%%
 ACASE48, SPIDER, IDUM, MESHR, MESHZ = 'KIAM', 'SPIDER', 3, 128, 257
 RDIM, ZDIM, RCENTR, RLEFT, ZMID = 0, 0, Re, 0, 0
-RMAXIS, ZMAXIS, UM, UP, BCENTR =  Re, 0, (psi_max)*2*pi, 0, F2_0**0.5 / Re
-CURRENT, RX1, ZX1, RX2, ZX2 = 0.15E+07, 0, 0, 0, 0
+RMAXIS, ZMAXIS, UM, UP, BCENTR =  Re, 0, 1, 0, F2_0**0.5 / Re
+CURRENT, RX1, ZX1, RX2, ZX2 = 0.15E+07, 0, 0, 0, 0 # spider uses current for calculating actual psi...
 ZMAXIS, UXN, UX1, UX2, XDUM = 0, 0, 0, 0, 0
 
 pprime = eq.pprime_linear_profile(p0, (psi0), MESHR)
@@ -59,6 +58,8 @@ with open("%s/%s" % (folder, filename), 'w') as file:
   
   eq.write_np_array_to_file(file, boundary, number_format)
   eq.write_np_array_to_file(file, boundary, number_format)
+
+print_colored("eqdsk_equlx saved to:", color='green', white_str="%s/%s" % (folder, filename))
 
 eq.plot_pres_fpol_n_ders(pres, fpol, pprime, ffprim)
 
