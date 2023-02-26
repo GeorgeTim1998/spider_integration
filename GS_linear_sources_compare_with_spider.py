@@ -85,11 +85,12 @@ for i, filename in enumerate(filenames):
   F2psi = project(F2_0*(1 + u/psi0), V)
   Fpsi = project(sqrt( F2_0*(1 + u/psi0) ), V)
   
-  J_psi = project(2*pi*(p0/psi0 * r + 1/(2*M0*r) * F2_0/psi0), V)
-  I = assemble(J_psi*dx)
+  Jpsi = project(2*pi*(p0/psi0 * r + 1/(2*M0*r) * F2_0/psi0), V)
+  I = assemble(Jpsi*dx)
   
   fsup.plot_big_axis_profile(ppsi, yaxis='p(psi)', PATH=my_dir, grid=True)
   fsup.plot_big_axis_profile(Fpsi, yaxis='F(psi)', PATH=my_dir, grid=True)
+  fsup.plot_big_axis_profile(Jpsi, yaxis='J(r, psi)', PATH=my_dir, grid=True)
   
   sup.print_colored("I = ", color='red', white_str=I)
   
