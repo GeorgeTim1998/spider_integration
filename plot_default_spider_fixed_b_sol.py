@@ -94,8 +94,8 @@ FPOLB = eq.default_fpolb()
 
 pres, fpol = eq.restore_pres_n_fpol(UM, UP, len(pprime), pprime, ffprim, FPOLB**0.5, FPOLB**0.5)
 
-plot_1D(np.linspace(0, 1, len(fpol)), pres, xlabel='coord', ylabel='pres', PATH=pic_path)
-plot_1D(r_mesh[:, 0], p_mesh[:, 0], xlabel='coord', ylabel='p_mesh', PATH=pic_path)
+# plot_1D(np.linspace(0, 1, len(fpol)), pres, xlabel='coord', ylabel='pres', PATH=pic_path)
+# plot_1D(r_mesh[:, 0], p_mesh[:, 0], xlabel='coord', ylabel='p_mesh', PATH=pic_path)
 plot_1D(np.linspace(0, 1, len(fpol)), fpol, xlabel='coord', ylabel='fpol', PATH=pic_path)
 plot_1D(r_mesh[:, 0], f_mesh[:, 0], xlabel='coord', ylabel='f_mesh', PATH=pic_path)
 # plot_1D(r_mesh[:, 0], dpdpsi_mesh[:, 0], xlabel='coord', ylabel='dpdpsi', PATH=pic_path)
