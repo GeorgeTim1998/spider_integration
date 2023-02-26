@@ -83,12 +83,21 @@ for i, filename in enumerate(filenames):
   
   ppsi = project(p0 * u/psi0, V)
   F2psi = project(F2_0*(1 + u/psi0), V)
-
+  Fpsi = project(sqrt( F2_0*(1 + u/psi0) ), V)
+  
+  J_psi = project(2*pi*(p0/psi0 * r + 1/(2*M0*r) * F2_0/psi0), V)
+  I = assemble(J_psi*dx)
+  
+  fsup.plot_big_axis_profile(ppsi, yaxis='p(psi)', PATH=my_dir, grid=True)
+  fsup.plot_big_axis_profile(Fpsi, yaxis='F(psi)', PATH=my_dir, grid=True)
+  
+  sup.print_colored("I = ", color='red', white_str=I)
+  
   sup.print_colored("psi_max = ", color='red', white_str=u.vector()[:].max())
   print("pressure max =", ppsi.vector()[:].max())
   print("F2 max =", F2psi.vector()[:].max())
   print("F2 min = ", F2psi.vector()[:].min())
   
-  fsup.countour_plot_via_mesh(gmsh, u, levels=50, colorbar=True, grid=True, PATH=my_dir, plot_title="Fenics")
+  # fsup.countour_plot_via_mesh(gmsh, u, levels=50, colorbar=True, grid=True, PATH=my_dir, plot_title="Fenics")
   print("\n")
   

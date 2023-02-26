@@ -349,7 +349,7 @@ def plot_big_axis_profile(u,
                           PATH=''):
   gmsh_coordinates = u.function_space().mesh().coordinates().transpose()
   r_minmax = [gmsh_coordinates[0].min(), gmsh_coordinates[0].max()]
-  r_array = numpy.linspace(r_minmax[0]*1.05, r_minmax[1]*0.95, point_num)
+  r_array = numpy.linspace(r_minmax[0]*1.01, r_minmax[1]*0.99, point_num)
   
   u_profile = [u(r, 0) for r in r_array]
   
