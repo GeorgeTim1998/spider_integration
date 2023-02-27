@@ -183,6 +183,12 @@ def countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh,
   if colorbar:
     pyplot.colorbar(figure).set_label("\u03C8(r, z), Вб")
   
+  if xlim != []:
+    pyplot.xlim(*xlim)
+      
+  if ylim != []:
+    pyplot.ylim(*ylim)
+  
   if grid:
     pyplot.grid(True)
     
