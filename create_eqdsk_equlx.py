@@ -17,12 +17,13 @@ p0 = 10000
 psi0 = 0.5 # на это я обезразмеривал.  Поток на 1 рад
 psi_max = 0.002613455467247852 # это максимальная psi. Поток на 1 рад  
 F2_0 = 0.25
+I=462897.5708251411
 
 #%%
 ACASE48, SPIDER, IDUM, MESHR, MESHZ = 'KIAM', 'SPIDER', 3, 128, 257
 RDIM, ZDIM, RCENTR, RLEFT, ZMID = 0, 0, Re, 0, 0
 RMAXIS, ZMAXIS, UM, UP, BCENTR =  Re, 0, 1, 0, F2_0**0.5 / Re
-CURRENT, RX1, ZX1, RX2, ZX2 = 0.15E+07, 0, 0, 0, 0 # spider uses current for calculating actual psi...
+CURRENT, RX1, ZX1, RX2, ZX2 = I/2/pi, 0, 0, 0, 0 # spider uses current for calculating actual psi...
 ZMAXIS, UXN, UX1, UX2, XDUM = 0, 0, 0, 0, 0
 
 pprime = eq.pprime_linear_profile(p0, (psi0), MESHR)
