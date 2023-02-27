@@ -6,7 +6,7 @@ from math import pi
 import numpy as np
 
 from pathlib import Path
-my_dir = "Pics/WK_linear_profs_no2pi_vs_fenics_slimmest/"
+my_dir = "Pics/WK_linear_profs_no2pi_vs_fenics_slimmest"
 Path(my_dir).mkdir(parents=True, exist_ok=True)
 
 fsup.print_colored("Launch program for linear p(\u03C8) and F\u00b2(\u03C8)", 'red', "\n", ["bold"])
@@ -74,7 +74,7 @@ for i, filename in enumerate(filenames):
   F2_0 = 0.25
 
   a = dot(grad(u)/r, grad(r2*v))*dx
-  f = 4*pi**2*(Constant(M0 * p0/psi0) * r2 + Constant(0.5 * F2_0/psi0))
+  f = (Constant(M0 * p0/psi0) * r2 + Constant(0.5 * F2_0/psi0))
   L = f * r*v*dx
     
 #%% Compute solution and p(psi), F(psi), J(psi)
@@ -88,17 +88,16 @@ for i, filename in enumerate(filenames):
   Jpsi = project(2*pi*(p0/psi0 * r + 1/(2*M0*r) * F2_0/psi0), V)
   I = assemble(Jpsi*dx)
   
-  fsup.plot_big_axis_profile(ppsi, yaxis='p(psi)', PATH=my_dir, grid=True)
-  fsup.plot_big_axis_profile(Fpsi, yaxis='F(psi)', PATH=my_dir, grid=True)
-  fsup.plot_big_axis_profile(Jpsi, yaxis='J(r, psi)', PATH=my_dir, grid=True)
+  # fsup.plot_big_axis_profile(ppsi, yaxis='p(psi)', PATH=my_dir, grid=True)
+  # fsup.plot_big_axis_profile(Fpsi, yaxis='F(psi)', PATH=my_dir, grid=True)
+  # fsup.plot_big_axis_profile(Jpsi, yaxis='J(r, psi)', PATH=my_dir, grid=True)
   
-  sup.print_colored("I = ", color='red', white_str=I)
+  sup.print_colored("I =", color='green', white_str=I)
+  sup.print_colored("\u03C8 max =", color='green', white_str=u.vector()[:].max())
+  sup.print_colored("p' max =", color='green', white_str=p0/psi0)
+  sup.print_colored("F2' max =", color='green', white_str=0.5 * F2_0/psi0)
+  print("\n")
   
-  sup.print_colored("psi_max = ", color='red', white_str=u.vector()[:].max())
-  print("pressure max =", ppsi.vector()[:].max())
-  print("F2 max =", F2psi.vector()[:].max())
-  print("F2 min = ", F2psi.vector()[:].min())
-  
-  # fsup.countour_plot_via_mesh(gmsh, u, levels=50, colorbar=True, grid=True, PATH=my_dir, plot_title="Fenics")
+  fsup.countour_plot_via_mesh(gmsh, u, levels=[0.001, 0.002, 0.003, 0.01], colorbar=True, grid=True, PATH=my_dir, plot_title="Fenics")
   print("\n")
   

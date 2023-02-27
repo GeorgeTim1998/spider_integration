@@ -4,7 +4,7 @@ import support as sup
 import matplotlib.pyplot as pyplot
 from fenics import *
 from scipy.interpolate import interp2d, LinearNDInterpolator
-from fenics_support import countour_plot_via_mesh, assign_const_to_nan_in_expression, plot_1D, interpolate_spider_data_on_function_space
+from fenics_support import countour_plot_via_mesh, assign_const_to_nan_in_expression, plot_1D, interpolate_spider_data_on_function_space, M0
 from helpers import eqdsk_equlx_helper as eq
 
 #%% Prescript things
@@ -14,6 +14,8 @@ pic_path = "Pics/%s" % working_folder
 wr_file = 'spik.wr'
 
 path_to_file = "%s/%s/%s" % (path, working_folder, wr_file)
+
+sup.print_colored("Launch Spider program", 'red', "\n", ["bold"])
 
 #%% Get data from file
 with open(path_to_file, 'r') as file:
@@ -81,34 +83,21 @@ dfdpsi_mesh = (I.transpose() * dfdpsi).transpose()
 dpdpsi_mesh = (I.transpose() * dpdpsi).transpose()
 q_mesh = (I.transpose() * q).transpose()
 
-sup.print_colored("PSI MAX = ", color='green', white_str=psi_mesh.max())
-sup.countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh, levels=50, grid=True, colorbar=True, note='Spider', PATH=pic_path, plot_title='Spider')
+Jpsi = r_mesh[:, 0]*dpdpsi + dfdpsi/(M0*r_mesh[:, 0])
+
+sup.print_colored("\u03C8 max =", color='green', white_str=psi_mesh.max())
+sup.print_colored("p' =", color='green', white_str=dpdpsi.max())
+sup.print_colored("F2' =", color='green', white_str=dfdpsi.max())
+print("\n")
+
+sup.countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh, levels=[0.001, 0.002, 0.003, 0.01], grid=True, colorbar=True, note='3D countour plot from Spider saved to PATH:', PATH=pic_path, plot_title='Spider')
+
 exit()
+plot_1D(r_mesh[:, 0], dpdpsi, xlabel='coord', ylabel='dpdpsi. Spider', PATH=pic_path)
+# plot_1D(r_mesh[:, 0], p_mesh[:, 0], xlabel='coord', ylabel='p_mesh. Spider', PATH=pic_path)
+# plot_1D(r_mesh[:, 0], f_mesh[:, 0], xlabel='coord', ylabel='f_mesh. Spider', PATH=pic_path)
+# plot_1D(r_mesh[:, 0], Jpsi, xlabel='coord', ylabel='Jpsi. Spider', PATH=pic_path)
 #%% try to find what to do...
-pprim = eq.default_pprime()
-ffprim = eq.default_ffprim()
-
-multiplicator_p = pprim[0]/dpdpsi_mesh[0,0]
-multiplicator_f = ffprim[0]/(f_mesh[0,0]*dfdpsi_mesh[0,0])
-
-
-f_b = 2.96
-f_max = 3.2351521302396
-
-pres_max = 79843.91254350766
-
-psimax = 0.602393949
-psimin = 0.157520013
-
-multiplicator_p/pres_max*2*pi
-multiplicator_p/(pres_max/(psi.max()))
-multiplicator_p/(pres_max/(psi.max()**0.5))
-pres_max/(psimax - psimin)*pi
-
-multiplicator_f/(f_max**2/psi.max())
-pprim.max()
-ffprim.max()
-
 plot_1D(r_mesh[:, 0], p_mesh[:, 0], xlabel='coord', ylabel='p_mesh', PATH=pic_path)
 plot_1D(r_mesh[:, 0], multiplicator_p*dpdpsi_mesh[:, 0], xlabel='coord', ylabel='dpdpsi', PATH=pic_path)
 plot_1D(r_mesh[:, 0], f_mesh[:, 0], xlabel='coord', ylabel='f_mesh', PATH=pic_path)
