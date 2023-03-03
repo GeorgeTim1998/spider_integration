@@ -7,7 +7,9 @@ import numpy as np
 from return_spider_fixed_b_sol import return_spider_fixed_b_sol
 
 from pathlib import Path
-my_dir = "Pics/WK_linear_profs_no2pi_vs_fenics_slimmest"
+
+spider_folder = "WK_linear_profs_no2pi_vs_fenics_slimmest"
+my_dir = "Pics/%s" % spider_folder
 Path(my_dir).mkdir(parents=True, exist_ok=True)
 
 fsup.print_colored("Launch program for linear p(\u03C8) and F\u00b2(\u03C8)", 'red', "\n", ["bold"])
@@ -103,7 +105,7 @@ for i, filename in enumerate(filenames):
   fsup.countour_plot_via_mesh(gmsh, u, levels=[0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008, 0.009, 0.01], colorbar=True, grid=True, PATH=my_dir, plot_title="Fenics")
   print("\n")
   
-  r_spider, z_spider, psi_spider = return_spider_fixed_b_sol()
+  r_spider, z_spider, psi_spider = return_spider_fixed_b_sol(spider_folder)
   fsup.calculate_errors_fenics_vs_spider(u, psi_spider, r_spider, z_spider)
   print("1\n")
   

@@ -7,10 +7,9 @@ from scipy.interpolate import interp2d, LinearNDInterpolator
 from fenics_support import countour_plot_via_mesh, assign_const_to_nan_in_expression, plot_1D, interpolate_spider_data_on_function_space, M0
 from helpers import eqdsk_equlx_helper as eq
 
-def return_spider_fixed_b_sol():
+def return_spider_fixed_b_sol(working_folder):
 #%% Prescript things
   path = '/media/george/part/Spider'
-  working_folder = 'WK_linear_profs_no2pi_vs_fenics_slimmest'
   pic_path = "Pics/%s" % working_folder
   wr_file = 'spik.wr'
 
