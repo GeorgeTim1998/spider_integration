@@ -522,3 +522,26 @@ def interpolate_spider_data_on_function_space(r_mesh, z_mesh, psi_mesh, V, bound
   psi = assign_const_to_nan_in_expression(psi, boundary_val)
   
   return psi
+
+def calculate_errors_fenics_vs_spider(psi_fenics, psi_spider, r_spider, z_spider):
+  r_spider = r_spider.transpose()
+  z_spider = z_spider.transpose()
+  psi_spider = psi_spider.transpose()
+  spider_solution_shape = numpy.shape(r_spider)
+  
+  error_matrix = numpy.zeros(spider_solution_shape)
+  
+  try:
+    for i in range(spider_solution_shape[0]):
+      for j in range(spider_solution_shape[1]):
+        error_matrix[i, j] = abs(psi_fenics(r_spider[i, j], z_spider[i, j]) - psi_spider[i, j])
+  except RuntimeError:
+    error_matrix[i, j] = 0
+
+  line = 'Fenics vs Spider solution error max ='
+  print_colored('Fenics vs Spider solution error max =', color='red', white_str=error_matrix.max())
+  print_colored('Fenics vs Spider solution error min =', color='red', white_str=error_matrix.min())
+  
+  string = ("%{size}s".format(size = len(line))) % "\u03C8 max ="
+  
+  print_colored(string, color='green', white_str=psi_spider.max())
