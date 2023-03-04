@@ -23,14 +23,15 @@ def lao_hash():
   Re = 142.5/100 # sm
   # E =  [1.60, 1.59, 1.59, 1.60] # elongation
   E =  numpy.linspace(1, 2, 11)
-  betta_p = 0.9 # poloidal betta
+  betta_pol = 0.9 # poloidal betta
+  betta_tor = 4.2e-2
   
   a = 37/100
   I = 345e3 # Amperes
   
   Bt0_mean = 2
   p0 = 6400
-  Bp = math.sqrt(2*M0*p0 / betta_p)
+  Bp = math.sqrt(2*M0*p0 / betta_pol)
   
   psi0 = Re**2 * Bp
   F2_0 = Re**2 * Bt0_mean**2
@@ -43,6 +44,8 @@ def lao_hash():
     'a': a,
     'I': I,
     'Bt0_mean': Bt0_mean,
+    'betta_pol': betta_pol,
+    'betta_tor': betta_tor,
     'p0': p0,
     'psi0': psi0,
     'psi_level': psi_level,
@@ -201,3 +204,8 @@ def countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh,
 
 def print_colored(color_srt, color='white', white_str='', attrs=[]):
   print(colored(color_srt, color, attrs=attrs), white_str)
+  
+def switch_conda_env(env):
+  bash_command = "conda activate %s" % env
+  print(bash_command)
+  os.system(bash_command)

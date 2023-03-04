@@ -7,11 +7,11 @@ DIM = 2
 MESH_SIZE = 5e-1
 LC = 0.5e-1
 
-def create_gmsh_mesh_from_points(boundary, ell_a=0, ell_b=0, msh_size=0, show=False):
+def create_gmsh_mesh_from_points(boundary, ell_a=0, elongation=0, msh_size=MESH_SIZE, show=False):
   boundary = np.reshape(boundary, (-1, 2))
 
   gmsh.initialize()
-  # gmsh.option.setNumber('Mesh.MeshSizeMax', MESH_SIZE) # you can set general options via strings in set number. see https://gmsh.info/doc/texinfo/gmsh.pdf
+  gmsh.option.setNumber('Mesh.MeshSizeMax', msh_size) # you can set general options via strings in set number. see https://gmsh.info/doc/texinfo/gmsh.pdf
   # gmsh.option.setNumber('Mesh.Algorithm', 3) # you can set general options via strings in set number. see https://gmsh.info/doc/texinfo/gmsh.pdf
   model = gmsh.model()
   
@@ -34,6 +34,6 @@ def create_gmsh_mesh_from_points(boundary, ell_a=0, ell_b=0, msh_size=0, show=Fa
   if show:
     gmsh.fltk.run()
   
-  file_name = "a_%.3f_ratio_%.3f_msh_%.1e" % (ell_a, ell_b, msh_size)
+  file_name = "a_%.3f_ratio_%.3f_msh_%.1e" % (ell_a, elongation, msh_size)
   gmsh.option.setNumber('Mesh.MshFileVersion', 2.2) # setting ascii 2 version so fenics understands whats up
   gmsh.write("%s/%s.msh" % (FOLDER, file_name))

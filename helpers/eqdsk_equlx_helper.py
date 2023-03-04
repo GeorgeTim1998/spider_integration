@@ -3,6 +3,8 @@ import matplotlib.pyplot as pyplot
 import math as mt
 from math import pi
 
+M0 = 1.25e-6
+
 def write_np_array_to_file(file, array, number_format):
   columns = 5
   rows = mt.floor(len(array)/5)
@@ -216,11 +218,20 @@ def default_q():
   return q
 
 def pprime_linear_profile(p0, psi0, length):
-  pprime = p0/psi0 * np.ones(length)
+  pprime = p0 * np.ones(length)
   
   return pprime
 
 def ffprim_linear_profile(F2_0, psi0, length):
-  ffprim = 0.5*F2_0/psi0 * np.ones(length)
+  ffprim = 0.5*F2_0 * np.ones(length)
   
   return ffprim
+
+def exponential_derivarives_profiles(Re, betta_pol, betta_tor, alpha, kappa, length):
+  u = np.linspace(0, 1, length)
+  etta_u = alpha * (1 - np.exp(alpha*u)) / (1 - mt.exp(alpha) + alpha)
+
+  pprime = 0.5*etta_u * betta_pol/M0
+  ffprim = 0.5*etta_u * Re**2 * betta_pol/betta_tor * kappa
+  
+  return pprime, ffprim
