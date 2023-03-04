@@ -26,15 +26,15 @@ RMAXIS, ZMAXIS, UM, UP, BCENTR =  Re, 0, 1, 0, F2_0**0.5 / Re
 CURRENT, RX1, ZX1, RX2, ZX2 = I/2/pi, 0, 0, 0, 0 # spider uses current for calculating actual psi...
 ZMAXIS, UXN, UX1, UX2, XDUM = 0, 0, 0, 0, 0
 
-pprime = eq.pprime_linear_profile(p0, (psi0), MESHR)
-ffprim = eq.ffprim_linear_profile(F2_0, (psi0), MESHR)
+pprime = eq.pprime_linear_profile(p0, (psi0/10), MESHR)
+ffprim = eq.ffprim_linear_profile(F2_0, (psi0/10), MESHR)
 
 pres, fpol = eq.restore_pres_n_fpol(UM, UP, MESHR, pprime, ffprim, BCENTR, RCENTR)
 
 u = np.zeros(MESHR * MESHZ)
 q = np.zeros(len(pprime))
 
-NXB,NBLM = 89, 89
+NXB,NBLM = 89, 89 
 
 boundary = eq.ellipse_boundary(Re, ell_a, E, NXB)
 #%% plot boundary
