@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as pyplot
+import os
 import math as mt
 from math import pi
 
@@ -235,3 +236,9 @@ def exponential_derivarives_profiles(Re, betta_pol, betta_tor, alpha, kappa, len
   ffprim = 0.5*etta_u * Re**2 * betta_pol/betta_tor * kappa
   
   return pprime, ffprim
+
+def launch_spider_fixed_b(WK_folder):
+  spider_dir = '/media/george/part/Spider'
+  spider_fixed_b_bash = "./SpiderFixedB.py -d %s -e eqdsk_equilx" % WK_folder
+  bash_command = "cd %s; %s" % (spider_dir, spider_fixed_b_bash)
+  os.system(bash_command)
