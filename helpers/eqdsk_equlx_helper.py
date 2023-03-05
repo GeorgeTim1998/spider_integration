@@ -242,3 +242,8 @@ def launch_spider_fixed_b(WK_folder):
   spider_fixed_b_bash = "./SpiderFixedB.py -d %s -e eqdsk_equilx" % WK_folder
   bash_command = "cd %s; %s" % (spider_dir, spider_fixed_b_bash)
   os.system(bash_command)
+  
+def del_eqdsk_equilx(WK_folder):
+  spider_dir = "/media/george/part/Spider/%s" % WK_folder
+  filename = "eqdsk_equilx"
+  os.remove("%s/%s" % (spider_dir, filename))
