@@ -244,6 +244,14 @@ def launch_spider_fixed_b(WK_folder):
   os.system(bash_command)
   
 def del_eqdsk_equilx(WK_folder):
-  spider_dir = "/media/george/part/Spider/%s" % WK_folder
+  WK_dir = "/media/george/part/Spider/%s" % WK_folder
   filename = "eqdsk_equilx"
-  os.remove("%s/%s" % (spider_dir, filename))
+  if filename in os.listdir(WK_dir):
+    os.remove("%s/%s" % (WK_dir, filename))
+  
+def copy_eqdsk_equilx_to_WK(WK_folder, elongation):
+  WK_dir = "/media/george/part/Spider/%s" % WK_folder
+  bash_command = "cp /media/george/part/Science/Files/%.1f/eqdsk_equilx %s" % (elongation, WK_dir)
+  print(bash_command)
+  
+  os.system(bash_command)
