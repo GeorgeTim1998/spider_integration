@@ -9,7 +9,7 @@ from helpers import eqdsk_equlx_helper as eq
 
 #%% Prescript things
 path = '/media/george/part/Spider'
-working_folder = 'WK_linear_profs_no2pi_vs_fenics_slimmest'
+working_folder = 'WK'
 pic_path = "Pics/%s" % working_folder
 wr_file = 'spik.wr'
 
@@ -83,29 +83,33 @@ dfdpsi_mesh = (I.transpose() * dfdpsi).transpose()
 dpdpsi_mesh = (I.transpose() * dpdpsi).transpose()
 q_mesh = (I.transpose() * q).transpose()
 
-Jpsi = r_mesh[:, 0]*dpdpsi + dfdpsi/(M0*r_mesh[:, 0])
+# Jpsi = r_mesh[:, 0]*dpdpsi + dfdpsi/(M0*r_mesh[:, 0])
 
 sup.print_colored("\u03C8 max =", color='green', white_str=psi_mesh.max())
 sup.print_colored("p' =", color='green', white_str=dpdpsi.max())
 sup.print_colored("F2' =", color='green', white_str=dfdpsi.max())
 print("\n")
 
-sup.countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh, levels=[0.001, 0.002, 0.003, 0.01], grid=True, colorbar=True, note='3D countour plot from Spider saved to PATH:', PATH=pic_path, plot_title='Spider')
-
+sup.countour_plot_maxtrix(r_mesh, z_mesh, psi_mesh, 
+                          levels=10, 
+                          grid=True, 
+                          colorbar=True, 
+                          note='3D countour plot from Spider saved to PATH:', 
+                          PATH=pic_path, 
+                          plot_title='Spider')
 exit()
-plot_1D(r_mesh[:, 0], dpdpsi, xlabel='coord', ylabel='dpdpsi. Spider', PATH=pic_path)
-# plot_1D(r_mesh[:, 0], p_mesh[:, 0], xlabel='coord', ylabel='p_mesh. Spider', PATH=pic_path)
-# plot_1D(r_mesh[:, 0], f_mesh[:, 0], xlabel='coord', ylabel='f_mesh. Spider', PATH=pic_path)
-# plot_1D(r_mesh[:, 0], Jpsi, xlabel='coord', ylabel='Jpsi. Spider', PATH=pic_path)
-#%% try to find what to do...
-plot_1D(r_mesh[:, 0], p_mesh[:, 0], xlabel='coord', ylabel='p_mesh', PATH=pic_path)
-plot_1D(r_mesh[:, 0], multiplicator_p*dpdpsi_mesh[:, 0], xlabel='coord', ylabel='dpdpsi', PATH=pic_path)
-plot_1D(r_mesh[:, 0], f_mesh[:, 0], xlabel='coord', ylabel='f_mesh', PATH=pic_path)
-plot_1D(r_mesh[:, 0], multiplicator_f*f_mesh[:, 0]*dfdpsi_mesh[:, 0], xlabel='coord', ylabel='f*dfdpsi', PATH=pic_path)
+# plot_1D(r_mesh[:, 0], dpdpsi, xlabel='coord', ylabel='dpdpsi. Spider', PATH=pic_path)
+# # plot_1D(r_mesh[:, 0], p_mesh[:, 0], xlabel='coord', ylabel='p_mesh. Spider', PATH=pic_path)
+# # plot_1D(r_mesh[:, 0], f_mesh[:, 0], xlabel='coord', ylabel='f_mesh. Spider', PATH=pic_path)
+# # plot_1D(r_mesh[:, 0], Jpsi, xlabel='coord', ylabel='Jpsi. Spider', PATH=pic_path)
+# #%% try to find what to do...
+# plot_1D(r_mesh[:, 0], p_mesh[:, 0], xlabel='coord', ylabel='p_mesh', PATH=pic_path)
+# plot_1D(r_mesh[:, 0], multiplicator_p*dpdpsi_mesh[:, 0], xlabel='coord', ylabel='dpdpsi', PATH=pic_path)
+# plot_1D(r_mesh[:, 0], f_mesh[:, 0], xlabel='coord', ylabel='f_mesh', PATH=pic_path)
+# plot_1D(r_mesh[:, 0], multiplicator_f*f_mesh[:, 0]*dfdpsi_mesh[:, 0], xlabel='coord', ylabel='f*dfdpsi', PATH=pic_path)
 
-exit()
 #%% Import Spider solution to fenics
-filename = 'test'
+filename = 'a_0.370_ratio_1.000_msh_3.0e-03'
 folder = sup.xml_files_folder()
 xml_file = "%s/%s.xml" % (folder, filename)
 
@@ -113,6 +117,6 @@ gmsh = Mesh(xml_file)
 V = FunctionSpace(gmsh, 'Lagrange', 1)
 
 psi = interpolate_spider_data_on_function_space(r_mesh, z_mesh, psi_mesh, V)
-ppsi = interpolate_spider_data_on_function_space(r_mesh, z_mesh, p_mesh, V)
+# ppsi = interpolate_spider_data_on_function_space(r_mesh, z_mesh, p_mesh, V)
 countour_plot_via_mesh(gmsh, psi, levels=50, colorbar=True, grid=True, xlim=[0.8, 2.4], ylim=[-1, 1], PATH=pic_path)
-countour_plot_via_mesh(gmsh, ppsi, levels=50, colorbar=True, grid=True, xlim=[0.8, 2.4], ylim=[-1, 1], PATH=pic_path)
+# countour_plot_via_mesh(gmsh, ppsi, levels=50, colorbar=True, grid=True, xlim=[0.8, 2.4], ylim=[-1, 1], PATH=pic_path)
