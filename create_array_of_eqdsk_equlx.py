@@ -29,7 +29,7 @@ betta_pol = lao_hash()['betta_pol']
 betta_tor = lao_hash()['betta_tor']
 
 alpha = 0.1
-kappa = 1e-2
+kappa = -1e-2
 
 for elongation in elongations:
 #%% Define all data
@@ -74,4 +74,4 @@ for elongation in elongations:
 
   # eq.plot_pres_fpol_n_ders(pres, fpol, pprime, ffprim)
 
-  gmsh.create_gmsh_mesh_from_points(boundary, ell_a, elongation)
+  gmsh.create_gmsh_mesh_from_points(boundary, ell_a, elongation, msh_size=1e-1)
