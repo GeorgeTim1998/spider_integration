@@ -21,7 +21,6 @@ def xml_files_folder():
 
 def lao_hash():
   Re = 142.5/100 # sm
-  # E =  [1.60, 1.59, 1.59, 1.60] # elongation
   E =  numpy.linspace(1, 2, 11)
   betta_pol = 0.9 # poloidal betta
   betta_tor = 4.2e-2
@@ -54,7 +53,7 @@ def lao_hash():
   }
 
 def create_readmi(lao_hash, folder, p_pow=1, F_pow=1):
-  file = open("%s/readme.txt" % folder, "w")
+  file = open("%s/%s.txt" % (folder, Time_name()), "w")
   keys = list(lao_hash.keys())
   for key in keys:
     file.write("%s = %s\n" % (key, lao_hash[key]))
