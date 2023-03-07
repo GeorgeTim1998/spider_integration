@@ -362,6 +362,12 @@ def plot_big_axis_profile(u,
   
   save_contour_plot(note=note, PATH=PATH)
 
+def calc_big_axis_R(r_mesh, z_mesh):
+  r = r_mesh.transpose()[0]
+  z = z_mesh.transpose()[0]
+  
+  return numpy.sqrt(r**2 + z**2)
+
 def return_q_1D(R0, a, u, Bt, Bp):
   r_max = u.function_space().mesh().coordinates().transpose()[0].max()
 
