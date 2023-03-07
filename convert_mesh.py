@@ -23,7 +23,8 @@ if diff != []:
     os.system(bash_command)
   
   print('Converted:')
+  diff = diff.sort()
   for file_name in diff:
-    print(file_name)
+    print("'%s'," % file_name)
 else:
   print('Nothing to convert')
