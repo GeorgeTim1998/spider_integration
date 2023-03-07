@@ -114,8 +114,6 @@ for i in range(len(E)):
   dpdpsi_mesh = (I.transpose() * dpdpsi).transpose()
   q_mesh = (I.transpose() * q).transpose()
 
-  # Jpsi = r_mesh[:, 0]*dpdpsi + dfdpsi/(M0*r_mesh[:, 0])
-
   sup.print_colored("\u03C8 max =", color='green', white_str=psi_mesh.max())
   print("\n")
 
@@ -145,7 +143,7 @@ for i in range(len(E)):
 
   p_psi = interpolate_spider_data_on_function_space(r_mesh, z_mesh, p_mesh, V)
   sup.print_colored("Interpolated pressure", color='green')
-  F2_psi = interpolate_spider_data_on_function_space(r_mesh, z_mesh, f_mesh**2, V, boundary_val=dfdpsi_mesh[-1, -1]**2)
+  F2_psi = interpolate_spider_data_on_function_space(r_mesh, z_mesh, f_mesh**2, V, boundary_val=f_mesh[-1, -1]**2)
   sup.print_colored("Interpolated toroidal func", color='green')
   J_psi, I = fsup.define_J_from_spider_data(ppsi_der, F2psi_der, r, V)
   sup.print_colored("Defined current density. I =", color='green', white_str=I)
