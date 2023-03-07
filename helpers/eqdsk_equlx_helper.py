@@ -3,6 +3,7 @@ import matplotlib.pyplot as pyplot
 import os
 import math as mt
 from math import pi
+from termcolor import colored
 
 M0 = 1.25e-6
 
@@ -241,17 +242,24 @@ def launch_spider_fixed_b(WK_folder):
   spider_dir = '/media/george/part/Spider'
   spider_fixed_b_bash = "./SpiderFixedB.py -d %s -e eqdsk_equilx" % WK_folder
   bash_command = "cd %s; %s" % (spider_dir, spider_fixed_b_bash)
+  
+  print(colored(bash_command, 'yellow'))
+  print("\n")
   os.system(bash_command)
   
 def del_eqdsk_equilx(WK_folder):
   WK_dir = "/media/george/part/Spider/%s" % WK_folder
   filename = "eqdsk_equilx"
   if filename in os.listdir(WK_dir):
-    os.remove("%s/%s" % (WK_dir, filename))
+    bash_command = "%s/%s" % (WK_dir, filename)
+    print(colored(bash_command, 'yellow'))
+    print("\n")
+    os.remove(bash_command)
   
 def copy_eqdsk_equilx_to_WK(WK_folder, elongation):
   WK_dir = "/media/george/part/Spider/%s" % WK_folder
   bash_command = "cp /media/george/part/Science/Files/%.1f/eqdsk_equilx %s" % (elongation, WK_dir)
-  print(bash_command)
+  print(colored(bash_command, 'yellow'))
+  print("\n")
   
   os.system(bash_command)
