@@ -123,7 +123,7 @@ for i in range(len(E)):
                             colorbar=True, 
                             note='3D countour plot from Spider saved to PATH:', 
                             PATH=pic_path, 
-                            plot_title='Spider')
+                            plot_title="Spider. %.1f" % E[i])
 
   #%% Import Spider solution to fenics
   msh_filename = msh_filenames[i]
@@ -152,7 +152,7 @@ for i in range(len(E)):
                         levels=10, 
                         colorbar=True, 
                         grid=True,
-                        plot_title='Fenics',
+                        plot_title="Fenics. %.1f" % E[i],
                         PATH=pic_path)
 
 #%% Post solve
