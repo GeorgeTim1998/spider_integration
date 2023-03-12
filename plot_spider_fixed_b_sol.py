@@ -167,6 +167,8 @@ for i in range(len(E)):
   W = fsup.form_vector_space(u)
   Bp = fsup.calculate_Bp(u, r, W)
   Bpa = 1/L * fsup.circulation(Bp, n, ds)
+  
+  sup.print_colored("Bpa vs M0*I/L =", color='yellow', white_str=Bpa / (M0*I/L))
 
   Bt = fsup.calculate_Bt(F2_psi, r)
   Bt0 = fsup.calculate_Bt0(fvac**2, r, V)
