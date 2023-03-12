@@ -40,6 +40,7 @@ def create_gmsh_mesh_from_points(boundary, ell_a=0, elongation=0, msh_size=MESH_
     
     gmsh.option.setNumber('Mesh.MshFileVersion', 2.2) # setting ascii 2 version so fenics understands whats up
     gmsh.write("%s/%s.msh" % (FOLDER, file_name))
+    gmsh.finalize()
   
 def mesh_exists(filename):
   return (filename + '.msh') in os.listdir(FOLDER)
