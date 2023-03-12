@@ -207,6 +207,14 @@ def countour_plot_via_mesh(gmsh, u, levels,
 
   return u_max
 
+def define_J_from_spider_data(p_der, F2_der, r, V):
+  J_psi = r * p_der + 1/(M0*r) * F2_der
+  J_psi = project(J_psi, V)
+  
+  I = assemble(J_psi*dx)
+  
+  return J_psi, I
+
 def calculate_d_at_boundary(u, psi0):
   gmsh = u.function_space().mesh()
   gmsh_coordinates = gmsh.coordinates().reshape((-1, 2)).T
@@ -522,10 +530,10 @@ def assign_const_to_nan_in_expression(expression, boundary_val=0):
   return expression
 
 def interpolate_spider_data_on_function_space(r_mesh, z_mesh, psi_mesh, V, boundary_val=0):
-  interp = LinearNDInterpolator(list(zip(r_mesh.flatten(), z_mesh.flatten())), psi_mesh.flatten())
+  interp = LinearNDInterpolator(list(zip(r_mesh.flatten(), z_mesh.flatten())), psi_mesh.flatten(), fill_value=boundary_val)
   psi = scipy_func.ExpressionFromScipyFunction(interp, element=V.ufl_element())
   psi = interpolate(psi, V) 
-  psi = assign_const_to_nan_in_expression(psi, boundary_val)
+  # psi = assign_const_to_nan_in_expression(psi, boundary_val)
   
   return psi
 
