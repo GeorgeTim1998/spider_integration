@@ -38,19 +38,19 @@ theory_data = fsup.form_dict_additions()
 plot_keys = fsup.addition_keys() # do later smth with it
 
 #%% Files
-filenames = ['a_0.370_ratio_1.000_msh_3.0e-03',
-             'a_0.370_ratio_1.100_msh_3.0e-03',
-             'a_0.370_ratio_1.200_msh_1.0e-02',
-             'a_0.370_ratio_1.300_msh_1.0e-02',
-             'a_0.370_ratio_1.400_msh_1.0e-02',
-             'a_0.370_ratio_1.500_msh_1.0e-02',
-             'a_0.370_ratio_1.600_msh_1.0e-02',
-             'a_0.370_ratio_1.700_msh_1.0e-02',
-             'a_0.370_ratio_1.800_msh_1.0e-02',
-             'a_0.370_ratio_1.900_msh_1.0e-02',
-             'a_0.370_ratio_2.000_msh_1.0e-02']
+# filenames = ['a_0.370_ratio_1.000_msh_3.0e-03',
+#              'a_0.370_ratio_1.100_msh_3.0e-03',
+#              'a_0.370_ratio_1.200_msh_1.0e-02',
+#              'a_0.370_ratio_1.300_msh_1.0e-02',
+#              'a_0.370_ratio_1.400_msh_1.0e-02',
+#              'a_0.370_ratio_1.500_msh_1.0e-02',
+#              'a_0.370_ratio_1.600_msh_1.0e-02',
+#              'a_0.370_ratio_1.700_msh_1.0e-02',
+#              'a_0.370_ratio_1.800_msh_1.0e-02',
+#              'a_0.370_ratio_1.900_msh_1.0e-02',
+#              'a_0.370_ratio_2.000_msh_1.0e-02']
 # 1.7 is behaving strangely. maybe its integral from g
-# filenames = ['a_37.000_ratio_1.100_msh_1.0e+00']
+filenames = ['a_37.000_ratio_1.000_msh_1.0e+00']
 
 #%% Program body
 for i, filename in enumerate(filenames):

@@ -98,6 +98,6 @@ for i, filename in enumerate(filenames):
   sup.print_colored("F2' max =", color='green', white_str=0.5 * F2_0/psi0)
   print("\n")
   
-  fsup.countour_plot_via_mesh(gmsh, u, levels=[0.001, 0.002, 0.003, 0.01], colorbar=True, grid=True, PATH=my_dir, plot_title="Fenics")
+  fsup.countour_plot_via_mesh(gmsh, u, levels=[0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008, 0.009, 0.01], colorbar=True, grid=True, PATH=my_dir, plot_title="Fenics", xlim=[1.5, 1.52], ylim=[-0.05, 0.05])
   print("\n")
   
