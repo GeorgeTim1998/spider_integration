@@ -42,7 +42,7 @@ msh_filenames = ["a_0.370_ratio_1.000_msh_1.0e-01",
             "a_0.370_ratio_2.000_msh_1.0e-01"]
 E = lao_hash['E']
 
-for i in range(len(E)):
+for i in range(len(msh_filenames)):
   eq.del_eqdsk_equilx(working_folder)
 
   eq.copy_eqdsk_equilx_to_WK(working_folder, E[i])
@@ -125,7 +125,7 @@ for i in range(len(E)):
                             PATH=pic_path, 
                             plot_title="Spider. %.1f" % E[i])
 
-  #%% Import Spider solution to fenics
+#%% Import Spider solution to fenics
   msh_filename = msh_filenames[i]
   folder = sup.xml_files_folder()
   xml_file = "%s/%s.xml" % (folder, msh_filename)
@@ -229,6 +229,7 @@ for i in range(len(E)):
 
 #%% Calculate S1-S3 based on known bp, li, mu_i  
   S1_theory = 2
+  # S2_theory = (2*bp_theory + li_theory - 1) * (1 + eps_K/2) 
   S2_theory = 2*bp_theory + li_theory - 1
   S3_theory = 1 - eps_K/2 - d*(1 - eps_K**2/2)
 
@@ -242,11 +243,11 @@ keys = list(problem_data.keys())
 for key in keys:
   if key in list(plot_keys.keys()):
     fsup.plot_1D(E, problem_data[key],
-                xlabel='elongation', ylabel=key, note=key,
+                xlabel="$\it{K}$", ylabel=key, note=key,
                 additions=theory_data[plot_keys[key]],
                 PATH=pic_path) # maybe add special funcs for certain values
   else:
     fsup.plot_1D(E, problem_data[key],
-                xlabel='elongation', ylabel=key, 
+                xlabel="$\it{K}$", ylabel=key, 
                 note=key,
                 PATH=pic_path) # maybe add special funcs for certain values

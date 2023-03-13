@@ -14,6 +14,12 @@ PICS_FOLDER = 'Pics'
 
 M0 = 1.25e-6
 
+
+FONT = {'family': "Times New Roman"}
+matplt.rc('font', **FONT)
+params = {'mathtext.default': 'regular' }          
+matplt.rcParams.update(params)
+
 def operator_weights(V):
   r_2 = interpolate(Expression('x[0]*x[0]', degree = 2), V) # interpolation is needed so that 'a' could evaluate deriviations and such
   r = interpolate(Expression('x[0]', degree = 1), V) # interpolation is needed so that 'a' could evaluate deriviations and such
@@ -493,13 +499,32 @@ def addition_keys():
   
   return addition
 
-def plot_1D(x, y, xlabel='', ylabel='', note='', additions=[], PATH=''):
+def format_keys():
+  format_keys = {}
+  
+  format_keys['d'] = "$\it{d}$"
+  
+  format_keys['S1'] = "$\it{S}_{1}$"
+  format_keys['S2'] = "$\it{S}_{2}$"
+  format_keys['S3'] = "$\it{S}_{3}$"
+  
+  format_keys['S1_theory'] = "$\it{S}_{1}$ из [4]"
+  format_keys['S2_theory'] = "$\it{S}_{2}$ из [4]"
+  format_keys['S3_theory'] = "$\it{S}_{3}$ из [4]"
+  
+  return format_keys
 
+def plot_1D(x, y, xlabel='', ylabel='', note='', additions=[], PATH=''):
+  fk = format_keys()
+  
   matplt.scatter(x, y)
   matplt.legend([note], loc='best')
   if additions != []:
     matplt.scatter(x, additions)
-    matplt.legend([note, addition_keys()[note]], loc='best')
+    if (note in fk):
+      matplt.legend([fk[note], fk[addition_keys()[note]]], loc='best')
+    else:
+      matplt.legend([note, addition_keys()[note]], loc='best')
 
   matplt.grid("True")
   
@@ -507,7 +532,10 @@ def plot_1D(x, y, xlabel='', ylabel='', note='', additions=[], PATH=''):
     matplt.xlabel(xlabel)
   
   if ylabel != '':
-    matplt.ylabel(ylabel)
+    if (note in fk):
+      matplt.ylabel(fk[ylabel])
+    else:
+      matplt.ylabel(ylabel)
 
   save_contour_plot(note="2D plot of %s saved to PATH:" % note, PATH=PATH)
 
