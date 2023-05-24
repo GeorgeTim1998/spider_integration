@@ -1,0 +1,13 @@
+name: fenicsproject
+channels:
+  - conda-forge
+dependencies:
+  - defaults::python=3.7.4
+  - defaults::scipy=1.7.3
+  - fenics=2019.1.0
+  - matplotlib=3.3.2
+  - gmsh=4.6.0
+  - python-gmsh=4.6.0
+  - numpy
+  - time
+  - datetime
